@@ -1,0 +1,7 @@
+(function (root, factory) {
+    if (typeof define === 'function' && define.amd) {
+        define(['lodash'], factory);
+    } else {
+        root.WingspanForms = factory(root._);
+    }
+}(this, function (_) {

@@ -1,0 +1,21 @@
+{
+  "name": "work-area demo",
+  "version": "0.0.0",
+  "homepage": "https://github.com/wingspan/wingspan-forms",
+  "authors": [
+    "Wingspan Technology Inc."
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "lodash": "~2.4.1",
+    "almond": "~0.2.7"
+  }
+}
