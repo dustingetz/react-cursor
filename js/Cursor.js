@@ -3,6 +3,7 @@ define([
 ], function (_) {
     'use strict';
 
+    // this constructor is private
     function Cursor(state, path, commit, clone) {
         this.value = getRefAtPath(state, path);
 

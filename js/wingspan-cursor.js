@@ -3,5 +3,7 @@ define([
 ], function (Cursor) {
     'use strict';
 
-    return Cursor;
+    return {
+        build: Cursor.build
+    };
 });
