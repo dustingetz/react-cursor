@@ -5,6 +5,7 @@ define([
 
     // this constructor is private
     function Cursor(state, path, commit, clone) {
+        state = clone(state); // defensive clone right away so we can't close over a stale state reference
         this.value = getRefAtPath(state, path);
 
         this.onChange = function (nextValue) {
@@ -12,7 +13,7 @@ define([
             nextValue = clone(nextValue); // because the call site might retain the reference and mutate
 
             if (path.length > 0) {
-                nextState = clone(state); // defensive clone before mutate
+                nextState = state;
                 var scoped = getRefAtPath(nextState, _.initial(path));
                 scoped[_.last(path)] = nextValue;
             }
