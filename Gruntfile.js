@@ -64,13 +64,20 @@ module.exports = function (grunt) {
             }
         },
 
-        clean: ['bower_components', 'dist']
+        clean: ['bower_components', 'dist'],
+
+        karma: {
+            unit: {
+                configFile: 'karma.conf.js'
+            }
+        }
     });
 
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-requirejs');
     grunt.loadNpmTasks('grunt-bower-task');
     grunt.loadNpmTasks('grunt-contrib-clean');
+    grunt.loadNpmTasks('grunt-karma');
 
     grunt.registerTask('default', ['bower:install']);
     grunt.registerTask('release', ['clean', 'bower:install', 'requirejs']);
