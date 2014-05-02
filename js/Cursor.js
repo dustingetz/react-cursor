@@ -1,7 +1,6 @@
-define([
-    'lodash'
-], function (_) {
+define([], function () {
     'use strict';
+
 
     // this constructor is private
     function Cursor(state, path, commit, clone) {
@@ -14,8 +13,8 @@ define([
 
             if (path.length > 0) {
                 nextState = state;
-                var scoped = getRefAtPath(nextState, _.initial(path));
-                scoped[_.last(path)] = nextValue;
+                var scoped = getRefAtPath(nextState, initial(path));
+                scoped[last(path)] = nextValue;
             }
             else if (path.length === 0) {
                 nextState = nextValue;
@@ -24,24 +23,46 @@ define([
         };
 
         this.refine = function (/* one or more paths through the tree */) {
-            var nextPath = [].concat(path, _.flatten(arguments));
+            var nextPath = [].concat(path, flatten(arguments));
             return new Cursor(state, nextPath, commit, clone);
         };
     }
 
+
+    /**
+     * Example usages:
+     * Cursor.build(this.state, this.setState.bind(this), _.cloneDeep);
+     * Cursor.build(this.notState, function (nextState) { merge(this.notReactState, nextState); }.bind(this), _.identity);
+     */
     Cursor.build = function (state, commit, clone) {
         return new Cursor(state, [], commit, clone);
     };
 
-    function getRefAtPath(tree, paths) {
-        function deref(obj, key) { return obj[key]; }
 
-        return _.reduce(paths, deref, tree);
+    function getRefAtPath(tree, paths) {
+        return reduce(paths, deref, tree);
     }
 
-    return Cursor;
+    function deref(obj, key) {
+        return obj[key];
+    }
 
-//    Example usages:
-//    Cursor.build(this.state, this.setState.bind(this), _.cloneDeep);
-//    Cursor.build(this.notState, function (nextState) { merge(this.notReactState, nextState); }.bind(this), _.identity);
+    function initial(array) {
+        return array.slice(0, array.length-1);
+    }
+
+    function last(array) {
+        return array[array.length-1];
+    }
+
+    function reduce(array, f, mzero) {
+        return array.reduce(f, mzero);
+    }
+
+    function flatten(listOfLists) {
+        return [].concat.apply([], listOfLists);
+    }
+
+
+    return Cursor;
 });

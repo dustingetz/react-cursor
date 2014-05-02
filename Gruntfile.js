@@ -40,12 +40,10 @@ module.exports = function (grunt) {
                 baseUrl: 'js',
 
                 paths: {
-                    lodash: '../bower_components/lodash/dist/lodash.compat',
                     almond: '../bower_components/almond/almond'
                 },
 
                 shim: {
-                    'lodash': { deps: [], exports: '_' }
                 },
 
                 uglify: {
@@ -61,7 +59,7 @@ module.exports = function (grunt) {
                 options: {
                     out: 'dist/wingspan-cursor.js',
                     include: ['almond', 'wingspan-cursor'],
-                    exclude: ['require', 'lodash']
+                    exclude: ['require']
                 }
             }
         },

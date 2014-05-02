@@ -15,7 +15,6 @@
     "tests"
   ],
   "dependencies": {
-    "lodash": "~2.4.1",
     "almond": "~0.2.7"
   }
 }
