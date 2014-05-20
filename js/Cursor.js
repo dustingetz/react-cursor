@@ -20,6 +20,7 @@ define([], function () {
                 nextState = nextValue;
             }
             commit(nextState);
+            return nextState;
         };
 
         this.refine = function (/* one or more paths through the tree */) {
