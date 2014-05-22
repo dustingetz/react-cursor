@@ -20,7 +20,7 @@ define([], function () {
                 nextState = nextValue;
             }
             commit(nextState);
-            return nextState;
+            return new Cursor(nextState, path, commit, clone);
         };
 
         this.refine = function (/* one or more paths through the tree */) {
