@@ -41,7 +41,8 @@ module.exports = function (grunt) {
 
                 paths: {
                     almond: '../bower_components/almond/almond',
-                    react: '../bower_components/react/react-with-addons'
+                    react: '../bower_components/react/react-with-addons',
+                    underscore: '../bower_components/underscore/underscore'
                 },
 
                 shim: {
@@ -61,7 +62,7 @@ module.exports = function (grunt) {
                 options: {
                     out: 'dist/wingspan-cursor.js',
                     include: ['almond', 'wingspan-cursor'],
-                    exclude: ['require', 'react']
+                    exclude: ['require', 'react', 'underscore']
                 }
             }
         },

@@ -1,7 +1,7 @@
 (function (root, factory) {
     if (typeof define === 'function' && define.amd) {
-        define(['react'], factory);
+        define(['react', 'underscore'], factory);
     } else {
-        root.WingspanCursor = factory(root.React);
+        root.WingspanCursor = factory(root.React, root._);
     }
-}(this, function (React) {
+}(this, function (React, _) {
