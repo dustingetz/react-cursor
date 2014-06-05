@@ -31,6 +31,23 @@ define([], function () {
         return [].concat.apply([], listOfLists);
     }
 
+    function hashString(str) {
+        var hash = 0, i, ch, l;
+        if (str.length === 0) {
+            return hash;
+        }
+        for (i = 0, l = str.length; i < l; i++) {
+            ch  = str.charCodeAt(i);
+            hash  = ((hash << 5) - hash) + ch;
+            hash |= 0; // Convert to 32bit integer
+        }
+        return hash;
+    }
+
+    function hashRecord(record) {
+        return hashString(JSON.stringify(record));
+    }
+
     return {
         getRefAtPath: getRefAtPath,
         deref: deref,
@@ -38,6 +55,8 @@ define([], function () {
         initial: initial,
         last: last,
         reduce: reduce,
-        flatten: flatten
+        flatten: flatten,
+        hashString: hashString,
+        hashRecord: hashRecord
     };
 });
