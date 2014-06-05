@@ -1,9 +1,10 @@
 define([
-    'Cursor'
-], function (Cursor) {
+    'Cursor', 'ReactCursor'
+], function (Cursor, ReactCursor) {
     'use strict';
 
     return {
-        build: Cursor.build
+        build: Cursor.build,
+        ReactCursor: ReactCursor
     };
 });
