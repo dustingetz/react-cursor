@@ -37,7 +37,9 @@ define(['react', 'underscore', 'CursorFunctions'], function (ReactWithAddons, _,
         return new Cursor(state, pendingGetter, path, commit, partialMemoized);
     }
 
-    Cursor.build = function (state, pendingGetter, commit) {
+    Cursor.build = function (cmp) {
+        function pendingGetter () { return cmp._pendingState || cmp.state; }
+
         // Maintain a per-cursor cache of partially applied onChange functions - paths are not global, they are specific
         // to an initial call to Cursor.build
         var cache = {};
@@ -60,7 +62,7 @@ define(['react', 'underscore', 'CursorFunctions'], function (ReactWithAddons, _,
             return cf.hashRecord(path);
         }
 
-        return new Cursor(state, pendingGetter, [], commit, memoize(_.partial, memoHasher));
+        return new Cursor(cmp.state, pendingGetter, [], cmp.setState.bind(cmp), memoize(_.partial, memoHasher));
     };
 
     return Cursor;
