@@ -1,0 +1,24 @@
+{
+  "name": "wingspan-cursor-helloworld",
+  "version": "0.0.0",
+  "homepage": "https://github.com/dustingetz/wingspan-cursor",
+  "authors": [
+    "Wingspan Technology Inc."
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~1.9.1",
+    "underscore": "~1.4.4",
+    "react": "~0.10.0",
+    "requirejs": "~2.1.9",
+    "wingspan-contrib": "2b47b0f177aeb2086378b4e5ff8af3ef61b82e5d"
+  }
+}

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Master/Detail form demo | Wingspan Forms</title>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+    <link rel="stylesheet" type="text/css" href="styles/App.css">
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/javascript" src="lib/require.js"></script>
+<script type="text/javascript" src="require-shims.js"></script>
+<script>
+    (function(){
+        'use strict';
+
+        require(['jquery', 'underscore', 'Page'], function($, _, page) {
+            $(document).ready(_.partial(page.entrypoint, document.getElementById('root')));
+        });
+
+    })();
+</script>
+</body>
+
+</html>
