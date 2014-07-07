@@ -1,7 +1,6 @@
     // Fake out the almond loader - shim these dependencies to their globals.
     // Make sure these globals are already on the page - e.g. by require-shims in the app
     define('react', function () { return React; });
-    define('underscore', function () { return _; });
 
     return require('wingspan-cursor');
 }));

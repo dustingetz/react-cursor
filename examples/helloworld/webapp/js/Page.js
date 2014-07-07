@@ -22,7 +22,7 @@ define([
     },
 
     render: function () {
-      var cursor = Cursor.ReactCursor.build(this);
+      var cursor = Cursor.build(this);
       var counts = cursor.refine('very', 'deeply', 'nested', 'counts');
 
       var contents = counts.value.map(function (count, index) {
@@ -31,7 +31,8 @@ define([
 
       return (
         <div className="App">
-          <div className="MasterDetailDemo">{contents}</div>
+          <div>{contents}</div>
+          <pre>{JSON.stringify(cursor.value, undefined, 2)}</pre>
         </div>
       );
     }
