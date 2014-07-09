@@ -14,7 +14,7 @@
       'underscore': { deps: [], exports: '_' },
       'jquery': { deps: [], exports: '$' },
       'react': { deps: [], exports: 'React'},
-      'wingspan-cursor': { deps: [], exports: 'WingspanCursor' }
+      'wingspan-cursor': { deps: ['underscore'], exports: 'WingspanCursor' }
     }
   });
 })();
