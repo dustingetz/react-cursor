@@ -39,6 +39,8 @@ define([
   });
 
   var Clicker = React.createClass({
+    mixins: [Cursor.ImmutableOptimizations(['cursor'])],
+
     render: function () {
       return (
         <div>
@@ -63,10 +65,6 @@ define([
 
     inc10: function () {
       this.props.cursor.onChange(this.props.cursor.pendingValue() + 10);
-    },
-
-    shouldComponentUpdate: function (nextProps) {
-      return this.props.cursor.value !== nextProps.cursor.value;
     }
   });
 
