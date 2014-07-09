@@ -37,30 +37,29 @@ define(['react', 'util'], function (React, util) {
   }
 
 
-  var cursorBuildMemoize = util.memoizeFactory(); // build is memoized at global scope
-  function cursorBuildHasher (cmp) {
+  // build is memoized at global scope
+  var cursorBuildMemoize = util.memoizeFactory(function cursorBuildHasher (cmp) {
     // build should memoize globally on: cmp ref, and cmp.state value
     return util.refToHash(cmp) + util.hashRecord(cmp.state);
-  }
+  });
+
 
   Cursor.build = cursorBuildMemoize(function (cmp) {
     function pendingGetter () { return cmp._pendingState || cmp.state; }
 
-    // Maintain a per-cursor cache of partially applied onChange functions - paths are not global, they are specific
-    // to an initial call to Cursor.build
-    var memoize = util.memoizeFactory();
-
-    /**
-     * Given all of the arguments of a memoized onChange function, the only discriminator is the path.
-     * An onChange closing over different state values but having the same path is effectively the same
-     * onChange for the purposes of effecting change in a reference-equality-sensitive manner.
-     */
-    function memoHasher(onChange, state, pendingGetter, path, commit) {
+    // Maintain a per-cursor cache of partially applied onChange functions - paths are not global,
+    // they are specific to an initial call to Cursor.build
+    var memoize = util.memoizeFactory(function memoHasher(onChange, state, pendingGetter, path, commit) {
+      /**
+       * Given all of the arguments of a memoized onChange function, the only discriminator is the path.
+       * An onChange closing over different state values but having the same path is effectively the same
+       * onChange for the purposes of effecting change in a reference-equality-sensitive manner.
+       */
       return util.hashRecord(path);
-    }
+    });
 
-    return new Cursor(cmp.state, pendingGetter, [], cmp.setState.bind(cmp), memoize(_.partial, memoHasher));
-  }, cursorBuildHasher);
+    return new Cursor(cmp.state, pendingGetter, [], cmp.setState.bind(cmp), memoize(_.partial));
+  });
 
 
 

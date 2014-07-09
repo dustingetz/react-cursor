@@ -80,9 +80,9 @@ define([], function () {
       }
     }
 
-    function memoizeFactory () { // resolver can be promoted to here i think
+    function memoizeFactory (resolver) {
       var cache = {};
-      function memoize(func, resolver) {
+      function memoize(func) {
         return function () {
           var key = resolver ? resolver.apply(this, arguments) : arguments[0];
           return hasOwnProperty.call(cache, key)
