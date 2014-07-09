@@ -69,7 +69,7 @@ define([], function () {
       // if not, add to cache and generate a new ID to hash on
 
       var cmpsWithUid = _.pairs(refsCache);
-      var cmpFound = _.find(cmpsWithUid, function (cmpAndId) { return cmpAndId[0] === cmp; });
+      var cmpFound = _.find(cmpsWithUid, function (cmpAndId) { return cmpAndId[1] === cmp; });
       if (cmpFound) {
         return cmpFound[0]; // return the uid
       }
