@@ -36,21 +36,19 @@ define(['react', 'util'], function (React, util) {
     return new Cursor(state, pendingGetter, path, commit, partialMemoized);
   }
 
-  Cursor.build = function (cmp) {
+
+  var cursorBuildMemoize = util.memoizeFactory(); // build is memoized at global scope
+  function cursorBuildHasher (cmp) {
+    // build should memoize globally on: cmp ref, and cmp.state value
+    return util.refToHash(cmp) + util.hashRecord(cmp.state);
+  }
+
+  Cursor.build = cursorBuildMemoize(function (cmp) {
     function pendingGetter () { return cmp._pendingState || cmp.state; }
 
     // Maintain a per-cursor cache of partially applied onChange functions - paths are not global, they are specific
     // to an initial call to Cursor.build
-    var cache = {};
-
-    function memoize(func, resolver) {
-      return function () {
-        var key = resolver ? resolver.apply(this, arguments) : arguments[0];
-        return hasOwnProperty.call(cache, key)
-          ? cache[key]
-          : (cache[key] = func.apply(this, arguments));
-      };
-    }
+    var memoize = util.memoizeFactory();
 
     /**
      * Given all of the arguments of a memoized onChange function, the only discriminator is the path.
@@ -62,7 +60,8 @@ define(['react', 'util'], function (React, util) {
     }
 
     return new Cursor(cmp.state, pendingGetter, [], cmp.setState.bind(cmp), memoize(_.partial, memoHasher));
-  };
+  }, cursorBuildHasher);
+
 
 
   return Cursor;
