@@ -45,11 +45,11 @@ define(['react', 'util'], function (React, util) {
     // care about this.state and nextState.
   });
 
-  Cursor.build = cursorBuildMemoizer(function (cmp, path) {
+  var build = cursorBuildMemoizer(function (cmp, path) {
     path = path === undefined ? [] : path;
     return new Cursor(cmp, path);
   });
 
 
-  return Cursor;
+  return { build: build };
 });
