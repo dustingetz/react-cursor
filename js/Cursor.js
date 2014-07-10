@@ -16,7 +16,7 @@ define(['react', 'util'], function (React, util) {
 
     this.refine = function (/* one or more paths through the tree */) {
       var nextPath = [].concat(path, util.flatten(arguments));
-      return new Cursor(state, pendingGetter, nextPath, commit, partialMemoized);
+      return new Cursor(cmp, state, pendingGetter, nextPath, commit, partialMemoized);
     };
   }
 
