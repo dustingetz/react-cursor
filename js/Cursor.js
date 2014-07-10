@@ -4,8 +4,9 @@ define(['react', 'util'], function (React, util) {
 
   // If we build two cursors on the same React component, and those React components have equal state,
   // reuse the same cursor instance, so we can use === to compare them.
-  var cursorBuildMemoizer = util.memoizeFactory(function (cmp) {
-    return util.refToHash(cmp) + util.hashRecord(cmp.state);
+  var cursorBuildMemoizer = util.memoizeFactory(function (cmp, path) {
+    path = path === undefined ? [] : path; // account for the default value here
+    return util.refToHash(cmp) + util.hashRecord(cmp.state) + util.hashRecord(path);
     // I think we want to clamp this to cachesize === 2, because we only
     // care about this.state and nextState.
   });
@@ -34,12 +35,7 @@ define(['react', 'util'], function (React, util) {
 
     this.refine = function (/* one or more paths through the tree */) {
       var nextPath = [].concat(path, util.flatten(arguments));
-
-      // Need to find the cursor for this cmp & state, and then find the onChange handlers for this path
-      // I think if we just build the cursor at the path, the onchange will take care of itself as they
-      // are shared globally.
-
-      return new Cursor(cmp, nextPath);
+      return Cursor.build(cmp, nextPath); // reuses refs where appropriate
     };
   }
 
@@ -59,8 +55,9 @@ define(['react', 'util'], function (React, util) {
     return new Cursor(cmp, path);
   }
 
-  Cursor.build = cursorBuildMemoizer(function (cmp) {
-    return new Cursor(cmp, []);
+  Cursor.build = cursorBuildMemoizer(function (cmp, path) {
+    path = path === undefined ? [] : path;
+    return new Cursor(cmp, path);
   });
 
 
