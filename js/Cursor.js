@@ -1,7 +1,7 @@
 define(['react', 'util'], function (React, util) {
   'use strict';
 
-  function Cursor(cmp, state, pendingGetter, path, commit, partialMemoized) {
+  function Cursor(cmp, state, pendingGetter, path, partialMemoized) {
     // Please treat values as read-only
     this.value = util.getRefAtPath(state, path); // value to put in the DOM, use from render()
 
@@ -12,15 +12,15 @@ define(['react', 'util'], function (React, util) {
 
     // Cursors sharing a path also share an onChange handler - so that we can do meaningful reference equality
     // comparisons for onChange handlers passes as react props in shouldComponentUpdate
-    this.onChange = partialMemoized(onChange, cmp, state, pendingGetter, path, commit, partialMemoized);
+    this.onChange = partialMemoized(onChange, cmp, state, pendingGetter, path, partialMemoized);
 
     this.refine = function (/* one or more paths through the tree */) {
       var nextPath = [].concat(path, util.flatten(arguments));
-      return new Cursor(cmp, state, pendingGetter, nextPath, commit, partialMemoized);
+      return new Cursor(cmp, state, pendingGetter, nextPath, partialMemoized);
     };
   }
 
-  function onChange(cmp, state, pendingGetter, path, commit, partialMemoized, nextValue) {
+  function onChange(cmp, state, pendingGetter, path, partialMemoized, nextValue) {
     var nextState;
 
     if (path.length > 0) {
@@ -32,8 +32,8 @@ define(['react', 'util'], function (React, util) {
     else if (path.length === 0) {
       nextState = nextValue;
     }
-    commit(nextState);
-    return new Cursor(cmp, state, pendingGetter, path, commit, partialMemoized);
+    cmp.setState(nextState);
+    return new Cursor(cmp, state, pendingGetter, path, partialMemoized);
   }
 
   // If we build two cursors on the same React component, and those React components have equal state,
@@ -49,13 +49,13 @@ define(['react', 'util'], function (React, util) {
   // So we have a global cache of partially applied onChange functions, so we can reuse onChange functions
   // if both the paths are the same, and they are attached to the same React component.
   // Note we don't care about the state of the React component for onChange handlers.
-  var onChangeMemoizer = util.memoizeFactory(function (onChange, cmp, state, pendingGetter, path, commit) {
+  var onChangeMemoizer = util.memoizeFactory(function (onChange, cmp, state, pendingGetter, path) {
     return util.refToHash(cmp) + util.hashRecord(path);
   });
 
   Cursor.build = cursorBuildMemoizer(function (cmp) {
     function pendingGetter () { return cmp._pendingState || cmp.state; }
-    return new Cursor(cmp, cmp.state, pendingGetter, [], cmp.setState.bind(cmp), onChangeMemoizer(_.partial));
+    return new Cursor(cmp, cmp.state, pendingGetter, [], onChangeMemoizer(_.partial));
   });
 
 
