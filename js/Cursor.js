@@ -2,16 +2,6 @@ define(['react', 'util'], function (React, util) {
   'use strict';
 
 
-  // If we build two cursors for the same path on the same React component,
-  // and those React components have equal state, reuse the same cursor instance,
-  // so we can use === to compare them.
-  var cursorBuildMemoizer = util.memoizeFactory(function (cmp, path) {
-    path = path === undefined ? [] : path; // account for the default value here
-    return util.refToHash(cmp) + util.hashRecord(cmp.state) + util.hashRecord(path);
-    // I think we want to clamp this to cachesize === 2, because we only
-    // care about this.state and nextState.
-  });
-
   function Cursor(cmp, path) {
     // value to put in the DOM, use from render() and the component lifecycle methods
     this.value = util.getRefAtPath(cmp.state, path);
@@ -43,6 +33,17 @@ define(['react', 'util'], function (React, util) {
     }
     cmp.setState(nextState);
   }
+
+
+  // If we build two cursors for the same path on the same React component,
+  // and those React components have equal state, reuse the same cursor instance,
+  // so we can use === to compare them.
+  var cursorBuildMemoizer = util.memoizeFactory(function (cmp, path) {
+    path = path === undefined ? [] : path; // account for the default value here
+    return util.refToHash(cmp) + util.hashRecord(cmp.state) + util.hashRecord(path);
+    // I think we want to clamp this to cachesize === 2, because we only
+    // care about this.state and nextState.
+  });
 
   Cursor.build = cursorBuildMemoizer(function (cmp, path) {
     path = path === undefined ? [] : path;
