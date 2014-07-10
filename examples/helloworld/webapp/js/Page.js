@@ -41,6 +41,7 @@ define([
     mixins: [Cursor.ImmutableOptimizations(['cursor'])],
 
     render: function () {
+      console.log('rendering clicker ', this.props.key);
       return (
         <div>
           <input type="text" value={this.props.cursor.value} onChange={this.onInputChange} />
