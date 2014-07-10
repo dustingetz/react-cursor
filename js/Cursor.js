@@ -21,10 +21,8 @@ define(['react', 'util'], function (React, util) {
 
 
   function Cursor(cmp, path, partialMemoized) {
-    // Please treat values as read-only
     this.value = util.getRefAtPath(cmp.state, path); // value to put in the DOM, use from render()
 
-    // Please treat pending values as read-only
     this.pendingValue = function () {
       return util.getRefAtPath(cmp._pendingState || cmp.state, path); // the current value right now, use in event handlers
     };
