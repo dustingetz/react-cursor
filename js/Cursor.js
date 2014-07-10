@@ -37,7 +37,7 @@ define(['react', 'util'], function (React, util) {
   }
 
   // If we build two cursors on the same React component, and those React components have equal state,
-  // reuse the cursor reference, so we can use === to compare them.
+  // reuse the same cursor instance, so we can use === to compare them.
   var cursorBuildMemoizer = util.memoizeFactory(function (cmp) {
     return util.refToHash(cmp) + util.hashRecord(cmp.state);
     // I think we want to clamp this to cachesize === 2, because we only
