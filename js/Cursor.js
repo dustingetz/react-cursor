@@ -38,7 +38,7 @@ define(['react', 'util'], function (React, util) {
 
   // If we build two cursors on the same React component, and those React components have equal state,
   // reuse the cursor reference, so we can use === to compare them.
-  var cursorBuildMemoizer = util.memoizeFactory(function cursorBuildHasher (cmp) {
+  var cursorBuildMemoizer = util.memoizeFactory(function (cmp) {
     return util.refToHash(cmp) + util.hashRecord(cmp.state);
     // I think we want to clamp this to cachesize === 2, because we only
     // care about this.state and nextState.
@@ -49,7 +49,7 @@ define(['react', 'util'], function (React, util) {
   // So we have a global cache of partially applied onChange functions, so we can reuse onChange functions
   // if both the paths are the same, and they are attached to the same React component.
   // Note we don't care about the state of the React component for onChange handlers.
-  var onChangeMemoizer = util.memoizeFactory(function memoHasher(onChange, cmp, state, pendingGetter, path, commit) {
+  var onChangeMemoizer = util.memoizeFactory(function (onChange, cmp, state, pendingGetter, path, commit) {
     return util.refToHash(cmp) + util.hashRecord(path);
   });
 
