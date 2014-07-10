@@ -19,8 +19,9 @@ define(['react', 'util'], function (React, util) {
     return util.refToHash(cmp) + util.hashRecord(path);
   });
 
+  var partialMemoized = onChangeMemoizer(_.partial);
 
-  function Cursor(cmp, path, partialMemoized) {
+  function Cursor(cmp, path) {
     this.value = util.getRefAtPath(cmp.state, path); // value to put in the DOM, use from render()
 
     this.pendingValue = function () {
@@ -29,15 +30,20 @@ define(['react', 'util'], function (React, util) {
 
     // Cursors sharing a path also share an onChange handler - so that we can do meaningful reference equality
     // comparisons for onChange handlers passes as react props in shouldComponentUpdate
-    this.onChange = partialMemoized(onChange, cmp, path, partialMemoized);
+    this.onChange = partialMemoized(onChange, cmp, path);
 
     this.refine = function (/* one or more paths through the tree */) {
       var nextPath = [].concat(path, util.flatten(arguments));
-      return new Cursor(cmp, nextPath, partialMemoized);
+
+      // Need to find the cursor for this cmp & state, and then find the onChange handlers for this path
+      // I think if we just build the cursor at the path, the onchange will take care of itself as they
+      // are shared globally.
+
+      return new Cursor(cmp, nextPath);
     };
   }
 
-  function onChange(cmp, path, partialMemoized, nextValue) {
+  function onChange(cmp, path, nextValue) {
     var nextState;
 
     if (path.length > 0) {
@@ -50,11 +56,11 @@ define(['react', 'util'], function (React, util) {
       nextState = nextValue;
     }
     cmp.setState(nextState);
-    return new Cursor(cmp, path, partialMemoized);
+    return new Cursor(cmp, path);
   }
 
   Cursor.build = cursorBuildMemoizer(function (cmp) {
-    return new Cursor(cmp, [], onChangeMemoizer(_.partial));
+    return new Cursor(cmp, []);
   });
 
 
