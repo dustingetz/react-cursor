@@ -41,6 +41,8 @@ define(['react', 'util'], function (React, util) {
   var cursorBuildMemoize = util.memoizeFactory(function cursorBuildHasher (cmp) {
     // build should memoize globally on: cmp ref, and cmp.state value
     return util.refToHash(cmp) + util.hashRecord(cmp.state);
+    // I think we want to clamp this to cachesize === 2, because we only
+    // care about this.state and nextState.
   });
 
 
