@@ -36,28 +36,20 @@ define(['react', 'util'], function (React, util) {
     return new Cursor(cmp, state, pendingGetter, path, commit, partialMemoized);
   }
 
-
-  // build is memoized at global scope
+  // If we build two cursors on the same React component, and those React components have equal state,
+  // reuse the cursor reference, so we can use === to compare them.
   var cursorBuildMemoizer = util.memoizeFactory(function cursorBuildHasher (cmp) {
-    // build should memoize globally on: cmp ref, and cmp.state value
     return util.refToHash(cmp) + util.hashRecord(cmp.state);
     // I think we want to clamp this to cachesize === 2, because we only
     // care about this.state and nextState.
   });
 
-
-  // Maintain a per-cursor cache of partially applied onChange functions - paths are not global,
-  // they are specific to an initial call to Cursor.build
-  //
-  // If we want two cursor.build calls to have the same change handlers, we have to memozie on the cmp too,
-  // then it can be global
-  //
+  // We want two cursors of the same path to share the same reference.
+  // If we call cursor.build twice, the onChange handlers should still share the same reference.
+  // So we have a global cache of partially applied onChange functions, so we can reuse onChange functions
+  // if both the paths are the same, and they are attached to the same React component.
+  // Note we don't care about the state of the React component for onChange handlers.
   var onChangeMemoizer = util.memoizeFactory(function memoHasher(onChange, cmp, state, pendingGetter, path, commit) {
-    /**
-     * Given all of the arguments of a memoized onChange function, the only discriminator is the path.
-     * An onChange closing over different state values but having the same path is effectively the same
-     * onChange for the purposes of effecting change in a reference-equality-sensitive manner.
-     */
     return util.refToHash(cmp) + util.hashRecord(path);
   });
 
@@ -65,7 +57,6 @@ define(['react', 'util'], function (React, util) {
     function pendingGetter () { return cmp._pendingState || cmp.state; }
     return new Cursor(cmp, cmp.state, pendingGetter, [], cmp.setState.bind(cmp), onChangeMemoizer(_.partial));
   });
-
 
 
   return Cursor;
