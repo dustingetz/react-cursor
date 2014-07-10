@@ -31,8 +31,14 @@ define([], function () {
         return [].concat.apply([], listOfLists);
     }
 
+    /**
+     * Hash of null is null, hash of undefined is undefined
+     */
     function hashString(str) {
         var hash = 0, i, ch, l;
+        if (str === undefined || str === null) {
+            return str;
+        }
         if (str.length === 0) {
             return hash;
         }

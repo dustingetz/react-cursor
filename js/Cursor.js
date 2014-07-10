@@ -40,7 +40,8 @@ define(['react', 'util'], function (React, util) {
   // so we can use === to compare them.
   var cursorBuildMemoizer = util.memoizeFactory(function (cmp, path) {
     path = path === undefined ? [] : path; // account for the default value here
-    return util.refToHash(cmp) + util.hashRecord(cmp.state) + util.hashRecord(path);
+    var subtreeValue = util.getRefAtPath(cmp.state, path);
+    return util.refToHash(cmp) + util.hashRecord(subtreeValue) + util.hashRecord(path);
     // I think we want to clamp this to cachesize === 2, because we only
     // care about this.state and nextState.
   });
