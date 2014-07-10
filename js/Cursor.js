@@ -42,7 +42,6 @@ define(['react', 'util'], function (React, util) {
       nextState = nextValue;
     }
     cmp.setState(nextState);
-    return new Cursor(cmp, path);
   }
 
   Cursor.build = cursorBuildMemoizer(function (cmp, path) {
