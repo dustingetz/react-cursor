@@ -60,7 +60,7 @@ module.exports = function (grunt) {
               'bower_components/underscore/underscore.js',
               'bower_components/react/react-with-addons.js',
               'bower_components/requirejs/require.js',
-              '../../dist/wingspan-cursor.js'
+              '../../dist/react-cursor.js'
             ],
             dest: 'webapp/lib',
             flatten: true,

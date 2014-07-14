@@ -1,6 +1,6 @@
 /** @jsx React.DOM */
 define([
-  'underscore', 'react', 'wingspan-cursor'
+  'underscore', 'react', 'react-cursor'
 ], function (_, React, Cursor) {
   'use strict';
 

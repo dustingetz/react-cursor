@@ -3,5 +3,5 @@
     define('react', function () { return React; });
     define('underscore', function () { return _; });
 
-    return require('wingspan-cursor');
+    return require('react-cursor');
 }));

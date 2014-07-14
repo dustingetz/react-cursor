@@ -60,8 +60,8 @@ module.exports = function (grunt) {
             },
             compile: {
                 options: {
-                    out: 'dist/wingspan-cursor.js',
-                    include: ['almond', 'wingspan-cursor'],
+                    out: 'dist/react-cursor.js',
+                    include: ['almond', 'react-cursor'],
                     exclude: ['require', 'react', 'underscore']
                 }
             }
