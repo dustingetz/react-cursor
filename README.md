@@ -83,8 +83,8 @@ Cursors are heavily memoized to preserve reference equality between equivalent c
         return this.props.cursor !== nextProps.cursor; 
     }
 
-This is provided as a mixin: see (Cursor.ImmutableOptimizations)[https://github.com/dustingetz/react-cursor/blob/master/js/ImmutableOptimizations.js].
+This is provided as a mixin: see [ImmutableOptimizations.js](https://github.com/dustingetz/react-cursor/blob/master/js/ImmutableOptimizations.js).
 
-`react-cursor` currently depends on underscore, but this can be trivially factored out.
+`react-cursor` currently depends on underscore, but this will be factored out (sooner if someone asks me for it).
 
 Please email the maintainer (dustin.getz@gmail.com) with questions, discussion or feature requests.
