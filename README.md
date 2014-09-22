@@ -79,7 +79,9 @@ Cursors are implemented in terms of [React.addons.update](http://facebook.github
 Cursors are heavily memoized to preserve reference equality between equivalent cursors, such that we can implement 
 `React.shouldComponentUpdate` trivially and O(1):
  
-    shouldComponentUpdate: function (nextProps, nextState) { return this.props.cursor !== nextProps.cursor }
+    shouldComponentUpdate: function (nextProps, nextState) { 
+        return this.props.cursor !== nextProps.cursor; 
+    }
 
 This is provided as a mixin: see (Cursor.ImmutableOptimizations)[https://github.com/dustingetz/react-cursor/blob/master/js/ImmutableOptimizations.js].
 
