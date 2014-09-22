@@ -65,7 +65,7 @@ Cursors have `refine`, `value` and `onChange`:
 
 Cursors make it trivial to implement a React JSON editor:
 
-[![live demo](docs/_assets/json-editor.png?raw=true)](http://react-json-editor.bitballoon.com/examples/react-state-editor/webapp/)
+[![live demo](https://raw.githubusercontent.com/dustingetz/react-json-editor/master/docs/_assets/json-editor.png)](http://react-json-editor.bitballoon.com/examples/react-state-editor/webapp/)
 
 
 ## notes
