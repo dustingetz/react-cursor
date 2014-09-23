@@ -39,7 +39,7 @@ Given a React component with state like this:
                 "b": {
                     "foo": {
                         "bar": 42,
-                        "baz": 55
+                        "baz": ['red', 'green']
                     }
                 }
             };
@@ -60,8 +60,9 @@ Cursors have `refine`, `value` and `onChange`:
 
     cursor.refine('a').value            //=> 10
     cursor.refine('a').onChange(11);
-    cursor.refine('b').refine('foo').value      //=> { 'bar': 42, baz: 55 }
-    cursor.refine('b').refine('foo').onChange({ 'bar': 43, baz: 56 })
+    cursor.refine('b').refine('foo').value      //=> { 'bar': 42, 'baz': ['red', 'green'] }
+    cursor.refine('b').refine('foo').onChange({ 'bar': 43, 'baz': ['red', 'green'] })
+    cursor.refine('b', 'foo', 'baz', 1).onChange('blue')
 
 Cursors are heavily memoized to preserve reference equality between equivalent cursors, such that we can implement
 `React.shouldComponentUpdate` trivially and O(1):
