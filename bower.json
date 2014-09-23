@@ -16,7 +16,6 @@
     "tests"
   ],
   "dependencies": {
-    "almond": "~0.2.7",
     "react": "0.10.0",
     "underscore": "~1.4.4"
   }

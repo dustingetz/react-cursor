@@ -2,6 +2,8 @@
 module.exports = function (grunt) {
   'use strict';
 
+  var reactify = require('reactify');
+
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     banner: '/*! <%= pkg.title || pkg.name %> - v<%= pkg.version %> - ' +
@@ -23,18 +25,17 @@ module.exports = function (grunt) {
       }
     },
 
-    subgrunt: {
-      options: {},
-      'default': {
-        '../../': ['release']
+    browserify: {
+      dev: {
+        src: ['./webapp/js/Page.js'],
+        dest: './webapp/js/build.js'
+      },
+
+      options: {
+        transform: [reactify]
       }
     },
 
-    react: {
-      app: {
-        files: [{ expand: true, cwd: 'webapp/js', src: ['**/*.js'], dest: 'webapp/js-built', ext: '.js' }]
-      }
-    },
 
     less: {
       development: {
@@ -50,38 +51,15 @@ module.exports = function (grunt) {
       }
     },
 
-    copy: {
-      'libs': {
-        files: [
-          {
-            expand: true,
-            src: [
-              'bower_components/jquery/jquery.js',
-              'bower_components/underscore/underscore.js',
-              'bower_components/react/react-with-addons.js',
-              'bower_components/requirejs/require.js',
-              '../../dist/react-cursor.js'
-            ],
-            dest: 'webapp/lib',
-            flatten: true,
-            filter: 'isFile'
-          }
-        ]
-      }
-    },
-
-    clean: ['bower_components', 'webapp/js-built', 'webapp/libs', 'webapp/styles/App.css', 'webapp/Page.js']
+    clean: ['bower_components', 'webapp/libs', 'webapp/styles/App.css', 'webapp/Page.js']
 
   });
 
   grunt.loadNpmTasks('grunt-contrib-jshint');
-  grunt.loadNpmTasks('grunt-contrib-requirejs');
   grunt.loadNpmTasks('grunt-contrib-less');
-  grunt.loadNpmTasks('grunt-react');
+  grunt.loadNpmTasks('grunt-browserify');
   grunt.loadNpmTasks('grunt-bower-task');
-  grunt.loadNpmTasks('grunt-subgrunt');
   grunt.loadNpmTasks('grunt-contrib-clean');
-  grunt.loadNpmTasks('grunt-contrib-copy');
 
-  grunt.registerTask('default', ['bower:install', 'subgrunt', 'copy', 'react', 'less']);
+  grunt.registerTask('default', ['browserify', 'less']);
 };
