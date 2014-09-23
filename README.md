@@ -3,7 +3,7 @@ react-cursor
 
 > Functional state management abstraction for use with Facebook React
 
-`react-cursor` is a javascript implementation of the Cursor concept first seen in [Om](https://github.com/swannodette/om/wiki/Cursors), and inspired by functional zippers.
+`react-cursor` is an opinionated javascript implementation of the Cursor concept first seen in [Om](https://github.com/swannodette/om/wiki/Cursors), and inspired by functional zippers.
 
 Cursors makes it easy for us work with deeply nested immutable values that are backed by React state. This
 means we can store our entire application state in a single nested immutable value, allowing completely stateless React
