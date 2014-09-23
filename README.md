@@ -49,6 +49,7 @@ Given a React component with state like this:
     });
 
 Construct a cursor:
+
     var Cursor = require('path/to/react-cursor').Cursor;
 
     var cursor = Cursor.build(this) // `this` is the React component's this pointer
