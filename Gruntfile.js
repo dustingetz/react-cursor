@@ -15,7 +15,16 @@ module.exports = function (grunt) {
         browserify: {
           dev: {
             src: ['./src/react-cursor.js'],
-            dest: './dist/react-cursor.js'
+            dest: './dist/react-cursor.dev.js'
+          },
+
+          build: {
+            src: ['./src/react-cursor.js'],
+            dest: './dist/react-cursor.js',
+
+            options: {
+              external: ['react/addons', 'underscore']
+            }
           },
 
           dist: {
@@ -23,13 +32,13 @@ module.exports = function (grunt) {
             dest: './dist/react-cursor.min.js',
 
             options: {
-              external: ['react', 'underscore'],
+              external: ['react/addons', 'underscore'],
               transform: [uglifyify]
             }
           }
         },
 
-        clean: ['bower_components', 'dist'],
+        clean: ['dist'],
 
         karma: {
             unit: {
@@ -41,10 +50,9 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-requirejs');
     grunt.loadNpmTasks('grunt-browserify');
-    grunt.loadNpmTasks('grunt-bower-task');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-karma');
 
-    grunt.registerTask('default', ['bower:install']);
-    grunt.registerTask('release', ['clean', 'bower:install', 'requirejs']);
+    grunt.registerTask('default', ['clean', 'browserify:dev']);
+    grunt.registerTask('release', ['clean', 'browserify:dev', 'browserify:build', 'browserify:dist']);
 };

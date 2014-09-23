@@ -12,19 +12,6 @@ module.exports = function (grunt) {
       '* Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>;' +
       ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */\n',
 
-    bower: {
-      install: {
-        options: {
-          copy: false,
-          install: true,
-          verbose: false,
-          cleanTargetDir: false,
-          cleanBowerDir: false,
-          bowerOptions: {}
-        }
-      }
-    },
-
     browserify: {
       dev: {
         src: ['./webapp/js/Page.js'],
@@ -58,7 +45,6 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-browserify');
-  grunt.loadNpmTasks('grunt-bower-task');
   grunt.loadNpmTasks('grunt-contrib-clean');
 
   grunt.registerTask('default', ['browserify', 'less']);
