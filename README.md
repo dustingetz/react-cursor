@@ -89,7 +89,7 @@ This is provided as a mixin which can be used like so:
 
 `var ImmutableOptimizations = require('path/to/react-cursor').ImmutableOptimizations`
 
-see [ImmutableOptimizations.js](https://github.com/dustingetz/react-cursor/blob/master/js/ImmutableOptimizations.js).
+see [ImmutableOptimizations.js](https://github.com/dustingetz/react-cursor/blob/master/src/ImmutableOptimizations.js).
 
 `react-cursor` currently depends on underscore, but this will be factored out (sooner if someone asks me for it).
 
