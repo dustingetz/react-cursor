@@ -1,15 +1,25 @@
 {
   "name": "react-cursor",
   "version": "0.9.0",
-  "description": "",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "description": "react-cursor is a javascript implementation of the Cursor concept first seen in Om, and inspired by functional zippers.",
+  "keywords": [
+    "react",
+    "cursor"
+  ],
+  "author": "Dustin Getz",
   "contributors": [
     "Dustin Getz",
     "Wingspan Technology, Inc."
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dustingetz/react-cursor.git"
+  },
   "license": "MIT",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "main": "./src/react-cursor.js",
   "devDependencies": {
     "grunt": "~0.4.5",
     "grunt-cli": "~0.1.9",
