@@ -20,12 +20,13 @@ Cursors solve this problem.
 
 `react-cursor` offers the following benefits:
 
- * single mutable ref to normalized app state
+ * single mutable ref to app state
  * cursors for encapsulation and modularity
  * O(1) deep equality checks (like Om)
  * fastest possible react performance
  * Manipulate deeply nested immutable values backed by React state
  * Decouple your application state from the shape of the DOM, allowing application state to be normalized
+ * Mechanically eliminates [React's double setState issue](https://github.com/facebook/react/issues/122).
 
 ## tutorial
 
@@ -62,22 +63,6 @@ Cursors have `refine`, `value` and `onChange`:
     cursor.refine('b').refine('foo').value      //=> { 'bar': 42, baz: 55 }
     cursor.refine('b').refine('foo').onChange({ 'bar': 43, baz: 56 })
 
-
-## example app
-
-Cursors make it trivial to implement a React JSON editor:
-
-[![live demo](https://raw.githubusercontent.com/dustingetz/react-json-editor/master/docs/_assets/json-editor.png)](http://react-json-editor.bitballoon.com/examples/react-state-editor/webapp/)
-
-
-## notes
-
-`value` and `onChange` are the chosen nomenclature to directly line up with React's value/onChange convention.
-
-Cursors also have `pendingValue()` for use in event handlers. This solves the [double setState bug](https://github.com/facebook/react/issues/122).
-
-Cursors are implemented in terms of [React.addons.update](http://facebook.github.io/react/docs/update.html).
-
 Cursors are heavily memoized to preserve reference equality between equivalent cursors, such that we can implement
 `React.shouldComponentUpdate` trivially and O(1):
 
@@ -85,11 +70,38 @@ Cursors are heavily memoized to preserve reference equality between equivalent c
         return this.props.cursor !== nextProps.cursor;
     }
 
-This is provided as a mixin which can be used like so:
+Due to the nature of React, this is a critical optimization when your application grows large. `react-cursor` provides this optimization as a mixin which can be used like so:
 
 `var ImmutableOptimizations = require('path/to/react-cursor').ImmutableOptimizations`
 
 see [ImmutableOptimizations.js](https://github.com/dustingetz/react-cursor/blob/master/src/ImmutableOptimizations.js).
+
+Cursors also have `pendingValue()` for use in event handlers. This solves the [double setState bug](https://github.com/facebook/react/issues/122).
+
+## example app
+
+Cursors make it trivial to implement a React JSON editor:
+
+[![live demo](https://raw.githubusercontent.com/dustingetz/react-json-editor/master/docs/_assets/json-editor.png)](http://react-json-editor.bitballoon.com/examples/react-state-editor/webapp/)
+
+## Comparisons to similar libraries
+
+There exist several similar libraries 
+([Cortex](https://github.com/mquan/cortex), 
+[immutable-js](https://github.com/facebook/immutable-js#cursors), 
+[caseywebdev/cursors](https://github.com/caseywebdev/cursors)) 
+that tackle exactly the same problem, some of which pre-date this project. `react-cursor` has one distinguishing 
+feature: the ability to trivially implement a correct shouldComponentUpdate. Note that to do this correctly, not only do
+equivalent values at equal paths need to be `===`, but `onChange` handlers at equal paths also need to be `===`. (If the 
+path changes, the DOM event handlers may need to be updated as well, requiring a render.) 
+
+I also don't believe other libraries address [React's double setState issue](https://github.com/facebook/react/issues/122).
+
+## notes
+
+`value` and `onChange` are the chosen nomenclanture to directly line up with React's value/onChange convention.
+
+Cursors are implemented in terms of [React.addons.update](http://facebook.github.io/react/docs/update.html).
 
 `react-cursor` currently depends on underscore, but this will be factored out (sooner if someone asks me for it).
 
