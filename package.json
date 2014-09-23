@@ -1,19 +1,25 @@
 {
-    "name": "react-cursor",
-    "version": "0.9.0",
-    "description": "",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "contributors": ["Dustin Getz", "Wingspan Technology, Inc."],
-    "license": "MIT",
-    "devDependencies": {
-        "grunt": "~0.4.1",
-        "grunt-cli": "~0.1.9",
-        "grunt-contrib-jshint": "~0.7.1",
-        "grunt-contrib-requirejs": "~0.4.1",
-        "grunt-bower-task": "~0.3.4",
-        "grunt-contrib-clean": "~0.5.0",
-        "grunt-karma": "~0.6.2"
-    }
+  "name": "react-cursor",
+  "version": "0.9.0",
+  "description": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "contributors": [
+    "Dustin Getz",
+    "Wingspan Technology, Inc."
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "grunt": "~0.4.5",
+    "grunt-cli": "~0.1.9",
+    "grunt-contrib-jshint": "~0.7.1",
+    "grunt-contrib-requirejs": "~0.4.1",
+    "grunt-contrib-clean": "~0.5.0",
+    "grunt-karma": "~0.6.2",
+    "grunt-browserify": "~3.0.1",
+    "uglifyify": "~2.5.0",
+    "underscore": "~1.7.0",
+    "react": "~0.11.2"
+  }
 }

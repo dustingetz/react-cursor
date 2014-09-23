@@ -2,6 +2,8 @@
 module.exports = function (grunt) {
     'use strict';
 
+    var uglifyify = require('uglifyify');
+
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         banner: '/*! <%= pkg.title || pkg.name %> - v<%= pkg.version %> - ' +
@@ -10,64 +12,33 @@ module.exports = function (grunt) {
             '* Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>;' +
             ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */\n',
 
-        bower: {
-            install: {
-                options: {
-                    copy: false,
-                    install: true,
-                    verbose: false,
-                    cleanTargetDir: false,
-                    cleanBowerDir: false,
-                    bowerOptions: {}
-                }
-            }
-        },
+        browserify: {
+          dev: {
+            src: ['./src/react-cursor.js'],
+            dest: './dist/react-cursor.dev.js'
+          },
 
-        requirejs: {
+          build: {
+            src: ['./src/react-cursor.js'],
+            dest: './dist/react-cursor.js',
+
             options: {
-                optimize: 'none',
-                inlineText: true,
-                useStrict: true,
-                skipPragmas: true,
-                preserveLicenseComments: true,
-
-                wrap: {
-                    "startFile": "almond-begin.txt",
-                    "endFile": "almond-end.txt"
-                },
-
-
-                baseUrl: 'js',
-
-                paths: {
-                    almond: '../bower_components/almond/almond',
-                    react: '../bower_components/react/react-with-addons',
-                    underscore: '../bower_components/underscore/underscore'
-                },
-
-                shim: {
-                    react: { deps: [], exports: 'React'}
-                },
-
-                uglify: {
-                    toplevel: true,
-                    ascii_only: true,
-                    beautify: true,
-                    max_line_length: 1000,
-                    defines: { DEBUG: ['name', 'false'] },
-                    no_mangle: true
-                }
-            },
-            compile: {
-                options: {
-                    out: 'dist/react-cursor.js',
-                    include: ['almond', 'react-cursor'],
-                    exclude: ['require', 'react', 'underscore']
-                }
+              external: ['react/addons', 'underscore']
             }
+          },
+
+          dist: {
+            src: ['./src/react-cursor.js'],
+            dest: './dist/react-cursor.min.js',
+
+            options: {
+              external: ['react/addons', 'underscore'],
+              transform: [uglifyify]
+            }
+          }
         },
 
-        clean: ['bower_components', 'dist'],
+        clean: ['dist'],
 
         karma: {
             unit: {
@@ -78,10 +49,10 @@ module.exports = function (grunt) {
 
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-requirejs');
-    grunt.loadNpmTasks('grunt-bower-task');
+    grunt.loadNpmTasks('grunt-browserify');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-karma');
 
-    grunt.registerTask('default', ['bower:install']);
-    grunt.registerTask('release', ['clean', 'bower:install', 'requirejs']);
+    grunt.registerTask('default', ['clean', 'browserify:dev']);
+    grunt.registerTask('release', ['clean', 'browserify:dev', 'browserify:build', 'browserify:dist']);
 };

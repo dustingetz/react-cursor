@@ -5,18 +5,22 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "contributors": ["Dustin Getz", "Wingspan Technology, Inc."],
+  "contributors": [
+    "Dustin Getz",
+    "Wingspan Technology, Inc."
+  ],
   "license": "MIT",
   "devDependencies": {
     "grunt": "~0.4.1",
     "grunt-cli": "~0.1.9",
     "grunt-contrib-jshint": "~0.7.1",
-    "grunt-contrib-requirejs": "~0.4.1",
     "grunt-contrib-less": "~0.7.0",
     "grunt-react": "~0.8.2",
-    "grunt-bower-task": "~0.3.4",
-    "grunt-subgrunt": "~0.2.4",
     "grunt-contrib-clean": "~0.5.0",
-    "grunt-contrib-copy": "~0.5.0"
+    "react": "~0.11.2",
+    "underscore": "~1.7.0",
+    "reactify": "~0.14.0",
+    "browserify": "~5.12.0",
+    "grunt-browserify": "~3.0.1"
   }
 }

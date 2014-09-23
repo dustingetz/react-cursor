@@ -5,13 +5,13 @@ react-cursor
 
 `react-cursor` is a javascript implementation of the Cursor concept first seen in [Om](https://github.com/swannodette/om/wiki/Cursors), and inspired by functional zippers.
 
-Cursors makes it easy for us work with deeply nested immutable values that are backed by React state. This 
-means we can store our entire application state in a single nested immutable value, allowing completely stateless React 
+Cursors makes it easy for us work with deeply nested immutable values that are backed by React state. This
+means we can store our entire application state in a single nested immutable value, allowing completely stateless React
 views.
 
 One of the React [maintainers wrote](https://news.ycombinator.com/item?id=6937921):
 
-> [React is] there when you want to treat state as an implementation detail of a subcomponent. This is only because 
+> [React is] there when you want to treat state as an implementation detail of a subcomponent. This is only because
 > we don't have a good way of externalizing state changes, while simultaneously keeping the nature of them private.
 
 Cursors solve this problem.
@@ -47,8 +47,10 @@ Given a React component with state like this:
             return <pre>{JSON.stringify(this.state, undefined, 2)}</pre>;
         }
     });
-    
+
 Construct a cursor:
+
+    var Cursor = require('path/to/react-cursor').Cursor;
 
     var cursor = Cursor.build(this) // `this` is the React component's this pointer
                                     // or the return value of React.renderComponent
@@ -56,7 +58,7 @@ Construct a cursor:
 Cursors have `refine`, `value` and `onChange`:
 
     cursor.refine('a').value            //=> 10
-    cursor.refine('a').onChange(11); 
+    cursor.refine('a').onChange(11);
     cursor.refine('b').refine('foo').value      //=> { 'bar': 42, baz: 55 }
     cursor.refine('b').refine('foo').onChange({ 'bar': 43, baz: 56 })
 
@@ -76,14 +78,18 @@ Cursors also have `pendingValue()` for use in event handlers. This solves the [d
 
 Cursors are implemented in terms of [React.addons.update](http://facebook.github.io/react/docs/update.html).
 
-Cursors are heavily memoized to preserve reference equality between equivalent cursors, such that we can implement 
+Cursors are heavily memoized to preserve reference equality between equivalent cursors, such that we can implement
 `React.shouldComponentUpdate` trivially and O(1):
- 
-    shouldComponentUpdate: function (nextProps, nextState) { 
-        return this.props.cursor !== nextProps.cursor; 
+
+    shouldComponentUpdate: function (nextProps, nextState) {
+        return this.props.cursor !== nextProps.cursor;
     }
 
-This is provided as a mixin: see [ImmutableOptimizations.js](https://github.com/dustingetz/react-cursor/blob/master/js/ImmutableOptimizations.js).
+This is provided as a mixin which can be used like so:
+
+`var ImmutableOptimizations = require('path/to/react-cursor').ImmutableOptimizations`
+
+see [ImmutableOptimizations.js](https://github.com/dustingetz/react-cursor/blob/master/js/ImmutableOptimizations.js).
 
 `react-cursor` currently depends on underscore, but this will be factored out (sooner if someone asks me for it).
 

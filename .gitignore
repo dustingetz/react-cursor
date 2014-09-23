@@ -2,6 +2,5 @@ Thumbs.db
 .DS_STORE
 /node_modules
 /bower_components
-/dist
 *.iml
 .idea

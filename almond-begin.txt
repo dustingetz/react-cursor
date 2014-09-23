@@ -1,7 +1,0 @@
-(function (root, factory) {
-    if (typeof define === 'function' && define.amd) {
-        define(['react', 'underscore'], factory);
-    } else {
-        root.ReactCursor = factory(root.React, root._);
-    }
-}(this, function (React, _) {

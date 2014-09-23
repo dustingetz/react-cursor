@@ -4,19 +4,18 @@
     <title>Master/Detail form demo | Wingspan Forms</title>
     <meta http-equiv="content-type" content="text/html;charset=UTF-8">
     <link rel="stylesheet" type="text/css" href="styles/App.css">
+    <script type='text/javascript' src='https://code.jquery.com/jquery-2.1.1.min.js'></script>
+    <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js'></script>
+    <script type="text/javascript" src="js/build.js"></script>
 </head>
 <body>
 <div id="root"></div>
 
-<script type="text/javascript" src="lib/require.js"></script>
-<script type="text/javascript" src="require-shims.js"></script>
 <script>
     (function(){
-        'use strict';
+      'use strict';
 
-        require(['jquery', 'underscore', 'Page'], function($, _, page) {
-            $(document).ready(_.partial(page.entrypoint, document.getElementById('root')));
-        });
+      $(document).ready(_.partial(window.entrypoint, document.getElementById('root')));
 
     })();
 </script>
