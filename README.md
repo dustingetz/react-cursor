@@ -99,7 +99,7 @@ I also believe `react-cursor` is the only library that attempts to address [Reac
 
 ## notes
 
-`value` and `onChange` are the chosen nomenclanture to directly line up with React's value/onChange convention.
+`value` and `onChange` are the chosen nomenclature to directly line up with React's value/onChange convention.
 
 Cursors are implemented in terms of [React.addons.update](http://facebook.github.io/react/docs/update.html).
 
