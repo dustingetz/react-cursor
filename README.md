@@ -94,3 +94,7 @@ see [ImmutableOptimizations.js](https://github.com/dustingetz/react-cursor/blob/
 `react-cursor` currently depends on underscore, but this will be factored out (sooner if someone asks me for it).
 
 Please email the maintainer (dustin.getz@gmail.com) with questions, discussion or feature requests.
+
+## Contributors
+
+The initial prototypes of `react-cursor` were pair programmed by [Dustin Getz](https://github.com/dustingetz) and (Daniel Miladinov)[https://github.com/danielmiladinov]. 
