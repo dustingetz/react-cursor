@@ -72,7 +72,7 @@ Cursors make it trivial to implement a React JSON editor:
 
 ## notes
 
-`value` and `onChange` are the chosen nomenclanture to directly line up with React's value/onChange convention.
+`value` and `onChange` are the chosen nomenclature to directly line up with React's value/onChange convention.
 
 Cursors also have `pendingValue()` for use in event handlers. This solves the [double setState bug](https://github.com/facebook/react/issues/122).
 
