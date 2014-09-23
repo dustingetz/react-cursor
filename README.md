@@ -110,3 +110,7 @@ Please email the maintainer (dustin.getz@gmail.com) with questions, discussion o
 ## Contributors
 
 The initial prototypes of `react-cursor` were pair programmed by [Dustin Getz](https://github.com/dustingetz) and [Daniel Miladinov](https://github.com/danielmiladinov). 
+
+## License
+
+_`react-cursor` is governed under the MIT License._
