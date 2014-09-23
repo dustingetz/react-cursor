@@ -95,7 +95,7 @@ feature: the ability to trivially implement a correct shouldComponentUpdate. Not
 equivalent values at equal paths need to be `===`, but `onChange` handlers at equal paths also need to be `===`. (If the 
 path changes, the DOM event handlers may need to be updated as well, requiring a render.) 
 
-I also don't believe other libraries address [React's double setState issue](https://github.com/facebook/react/issues/122).
+I also believe `react-cursor` is the only library that attempts to address [React's double setState issue](https://github.com/facebook/react/issues/122).
 
 ## notes
 
