@@ -1,5 +1,32 @@
 'use strict';
 
+// As documented here:
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind
+if (!Function.prototype.bind) {
+  Function.prototype.bind = function (context) {
+    if (typeof this !== "function") {
+      // closest thing possible to the ECMAScript 5
+      // internal IsCallable function
+      throw new TypeError("Function.prototype.bind - what is trying to be bound is not callable");
+    }
+
+    var args = Array.prototype.slice.call(arguments, 1),
+        toBind = this,
+        NOP = function () {},
+        bound = function () {
+          return toBind.apply(this instanceof NOP && context
+                 ? this
+                 : context,
+                 args.concat(Array.prototype.slice.call(arguments)));
+        };
+
+    NOP.prototype = this.prototype;
+    bound.prototype = new NOP();
+
+    return bound;
+  };
+}
+
 function getRefAtPath(tree, paths) {
   return reduce(paths, deref, tree);
 }
