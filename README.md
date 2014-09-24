@@ -87,11 +87,8 @@ Cursors make it trivial to implement a React JSON editor:
 
 ## Comparisons to similar libraries
 
-There exist several similar libraries 
-([Cortex](https://github.com/mquan/cortex), 
-[immutable-js](https://github.com/facebook/immutable-js#cursors), 
-[caseywebdev/cursors](https://github.com/caseywebdev/cursors)) 
-that tackle exactly the same problem, some of which pre-date this project. `react-cursor` has one distinguishing 
+There exist several similar libraries (most notably [Cortex](https://github.com/mquan/cortex)) 
+that tackle exactly the same problem. `react-cursor` has one distinguishing 
 feature: the ability to trivially implement a correct shouldComponentUpdate. Note that to do this correctly, not only do
 equivalent values at equal paths need to be `===`, but `onChange` handlers at equal paths also need to be `===`. (If the 
 path changes, the DOM event handlers may need to be updated as well, requiring a render.) 
