@@ -14,7 +14,7 @@ function Cursor(cmp, path, value) {
     return util.getRefAtPath(cmp._pendingState || cmp.state, path);
   };
 
-  this.onChange = _.partial(onChange, cmp, path);
+  this.transact = _.partial(transact, cmp, path);
 
   this.refine = function (/* one or more paths through the tree */) {
     // When refining inside a lifecycle method, same cmp and same path isn't enough.
@@ -26,7 +26,7 @@ function Cursor(cmp, path, value) {
   };
 }
 
-function onChange(cmp, path, nextValue) {
+function transact(cmp, path, nextValue) {
   var nextState;
 
   if (path.length > 0) {
