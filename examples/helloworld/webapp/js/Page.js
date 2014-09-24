@@ -46,7 +46,7 @@ var Clicker = React.createClass({
     console.log('rendering clicker ', this.props.key);
     return (
       <div>
-        <input type="text" value={this.props.cursor.value} onChange={this.onInputChange} />
+        <input type="text" value={this.props.cursor.value} set={this.onInputChange} />
         <span>{this.props.cursor.value}</span>
         <button onClick={this.inc2}>+2</button>
         <button onClick={this.inc10}>+10</button>
@@ -57,16 +57,16 @@ var Clicker = React.createClass({
   onInputChange: function (e) {
     var nextValue = parseInt(e.target.value, 10);
     if (isNaN(nextValue)) nextValue = '';
-    this.props.cursor.onChange(nextValue);
+    this.props.cursor.set(nextValue);
   },
 
   inc2: function () {
-    this.props.cursor.onChange(this.props.cursor.pendingValue() + 1);
-    this.props.cursor.onChange(this.props.cursor.pendingValue() + 1);
+    this.props.cursor.set(this.props.cursor.pendingValue() + 1);
+    this.props.cursor.set(this.props.cursor.pendingValue() + 1);
   },
 
   inc10: function () {
-    this.props.cursor.onChange(this.props.cursor.pendingValue() + 10);
+    this.props.cursor.set(this.props.cursor.pendingValue() + 10);
   }
 });
 
@@ -79,18 +79,18 @@ function entrypoint(rootEl) {
   var c1 = window.c1 = Cursor.build(window.App);
   var c2 = window.c2 = Cursor.build(window.App);
   console.assert(c1.value === c2.value);
-  console.assert(c1.onChange === c2.onChange);
+  console.assert(c1.set === c2.set);
   console.assert(c1 === c2);
 
   var c10 = c1.refine('very', 'deeply', 'nested', 'counts', '0');
   var c20 = c2.refine('very', 'deeply', 'nested', 'counts', '0');
   console.assert(c10.value === c20.value);
-  console.assert(c10.onChange === c20.onChange);
+  console.assert(c10.set === c20.set);
   console.assert(c10 === c20);
 
   var c20b = c2.refine('very', 'deeply', 'nested', 'counts', '0');
   console.assert(c20b.value === c20.value);
-  console.assert(c20b.onChange === c20.onChange);
+  console.assert(c20b.set === c20.set);
   console.assert(c20b === c20);
 }
 
