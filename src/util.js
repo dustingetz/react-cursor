@@ -147,5 +147,5 @@ module.exports = {
   isEqual: isEqual,
   union: union,
   omit: omit,
-  find: find,
+  find: find
 };
