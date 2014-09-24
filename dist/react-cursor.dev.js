@@ -21008,7 +21008,7 @@ module.exports = {
   isEqual: isEqual,
   union: union,
   omit: omit,
-  find: find,
+  find: find
 };
 
 },{"array-union":1,"deep-equal":3,"omit-keys":7}]},{},[171]);

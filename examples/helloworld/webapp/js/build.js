@@ -21922,7 +21922,7 @@ var Clicker = React.createClass({displayName: 'Clicker',
     console.log('rendering clicker ', this.props.key);
     return (
       React.DOM.div(null, 
-        React.DOM.input({type: "text", value: this.props.cursor.value, onChange: this.onInputChange}), 
+        React.DOM.input({type: "text", value: this.props.cursor.value, set: this.onInputChange}), 
         React.DOM.span(null, this.props.cursor.value), 
         React.DOM.button({onClick: this.inc2}, "+2"), 
         React.DOM.button({onClick: this.inc10}, "+10")
@@ -21933,16 +21933,16 @@ var Clicker = React.createClass({displayName: 'Clicker',
   onInputChange: function (e) {
     var nextValue = parseInt(e.target.value, 10);
     if (isNaN(nextValue)) nextValue = '';
-    this.props.cursor.onChange(nextValue);
+    this.props.cursor.set(nextValue);
   },
 
   inc2: function () {
-    this.props.cursor.onChange(this.props.cursor.pendingValue() + 1);
-    this.props.cursor.onChange(this.props.cursor.pendingValue() + 1);
+    this.props.cursor.set(this.props.cursor.pendingValue() + 1);
+    this.props.cursor.set(this.props.cursor.pendingValue() + 1);
   },
 
   inc10: function () {
-    this.props.cursor.onChange(this.props.cursor.pendingValue() + 10);
+    this.props.cursor.set(this.props.cursor.pendingValue() + 10);
   }
 });
 
@@ -21955,18 +21955,18 @@ function entrypoint(rootEl) {
   var c1 = window.c1 = Cursor.build(window.App);
   var c2 = window.c2 = Cursor.build(window.App);
   console.assert(c1.value === c2.value);
-  console.assert(c1.onChange === c2.onChange);
+  console.assert(c1.set === c2.set);
   console.assert(c1 === c2);
 
   var c10 = c1.refine('very', 'deeply', 'nested', 'counts', '0');
   var c20 = c2.refine('very', 'deeply', 'nested', 'counts', '0');
   console.assert(c10.value === c20.value);
-  console.assert(c10.onChange === c20.onChange);
+  console.assert(c10.set === c20.set);
   console.assert(c10 === c20);
 
   var c20b = c2.refine('very', 'deeply', 'nested', 'counts', '0');
   console.assert(c20b.value === c20.value);
-  console.assert(c20b.onChange === c20.onChange);
+  console.assert(c20b.set === c20.set);
   console.assert(c20b === c20);
 }
 
@@ -22267,323 +22267,323 @@ module.exports = function isObject(o) {
 };
 },{}],171:[function(require,module,exports){
 module.exports=require(2)
-},{"./lib/ReactWithAddons":259,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/addons.js":2}],172:[function(require,module,exports){
+},{"./lib/ReactWithAddons":259,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/addons.js":2}],172:[function(require,module,exports){
 module.exports=require(3)
-},{"./focusNode":291,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/AutoFocusMixin.js":3}],173:[function(require,module,exports){
+},{"./focusNode":291,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/AutoFocusMixin.js":3}],173:[function(require,module,exports){
 module.exports=require(4)
-},{"./EventConstants":187,"./EventPropagators":192,"./ExecutionEnvironment":193,"./SyntheticInputEvent":269,"./keyOf":312,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/BeforeInputEventPlugin.js":4}],174:[function(require,module,exports){
+},{"./EventConstants":187,"./EventPropagators":192,"./ExecutionEnvironment":193,"./SyntheticInputEvent":269,"./keyOf":312,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/BeforeInputEventPlugin.js":4}],174:[function(require,module,exports){
 module.exports=require(5)
-},{"./invariant":305,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/CSSCore.js":5,"_process":1}],175:[function(require,module,exports){
+},{"./invariant":305,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/CSSCore.js":5,"_process":1}],175:[function(require,module,exports){
 module.exports=require(6)
-},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/CSSProperty.js":6}],176:[function(require,module,exports){
+},{"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/CSSProperty.js":6}],176:[function(require,module,exports){
 module.exports=require(7)
-},{"./CSSProperty":175,"./dangerousStyleValue":286,"./hyphenateStyleName":303,"./memoizeStringOnly":314,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/CSSPropertyOperations.js":7}],177:[function(require,module,exports){
+},{"./CSSProperty":175,"./dangerousStyleValue":286,"./hyphenateStyleName":303,"./memoizeStringOnly":314,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/CSSPropertyOperations.js":7}],177:[function(require,module,exports){
 module.exports=require(8)
-},{"./PooledClass":199,"./invariant":305,"./mixInto":318,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/CallbackQueue.js":8,"_process":1}],178:[function(require,module,exports){
+},{"./PooledClass":199,"./invariant":305,"./mixInto":318,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/CallbackQueue.js":8,"_process":1}],178:[function(require,module,exports){
 module.exports=require(9)
-},{"./EventConstants":187,"./EventPluginHub":189,"./EventPropagators":192,"./ExecutionEnvironment":193,"./ReactUpdates":258,"./SyntheticEvent":267,"./isEventSupported":306,"./isTextInputElement":308,"./keyOf":312,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ChangeEventPlugin.js":9}],179:[function(require,module,exports){
+},{"./EventConstants":187,"./EventPluginHub":189,"./EventPropagators":192,"./ExecutionEnvironment":193,"./ReactUpdates":258,"./SyntheticEvent":267,"./isEventSupported":306,"./isTextInputElement":308,"./keyOf":312,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/ChangeEventPlugin.js":9}],179:[function(require,module,exports){
 module.exports=require(10)
-},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ClientReactRootIndex.js":10}],180:[function(require,module,exports){
+},{"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/ClientReactRootIndex.js":10}],180:[function(require,module,exports){
 module.exports=require(11)
-},{"./EventConstants":187,"./EventPropagators":192,"./ExecutionEnvironment":193,"./ReactInputSelection":234,"./SyntheticCompositionEvent":265,"./getTextContentAccessor":300,"./keyOf":312,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/CompositionEventPlugin.js":11}],181:[function(require,module,exports){
+},{"./EventConstants":187,"./EventPropagators":192,"./ExecutionEnvironment":193,"./ReactInputSelection":234,"./SyntheticCompositionEvent":265,"./getTextContentAccessor":300,"./keyOf":312,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/CompositionEventPlugin.js":11}],181:[function(require,module,exports){
 module.exports=require(12)
-},{"./Danger":184,"./ReactMultiChildUpdateTypes":240,"./getTextContentAccessor":300,"./invariant":305,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/DOMChildrenOperations.js":12,"_process":1}],182:[function(require,module,exports){
+},{"./Danger":184,"./ReactMultiChildUpdateTypes":240,"./getTextContentAccessor":300,"./invariant":305,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/DOMChildrenOperations.js":12,"_process":1}],182:[function(require,module,exports){
 module.exports=require(13)
-},{"./invariant":305,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/DOMProperty.js":13,"_process":1}],183:[function(require,module,exports){
+},{"./invariant":305,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/DOMProperty.js":13,"_process":1}],183:[function(require,module,exports){
 module.exports=require(14)
-},{"./DOMProperty":182,"./escapeTextForBrowser":289,"./memoizeStringOnly":314,"./warning":329,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/DOMPropertyOperations.js":14,"_process":1}],184:[function(require,module,exports){
+},{"./DOMProperty":182,"./escapeTextForBrowser":289,"./memoizeStringOnly":314,"./warning":329,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/DOMPropertyOperations.js":14,"_process":1}],184:[function(require,module,exports){
 module.exports=require(15)
-},{"./ExecutionEnvironment":193,"./createNodesFromMarkup":284,"./emptyFunction":287,"./getMarkupWrap":297,"./invariant":305,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/Danger.js":15,"_process":1}],185:[function(require,module,exports){
+},{"./ExecutionEnvironment":193,"./createNodesFromMarkup":284,"./emptyFunction":287,"./getMarkupWrap":297,"./invariant":305,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/Danger.js":15,"_process":1}],185:[function(require,module,exports){
 module.exports=require(16)
-},{"./keyOf":312,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/DefaultEventPluginOrder.js":16}],186:[function(require,module,exports){
+},{"./keyOf":312,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/DefaultEventPluginOrder.js":16}],186:[function(require,module,exports){
 module.exports=require(17)
-},{"./EventConstants":187,"./EventPropagators":192,"./ReactMount":238,"./SyntheticMouseEvent":271,"./keyOf":312,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/EnterLeaveEventPlugin.js":17}],187:[function(require,module,exports){
+},{"./EventConstants":187,"./EventPropagators":192,"./ReactMount":238,"./SyntheticMouseEvent":271,"./keyOf":312,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/EnterLeaveEventPlugin.js":17}],187:[function(require,module,exports){
 module.exports=require(18)
-},{"./keyMirror":311,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/EventConstants.js":18}],188:[function(require,module,exports){
+},{"./keyMirror":311,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/EventConstants.js":18}],188:[function(require,module,exports){
 module.exports=require(19)
-},{"./emptyFunction":287,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/EventListener.js":19,"_process":1}],189:[function(require,module,exports){
+},{"./emptyFunction":287,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/EventListener.js":19,"_process":1}],189:[function(require,module,exports){
 module.exports=require(20)
-},{"./EventPluginRegistry":190,"./EventPluginUtils":191,"./accumulate":277,"./forEachAccumulated":292,"./invariant":305,"./isEventSupported":306,"./monitorCodeUse":319,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/EventPluginHub.js":20,"_process":1}],190:[function(require,module,exports){
+},{"./EventPluginRegistry":190,"./EventPluginUtils":191,"./accumulate":277,"./forEachAccumulated":292,"./invariant":305,"./isEventSupported":306,"./monitorCodeUse":319,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/EventPluginHub.js":20,"_process":1}],190:[function(require,module,exports){
 module.exports=require(21)
-},{"./invariant":305,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/EventPluginRegistry.js":21,"_process":1}],191:[function(require,module,exports){
+},{"./invariant":305,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/EventPluginRegistry.js":21,"_process":1}],191:[function(require,module,exports){
 module.exports=require(22)
-},{"./EventConstants":187,"./invariant":305,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/EventPluginUtils.js":22,"_process":1}],192:[function(require,module,exports){
+},{"./EventConstants":187,"./invariant":305,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/EventPluginUtils.js":22,"_process":1}],192:[function(require,module,exports){
 module.exports=require(23)
-},{"./EventConstants":187,"./EventPluginHub":189,"./accumulate":277,"./forEachAccumulated":292,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/EventPropagators.js":23,"_process":1}],193:[function(require,module,exports){
+},{"./EventConstants":187,"./EventPluginHub":189,"./accumulate":277,"./forEachAccumulated":292,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/EventPropagators.js":23,"_process":1}],193:[function(require,module,exports){
 module.exports=require(24)
-},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ExecutionEnvironment.js":24}],194:[function(require,module,exports){
+},{"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/ExecutionEnvironment.js":24}],194:[function(require,module,exports){
 module.exports=require(25)
-},{"./DOMProperty":182,"./ExecutionEnvironment":193,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/HTMLDOMPropertyConfig.js":25}],195:[function(require,module,exports){
+},{"./DOMProperty":182,"./ExecutionEnvironment":193,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/HTMLDOMPropertyConfig.js":25}],195:[function(require,module,exports){
 module.exports=require(26)
-},{"./ReactLink":236,"./ReactStateSetters":252,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/LinkedStateMixin.js":26}],196:[function(require,module,exports){
+},{"./ReactLink":236,"./ReactStateSetters":252,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/LinkedStateMixin.js":26}],196:[function(require,module,exports){
 module.exports=require(27)
-},{"./ReactPropTypes":246,"./invariant":305,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/LinkedValueUtils.js":27,"_process":1}],197:[function(require,module,exports){
+},{"./ReactPropTypes":246,"./invariant":305,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/LinkedValueUtils.js":27,"_process":1}],197:[function(require,module,exports){
 module.exports=require(28)
-},{"./ReactBrowserEventEmitter":202,"./accumulate":277,"./forEachAccumulated":292,"./invariant":305,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/LocalEventTrapMixin.js":28,"_process":1}],198:[function(require,module,exports){
+},{"./ReactBrowserEventEmitter":202,"./accumulate":277,"./forEachAccumulated":292,"./invariant":305,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/LocalEventTrapMixin.js":28,"_process":1}],198:[function(require,module,exports){
 module.exports=require(29)
-},{"./EventConstants":187,"./emptyFunction":287,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/MobileSafariClickEventPlugin.js":29}],199:[function(require,module,exports){
+},{"./EventConstants":187,"./emptyFunction":287,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/MobileSafariClickEventPlugin.js":29}],199:[function(require,module,exports){
 module.exports=require(30)
-},{"./invariant":305,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/PooledClass.js":30,"_process":1}],200:[function(require,module,exports){
+},{"./invariant":305,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/PooledClass.js":30,"_process":1}],200:[function(require,module,exports){
 module.exports=require(31)
-},{"./DOMPropertyOperations":183,"./EventPluginUtils":191,"./ExecutionEnvironment":193,"./ReactChildren":205,"./ReactComponent":206,"./ReactCompositeComponent":209,"./ReactContext":210,"./ReactCurrentOwner":211,"./ReactDOM":212,"./ReactDOMComponent":214,"./ReactDefaultInjection":224,"./ReactDescriptor":227,"./ReactInstanceHandles":235,"./ReactMount":238,"./ReactMultiChild":239,"./ReactPerf":242,"./ReactPropTypes":246,"./ReactServerRendering":250,"./ReactTextComponent":254,"./onlyChild":320,"./warning":329,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/React.js":31,"_process":1}],201:[function(require,module,exports){
+},{"./DOMPropertyOperations":183,"./EventPluginUtils":191,"./ExecutionEnvironment":193,"./ReactChildren":205,"./ReactComponent":206,"./ReactCompositeComponent":209,"./ReactContext":210,"./ReactCurrentOwner":211,"./ReactDOM":212,"./ReactDOMComponent":214,"./ReactDefaultInjection":224,"./ReactDescriptor":227,"./ReactInstanceHandles":235,"./ReactMount":238,"./ReactMultiChild":239,"./ReactPerf":242,"./ReactPropTypes":246,"./ReactServerRendering":250,"./ReactTextComponent":254,"./onlyChild":320,"./warning":329,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/React.js":31,"_process":1}],201:[function(require,module,exports){
 module.exports=require(32)
-},{"./ReactEmptyComponent":229,"./ReactMount":238,"./invariant":305,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactBrowserComponentMixin.js":32,"_process":1}],202:[function(require,module,exports){
+},{"./ReactEmptyComponent":229,"./ReactMount":238,"./invariant":305,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/ReactBrowserComponentMixin.js":32,"_process":1}],202:[function(require,module,exports){
 module.exports=require(33)
-},{"./EventConstants":187,"./EventPluginHub":189,"./EventPluginRegistry":190,"./ReactEventEmitterMixin":231,"./ViewportMetrics":276,"./isEventSupported":306,"./merge":315,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactBrowserEventEmitter.js":33}],203:[function(require,module,exports){
+},{"./EventConstants":187,"./EventPluginHub":189,"./EventPluginRegistry":190,"./ReactEventEmitterMixin":231,"./ViewportMetrics":276,"./isEventSupported":306,"./merge":315,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/ReactBrowserEventEmitter.js":33}],203:[function(require,module,exports){
 module.exports=require(34)
-},{"./React":200,"./ReactCSSTransitionGroupChild":204,"./ReactTransitionGroup":257,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactCSSTransitionGroup.js":34}],204:[function(require,module,exports){
+},{"./React":200,"./ReactCSSTransitionGroupChild":204,"./ReactTransitionGroup":257,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/ReactCSSTransitionGroup.js":34}],204:[function(require,module,exports){
 module.exports=require(35)
-},{"./CSSCore":174,"./React":200,"./ReactTransitionEvents":256,"./onlyChild":320,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactCSSTransitionGroupChild.js":35,"_process":1}],205:[function(require,module,exports){
+},{"./CSSCore":174,"./React":200,"./ReactTransitionEvents":256,"./onlyChild":320,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/ReactCSSTransitionGroupChild.js":35,"_process":1}],205:[function(require,module,exports){
 module.exports=require(36)
-},{"./PooledClass":199,"./traverseAllChildren":327,"./warning":329,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactChildren.js":36,"_process":1}],206:[function(require,module,exports){
+},{"./PooledClass":199,"./traverseAllChildren":327,"./warning":329,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/ReactChildren.js":36,"_process":1}],206:[function(require,module,exports){
 module.exports=require(37)
-},{"./ReactDescriptor":227,"./ReactOwner":241,"./ReactUpdates":258,"./invariant":305,"./keyMirror":311,"./merge":315,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactComponent.js":37,"_process":1}],207:[function(require,module,exports){
+},{"./ReactDescriptor":227,"./ReactOwner":241,"./ReactUpdates":258,"./invariant":305,"./keyMirror":311,"./merge":315,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/ReactComponent.js":37,"_process":1}],207:[function(require,module,exports){
 module.exports=require(38)
-},{"./ReactDOMIDOperations":216,"./ReactMarkupChecksum":237,"./ReactMount":238,"./ReactPerf":242,"./ReactReconcileTransaction":248,"./getReactRootElementInContainer":299,"./invariant":305,"./setInnerHTML":323,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactComponentBrowserEnvironment.js":38,"_process":1}],208:[function(require,module,exports){
+},{"./ReactDOMIDOperations":216,"./ReactMarkupChecksum":237,"./ReactMount":238,"./ReactPerf":242,"./ReactReconcileTransaction":248,"./getReactRootElementInContainer":299,"./invariant":305,"./setInnerHTML":323,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/ReactComponentBrowserEnvironment.js":38,"_process":1}],208:[function(require,module,exports){
 module.exports=require(39)
-},{"./shallowEqual":324,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactComponentWithPureRenderMixin.js":39}],209:[function(require,module,exports){
+},{"./shallowEqual":324,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/ReactComponentWithPureRenderMixin.js":39}],209:[function(require,module,exports){
 module.exports=require(40)
-},{"./ReactComponent":206,"./ReactContext":210,"./ReactCurrentOwner":211,"./ReactDescriptor":227,"./ReactDescriptorValidator":228,"./ReactEmptyComponent":229,"./ReactErrorUtils":230,"./ReactOwner":241,"./ReactPerf":242,"./ReactPropTransferer":243,"./ReactPropTypeLocationNames":244,"./ReactPropTypeLocations":245,"./ReactUpdates":258,"./instantiateReactComponent":304,"./invariant":305,"./keyMirror":311,"./mapObject":313,"./merge":315,"./mixInto":318,"./monitorCodeUse":319,"./shouldUpdateReactComponent":325,"./warning":329,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactCompositeComponent.js":40,"_process":1}],210:[function(require,module,exports){
+},{"./ReactComponent":206,"./ReactContext":210,"./ReactCurrentOwner":211,"./ReactDescriptor":227,"./ReactDescriptorValidator":228,"./ReactEmptyComponent":229,"./ReactErrorUtils":230,"./ReactOwner":241,"./ReactPerf":242,"./ReactPropTransferer":243,"./ReactPropTypeLocationNames":244,"./ReactPropTypeLocations":245,"./ReactUpdates":258,"./instantiateReactComponent":304,"./invariant":305,"./keyMirror":311,"./mapObject":313,"./merge":315,"./mixInto":318,"./monitorCodeUse":319,"./shouldUpdateReactComponent":325,"./warning":329,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/ReactCompositeComponent.js":40,"_process":1}],210:[function(require,module,exports){
 module.exports=require(41)
-},{"./merge":315,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactContext.js":41}],211:[function(require,module,exports){
+},{"./merge":315,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/ReactContext.js":41}],211:[function(require,module,exports){
 module.exports=require(42)
-},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactCurrentOwner.js":42}],212:[function(require,module,exports){
+},{"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/ReactCurrentOwner.js":42}],212:[function(require,module,exports){
 module.exports=require(43)
-},{"./ReactDOMComponent":214,"./ReactDescriptor":227,"./ReactDescriptorValidator":228,"./mapObject":313,"./mergeInto":317,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactDOM.js":43,"_process":1}],213:[function(require,module,exports){
+},{"./ReactDOMComponent":214,"./ReactDescriptor":227,"./ReactDescriptorValidator":228,"./mapObject":313,"./mergeInto":317,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/ReactDOM.js":43,"_process":1}],213:[function(require,module,exports){
 module.exports=require(44)
-},{"./AutoFocusMixin":172,"./ReactBrowserComponentMixin":201,"./ReactCompositeComponent":209,"./ReactDOM":212,"./keyMirror":311,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactDOMButton.js":44}],214:[function(require,module,exports){
+},{"./AutoFocusMixin":172,"./ReactBrowserComponentMixin":201,"./ReactCompositeComponent":209,"./ReactDOM":212,"./keyMirror":311,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/ReactDOMButton.js":44}],214:[function(require,module,exports){
 module.exports=require(45)
-},{"./CSSPropertyOperations":176,"./DOMProperty":182,"./DOMPropertyOperations":183,"./ReactBrowserComponentMixin":201,"./ReactBrowserEventEmitter":202,"./ReactComponent":206,"./ReactMount":238,"./ReactMultiChild":239,"./ReactPerf":242,"./escapeTextForBrowser":289,"./invariant":305,"./keyOf":312,"./merge":315,"./mixInto":318,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactDOMComponent.js":45,"_process":1}],215:[function(require,module,exports){
+},{"./CSSPropertyOperations":176,"./DOMProperty":182,"./DOMPropertyOperations":183,"./ReactBrowserComponentMixin":201,"./ReactBrowserEventEmitter":202,"./ReactComponent":206,"./ReactMount":238,"./ReactMultiChild":239,"./ReactPerf":242,"./escapeTextForBrowser":289,"./invariant":305,"./keyOf":312,"./merge":315,"./mixInto":318,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/ReactDOMComponent.js":45,"_process":1}],215:[function(require,module,exports){
 module.exports=require(46)
-},{"./EventConstants":187,"./LocalEventTrapMixin":197,"./ReactBrowserComponentMixin":201,"./ReactCompositeComponent":209,"./ReactDOM":212,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactDOMForm.js":46}],216:[function(require,module,exports){
+},{"./EventConstants":187,"./LocalEventTrapMixin":197,"./ReactBrowserComponentMixin":201,"./ReactCompositeComponent":209,"./ReactDOM":212,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/ReactDOMForm.js":46}],216:[function(require,module,exports){
 module.exports=require(47)
-},{"./CSSPropertyOperations":176,"./DOMChildrenOperations":181,"./DOMPropertyOperations":183,"./ReactMount":238,"./ReactPerf":242,"./invariant":305,"./setInnerHTML":323,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactDOMIDOperations.js":47,"_process":1}],217:[function(require,module,exports){
+},{"./CSSPropertyOperations":176,"./DOMChildrenOperations":181,"./DOMPropertyOperations":183,"./ReactMount":238,"./ReactPerf":242,"./invariant":305,"./setInnerHTML":323,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/ReactDOMIDOperations.js":47,"_process":1}],217:[function(require,module,exports){
 module.exports=require(48)
-},{"./EventConstants":187,"./LocalEventTrapMixin":197,"./ReactBrowserComponentMixin":201,"./ReactCompositeComponent":209,"./ReactDOM":212,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactDOMImg.js":48}],218:[function(require,module,exports){
+},{"./EventConstants":187,"./LocalEventTrapMixin":197,"./ReactBrowserComponentMixin":201,"./ReactCompositeComponent":209,"./ReactDOM":212,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/ReactDOMImg.js":48}],218:[function(require,module,exports){
 module.exports=require(49)
-},{"./AutoFocusMixin":172,"./DOMPropertyOperations":183,"./LinkedValueUtils":196,"./ReactBrowserComponentMixin":201,"./ReactCompositeComponent":209,"./ReactDOM":212,"./ReactMount":238,"./invariant":305,"./merge":315,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactDOMInput.js":49,"_process":1}],219:[function(require,module,exports){
+},{"./AutoFocusMixin":172,"./DOMPropertyOperations":183,"./LinkedValueUtils":196,"./ReactBrowserComponentMixin":201,"./ReactCompositeComponent":209,"./ReactDOM":212,"./ReactMount":238,"./invariant":305,"./merge":315,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/ReactDOMInput.js":49,"_process":1}],219:[function(require,module,exports){
 module.exports=require(50)
-},{"./ReactBrowserComponentMixin":201,"./ReactCompositeComponent":209,"./ReactDOM":212,"./warning":329,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactDOMOption.js":50,"_process":1}],220:[function(require,module,exports){
+},{"./ReactBrowserComponentMixin":201,"./ReactCompositeComponent":209,"./ReactDOM":212,"./warning":329,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/ReactDOMOption.js":50,"_process":1}],220:[function(require,module,exports){
 module.exports=require(51)
-},{"./AutoFocusMixin":172,"./LinkedValueUtils":196,"./ReactBrowserComponentMixin":201,"./ReactCompositeComponent":209,"./ReactDOM":212,"./merge":315,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactDOMSelect.js":51}],221:[function(require,module,exports){
+},{"./AutoFocusMixin":172,"./LinkedValueUtils":196,"./ReactBrowserComponentMixin":201,"./ReactCompositeComponent":209,"./ReactDOM":212,"./merge":315,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/ReactDOMSelect.js":51}],221:[function(require,module,exports){
 module.exports=require(52)
-},{"./ExecutionEnvironment":193,"./getNodeForCharacterOffset":298,"./getTextContentAccessor":300,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactDOMSelection.js":52}],222:[function(require,module,exports){
+},{"./ExecutionEnvironment":193,"./getNodeForCharacterOffset":298,"./getTextContentAccessor":300,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/ReactDOMSelection.js":52}],222:[function(require,module,exports){
 module.exports=require(53)
-},{"./AutoFocusMixin":172,"./DOMPropertyOperations":183,"./LinkedValueUtils":196,"./ReactBrowserComponentMixin":201,"./ReactCompositeComponent":209,"./ReactDOM":212,"./invariant":305,"./merge":315,"./warning":329,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactDOMTextarea.js":53,"_process":1}],223:[function(require,module,exports){
+},{"./AutoFocusMixin":172,"./DOMPropertyOperations":183,"./LinkedValueUtils":196,"./ReactBrowserComponentMixin":201,"./ReactCompositeComponent":209,"./ReactDOM":212,"./invariant":305,"./merge":315,"./warning":329,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/ReactDOMTextarea.js":53,"_process":1}],223:[function(require,module,exports){
 module.exports=require(54)
-},{"./ReactUpdates":258,"./Transaction":275,"./emptyFunction":287,"./mixInto":318,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactDefaultBatchingStrategy.js":54}],224:[function(require,module,exports){
+},{"./ReactUpdates":258,"./Transaction":275,"./emptyFunction":287,"./mixInto":318,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/ReactDefaultBatchingStrategy.js":54}],224:[function(require,module,exports){
 module.exports=require(55)
-},{"./BeforeInputEventPlugin":173,"./ChangeEventPlugin":178,"./ClientReactRootIndex":179,"./CompositionEventPlugin":180,"./DefaultEventPluginOrder":185,"./EnterLeaveEventPlugin":186,"./ExecutionEnvironment":193,"./HTMLDOMPropertyConfig":194,"./MobileSafariClickEventPlugin":198,"./ReactBrowserComponentMixin":201,"./ReactComponentBrowserEnvironment":207,"./ReactDOM":212,"./ReactDOMButton":213,"./ReactDOMForm":215,"./ReactDOMImg":217,"./ReactDOMInput":218,"./ReactDOMOption":219,"./ReactDOMSelect":220,"./ReactDOMTextarea":222,"./ReactDefaultBatchingStrategy":223,"./ReactDefaultPerf":225,"./ReactEventListener":232,"./ReactInjection":233,"./ReactInstanceHandles":235,"./ReactMount":238,"./SVGDOMPropertyConfig":260,"./SelectEventPlugin":261,"./ServerReactRootIndex":262,"./SimpleEventPlugin":263,"./createFullPageComponent":283,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactDefaultInjection.js":55,"_process":1}],225:[function(require,module,exports){
+},{"./BeforeInputEventPlugin":173,"./ChangeEventPlugin":178,"./ClientReactRootIndex":179,"./CompositionEventPlugin":180,"./DefaultEventPluginOrder":185,"./EnterLeaveEventPlugin":186,"./ExecutionEnvironment":193,"./HTMLDOMPropertyConfig":194,"./MobileSafariClickEventPlugin":198,"./ReactBrowserComponentMixin":201,"./ReactComponentBrowserEnvironment":207,"./ReactDOM":212,"./ReactDOMButton":213,"./ReactDOMForm":215,"./ReactDOMImg":217,"./ReactDOMInput":218,"./ReactDOMOption":219,"./ReactDOMSelect":220,"./ReactDOMTextarea":222,"./ReactDefaultBatchingStrategy":223,"./ReactDefaultPerf":225,"./ReactEventListener":232,"./ReactInjection":233,"./ReactInstanceHandles":235,"./ReactMount":238,"./SVGDOMPropertyConfig":260,"./SelectEventPlugin":261,"./ServerReactRootIndex":262,"./SimpleEventPlugin":263,"./createFullPageComponent":283,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/ReactDefaultInjection.js":55,"_process":1}],225:[function(require,module,exports){
 module.exports=require(56)
-},{"./DOMProperty":182,"./ReactDefaultPerfAnalysis":226,"./ReactMount":238,"./ReactPerf":242,"./performanceNow":322,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactDefaultPerf.js":56}],226:[function(require,module,exports){
+},{"./DOMProperty":182,"./ReactDefaultPerfAnalysis":226,"./ReactMount":238,"./ReactPerf":242,"./performanceNow":322,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/ReactDefaultPerf.js":56}],226:[function(require,module,exports){
 module.exports=require(57)
-},{"./merge":315,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactDefaultPerfAnalysis.js":57}],227:[function(require,module,exports){
+},{"./merge":315,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/ReactDefaultPerfAnalysis.js":57}],227:[function(require,module,exports){
 module.exports=require(58)
-},{"./ReactContext":210,"./ReactCurrentOwner":211,"./merge":315,"./warning":329,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactDescriptor.js":58,"_process":1}],228:[function(require,module,exports){
+},{"./ReactContext":210,"./ReactCurrentOwner":211,"./merge":315,"./warning":329,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/ReactDescriptor.js":58,"_process":1}],228:[function(require,module,exports){
 module.exports=require(59)
-},{"./ReactCurrentOwner":211,"./ReactDescriptor":227,"./ReactPropTypeLocations":245,"./monitorCodeUse":319,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactDescriptorValidator.js":59}],229:[function(require,module,exports){
+},{"./ReactCurrentOwner":211,"./ReactDescriptor":227,"./ReactPropTypeLocations":245,"./monitorCodeUse":319,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/ReactDescriptorValidator.js":59}],229:[function(require,module,exports){
 module.exports=require(60)
-},{"./invariant":305,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactEmptyComponent.js":60,"_process":1}],230:[function(require,module,exports){
+},{"./invariant":305,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/ReactEmptyComponent.js":60,"_process":1}],230:[function(require,module,exports){
 module.exports=require(61)
-},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactErrorUtils.js":61}],231:[function(require,module,exports){
+},{"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/ReactErrorUtils.js":61}],231:[function(require,module,exports){
 module.exports=require(62)
-},{"./EventPluginHub":189,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactEventEmitterMixin.js":62}],232:[function(require,module,exports){
+},{"./EventPluginHub":189,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/ReactEventEmitterMixin.js":62}],232:[function(require,module,exports){
 module.exports=require(63)
-},{"./EventListener":188,"./ExecutionEnvironment":193,"./PooledClass":199,"./ReactInstanceHandles":235,"./ReactMount":238,"./ReactUpdates":258,"./getEventTarget":296,"./getUnboundedScrollPosition":301,"./mixInto":318,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactEventListener.js":63}],233:[function(require,module,exports){
+},{"./EventListener":188,"./ExecutionEnvironment":193,"./PooledClass":199,"./ReactInstanceHandles":235,"./ReactMount":238,"./ReactUpdates":258,"./getEventTarget":296,"./getUnboundedScrollPosition":301,"./mixInto":318,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/ReactEventListener.js":63}],233:[function(require,module,exports){
 module.exports=require(64)
-},{"./DOMProperty":182,"./EventPluginHub":189,"./ReactBrowserEventEmitter":202,"./ReactComponent":206,"./ReactCompositeComponent":209,"./ReactDOM":212,"./ReactEmptyComponent":229,"./ReactPerf":242,"./ReactRootIndex":249,"./ReactUpdates":258,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactInjection.js":64}],234:[function(require,module,exports){
+},{"./DOMProperty":182,"./EventPluginHub":189,"./ReactBrowserEventEmitter":202,"./ReactComponent":206,"./ReactCompositeComponent":209,"./ReactDOM":212,"./ReactEmptyComponent":229,"./ReactPerf":242,"./ReactRootIndex":249,"./ReactUpdates":258,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/ReactInjection.js":64}],234:[function(require,module,exports){
 module.exports=require(65)
-},{"./ReactDOMSelection":221,"./containsNode":280,"./focusNode":291,"./getActiveElement":293,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactInputSelection.js":65}],235:[function(require,module,exports){
+},{"./ReactDOMSelection":221,"./containsNode":280,"./focusNode":291,"./getActiveElement":293,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/ReactInputSelection.js":65}],235:[function(require,module,exports){
 module.exports=require(66)
-},{"./ReactRootIndex":249,"./invariant":305,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactInstanceHandles.js":66,"_process":1}],236:[function(require,module,exports){
+},{"./ReactRootIndex":249,"./invariant":305,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/ReactInstanceHandles.js":66,"_process":1}],236:[function(require,module,exports){
 module.exports=require(67)
-},{"./React":200,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactLink.js":67}],237:[function(require,module,exports){
+},{"./React":200,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/ReactLink.js":67}],237:[function(require,module,exports){
 module.exports=require(68)
-},{"./adler32":278,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactMarkupChecksum.js":68}],238:[function(require,module,exports){
+},{"./adler32":278,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/ReactMarkupChecksum.js":68}],238:[function(require,module,exports){
 module.exports=require(69)
-},{"./DOMProperty":182,"./ReactBrowserEventEmitter":202,"./ReactCurrentOwner":211,"./ReactDescriptor":227,"./ReactInstanceHandles":235,"./ReactPerf":242,"./containsNode":280,"./getReactRootElementInContainer":299,"./instantiateReactComponent":304,"./invariant":305,"./shouldUpdateReactComponent":325,"./warning":329,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactMount.js":69,"_process":1}],239:[function(require,module,exports){
+},{"./DOMProperty":182,"./ReactBrowserEventEmitter":202,"./ReactCurrentOwner":211,"./ReactDescriptor":227,"./ReactInstanceHandles":235,"./ReactPerf":242,"./containsNode":280,"./getReactRootElementInContainer":299,"./instantiateReactComponent":304,"./invariant":305,"./shouldUpdateReactComponent":325,"./warning":329,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/ReactMount.js":69,"_process":1}],239:[function(require,module,exports){
 module.exports=require(70)
-},{"./ReactComponent":206,"./ReactMultiChildUpdateTypes":240,"./flattenChildren":290,"./instantiateReactComponent":304,"./shouldUpdateReactComponent":325,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactMultiChild.js":70}],240:[function(require,module,exports){
+},{"./ReactComponent":206,"./ReactMultiChildUpdateTypes":240,"./flattenChildren":290,"./instantiateReactComponent":304,"./shouldUpdateReactComponent":325,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/ReactMultiChild.js":70}],240:[function(require,module,exports){
 module.exports=require(71)
-},{"./keyMirror":311,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactMultiChildUpdateTypes.js":71}],241:[function(require,module,exports){
+},{"./keyMirror":311,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/ReactMultiChildUpdateTypes.js":71}],241:[function(require,module,exports){
 module.exports=require(72)
-},{"./emptyObject":288,"./invariant":305,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactOwner.js":72,"_process":1}],242:[function(require,module,exports){
+},{"./emptyObject":288,"./invariant":305,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/ReactOwner.js":72,"_process":1}],242:[function(require,module,exports){
 module.exports=require(73)
-},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactPerf.js":73,"_process":1}],243:[function(require,module,exports){
+},{"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/ReactPerf.js":73,"_process":1}],243:[function(require,module,exports){
 module.exports=require(74)
-},{"./emptyFunction":287,"./invariant":305,"./joinClasses":310,"./merge":315,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactPropTransferer.js":74,"_process":1}],244:[function(require,module,exports){
+},{"./emptyFunction":287,"./invariant":305,"./joinClasses":310,"./merge":315,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/ReactPropTransferer.js":74,"_process":1}],244:[function(require,module,exports){
 module.exports=require(75)
-},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactPropTypeLocationNames.js":75,"_process":1}],245:[function(require,module,exports){
+},{"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/ReactPropTypeLocationNames.js":75,"_process":1}],245:[function(require,module,exports){
 module.exports=require(76)
-},{"./keyMirror":311,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactPropTypeLocations.js":76}],246:[function(require,module,exports){
+},{"./keyMirror":311,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/ReactPropTypeLocations.js":76}],246:[function(require,module,exports){
 module.exports=require(77)
-},{"./ReactDescriptor":227,"./ReactPropTypeLocationNames":244,"./emptyFunction":287,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactPropTypes.js":77}],247:[function(require,module,exports){
+},{"./ReactDescriptor":227,"./ReactPropTypeLocationNames":244,"./emptyFunction":287,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/ReactPropTypes.js":77}],247:[function(require,module,exports){
 module.exports=require(78)
-},{"./PooledClass":199,"./ReactBrowserEventEmitter":202,"./mixInto":318,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactPutListenerQueue.js":78}],248:[function(require,module,exports){
+},{"./PooledClass":199,"./ReactBrowserEventEmitter":202,"./mixInto":318,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/ReactPutListenerQueue.js":78}],248:[function(require,module,exports){
 module.exports=require(79)
-},{"./CallbackQueue":177,"./PooledClass":199,"./ReactBrowserEventEmitter":202,"./ReactInputSelection":234,"./ReactPutListenerQueue":247,"./Transaction":275,"./mixInto":318,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactReconcileTransaction.js":79}],249:[function(require,module,exports){
+},{"./CallbackQueue":177,"./PooledClass":199,"./ReactBrowserEventEmitter":202,"./ReactInputSelection":234,"./ReactPutListenerQueue":247,"./Transaction":275,"./mixInto":318,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/ReactReconcileTransaction.js":79}],249:[function(require,module,exports){
 module.exports=require(80)
-},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactRootIndex.js":80}],250:[function(require,module,exports){
+},{"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/ReactRootIndex.js":80}],250:[function(require,module,exports){
 module.exports=require(81)
-},{"./ReactDescriptor":227,"./ReactInstanceHandles":235,"./ReactMarkupChecksum":237,"./ReactServerRenderingTransaction":251,"./instantiateReactComponent":304,"./invariant":305,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactServerRendering.js":81,"_process":1}],251:[function(require,module,exports){
+},{"./ReactDescriptor":227,"./ReactInstanceHandles":235,"./ReactMarkupChecksum":237,"./ReactServerRenderingTransaction":251,"./instantiateReactComponent":304,"./invariant":305,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/ReactServerRendering.js":81,"_process":1}],251:[function(require,module,exports){
 module.exports=require(82)
-},{"./CallbackQueue":177,"./PooledClass":199,"./ReactPutListenerQueue":247,"./Transaction":275,"./emptyFunction":287,"./mixInto":318,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactServerRenderingTransaction.js":82}],252:[function(require,module,exports){
+},{"./CallbackQueue":177,"./PooledClass":199,"./ReactPutListenerQueue":247,"./Transaction":275,"./emptyFunction":287,"./mixInto":318,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/ReactServerRenderingTransaction.js":82}],252:[function(require,module,exports){
 module.exports=require(83)
-},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactStateSetters.js":83}],253:[function(require,module,exports){
+},{"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/ReactStateSetters.js":83}],253:[function(require,module,exports){
 module.exports=require(84)
-},{"./EventConstants":187,"./EventPluginHub":189,"./EventPropagators":192,"./React":200,"./ReactBrowserEventEmitter":202,"./ReactDOM":212,"./ReactDescriptor":227,"./ReactMount":238,"./ReactTextComponent":254,"./ReactUpdates":258,"./SyntheticEvent":267,"./copyProperties":281,"./mergeInto":317,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactTestUtils.js":84}],254:[function(require,module,exports){
+},{"./EventConstants":187,"./EventPluginHub":189,"./EventPropagators":192,"./React":200,"./ReactBrowserEventEmitter":202,"./ReactDOM":212,"./ReactDescriptor":227,"./ReactMount":238,"./ReactTextComponent":254,"./ReactUpdates":258,"./SyntheticEvent":267,"./copyProperties":281,"./mergeInto":317,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/ReactTestUtils.js":84}],254:[function(require,module,exports){
 module.exports=require(85)
-},{"./DOMPropertyOperations":183,"./ReactBrowserComponentMixin":201,"./ReactComponent":206,"./ReactDescriptor":227,"./escapeTextForBrowser":289,"./mixInto":318,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactTextComponent.js":85}],255:[function(require,module,exports){
+},{"./DOMPropertyOperations":183,"./ReactBrowserComponentMixin":201,"./ReactComponent":206,"./ReactDescriptor":227,"./escapeTextForBrowser":289,"./mixInto":318,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/ReactTextComponent.js":85}],255:[function(require,module,exports){
 module.exports=require(86)
-},{"./ReactChildren":205,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactTransitionChildMapping.js":86}],256:[function(require,module,exports){
+},{"./ReactChildren":205,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/ReactTransitionChildMapping.js":86}],256:[function(require,module,exports){
 module.exports=require(87)
-},{"./ExecutionEnvironment":193,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactTransitionEvents.js":87}],257:[function(require,module,exports){
+},{"./ExecutionEnvironment":193,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/ReactTransitionEvents.js":87}],257:[function(require,module,exports){
 module.exports=require(88)
-},{"./React":200,"./ReactTransitionChildMapping":255,"./cloneWithProps":279,"./emptyFunction":287,"./merge":315,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactTransitionGroup.js":88}],258:[function(require,module,exports){
+},{"./React":200,"./ReactTransitionChildMapping":255,"./cloneWithProps":279,"./emptyFunction":287,"./merge":315,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/ReactTransitionGroup.js":88}],258:[function(require,module,exports){
 module.exports=require(89)
-},{"./CallbackQueue":177,"./PooledClass":199,"./ReactCurrentOwner":211,"./ReactPerf":242,"./Transaction":275,"./invariant":305,"./mixInto":318,"./warning":329,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactUpdates.js":89,"_process":1}],259:[function(require,module,exports){
+},{"./CallbackQueue":177,"./PooledClass":199,"./ReactCurrentOwner":211,"./ReactPerf":242,"./Transaction":275,"./invariant":305,"./mixInto":318,"./warning":329,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/ReactUpdates.js":89,"_process":1}],259:[function(require,module,exports){
 module.exports=require(90)
-},{"./LinkedStateMixin":195,"./React":200,"./ReactCSSTransitionGroup":203,"./ReactComponentWithPureRenderMixin":208,"./ReactDefaultPerf":225,"./ReactTestUtils":253,"./ReactTransitionGroup":257,"./cloneWithProps":279,"./cx":285,"./update":328,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactWithAddons.js":90,"_process":1}],260:[function(require,module,exports){
+},{"./LinkedStateMixin":195,"./React":200,"./ReactCSSTransitionGroup":203,"./ReactComponentWithPureRenderMixin":208,"./ReactDefaultPerf":225,"./ReactTestUtils":253,"./ReactTransitionGroup":257,"./cloneWithProps":279,"./cx":285,"./update":328,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/ReactWithAddons.js":90,"_process":1}],260:[function(require,module,exports){
 module.exports=require(91)
-},{"./DOMProperty":182,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/SVGDOMPropertyConfig.js":91}],261:[function(require,module,exports){
+},{"./DOMProperty":182,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/SVGDOMPropertyConfig.js":91}],261:[function(require,module,exports){
 module.exports=require(92)
-},{"./EventConstants":187,"./EventPropagators":192,"./ReactInputSelection":234,"./SyntheticEvent":267,"./getActiveElement":293,"./isTextInputElement":308,"./keyOf":312,"./shallowEqual":324,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/SelectEventPlugin.js":92}],262:[function(require,module,exports){
+},{"./EventConstants":187,"./EventPropagators":192,"./ReactInputSelection":234,"./SyntheticEvent":267,"./getActiveElement":293,"./isTextInputElement":308,"./keyOf":312,"./shallowEqual":324,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/SelectEventPlugin.js":92}],262:[function(require,module,exports){
 module.exports=require(93)
-},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ServerReactRootIndex.js":93}],263:[function(require,module,exports){
+},{"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/ServerReactRootIndex.js":93}],263:[function(require,module,exports){
 module.exports=require(94)
-},{"./EventConstants":187,"./EventPluginUtils":191,"./EventPropagators":192,"./SyntheticClipboardEvent":264,"./SyntheticDragEvent":266,"./SyntheticEvent":267,"./SyntheticFocusEvent":268,"./SyntheticKeyboardEvent":270,"./SyntheticMouseEvent":271,"./SyntheticTouchEvent":272,"./SyntheticUIEvent":273,"./SyntheticWheelEvent":274,"./invariant":305,"./keyOf":312,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/SimpleEventPlugin.js":94,"_process":1}],264:[function(require,module,exports){
+},{"./EventConstants":187,"./EventPluginUtils":191,"./EventPropagators":192,"./SyntheticClipboardEvent":264,"./SyntheticDragEvent":266,"./SyntheticEvent":267,"./SyntheticFocusEvent":268,"./SyntheticKeyboardEvent":270,"./SyntheticMouseEvent":271,"./SyntheticTouchEvent":272,"./SyntheticUIEvent":273,"./SyntheticWheelEvent":274,"./invariant":305,"./keyOf":312,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/SimpleEventPlugin.js":94,"_process":1}],264:[function(require,module,exports){
 module.exports=require(95)
-},{"./SyntheticEvent":267,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/SyntheticClipboardEvent.js":95}],265:[function(require,module,exports){
+},{"./SyntheticEvent":267,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/SyntheticClipboardEvent.js":95}],265:[function(require,module,exports){
 module.exports=require(96)
-},{"./SyntheticEvent":267,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/SyntheticCompositionEvent.js":96}],266:[function(require,module,exports){
+},{"./SyntheticEvent":267,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/SyntheticCompositionEvent.js":96}],266:[function(require,module,exports){
 module.exports=require(97)
-},{"./SyntheticMouseEvent":271,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/SyntheticDragEvent.js":97}],267:[function(require,module,exports){
+},{"./SyntheticMouseEvent":271,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/SyntheticDragEvent.js":97}],267:[function(require,module,exports){
 module.exports=require(98)
-},{"./PooledClass":199,"./emptyFunction":287,"./getEventTarget":296,"./merge":315,"./mergeInto":317,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/SyntheticEvent.js":98}],268:[function(require,module,exports){
+},{"./PooledClass":199,"./emptyFunction":287,"./getEventTarget":296,"./merge":315,"./mergeInto":317,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/SyntheticEvent.js":98}],268:[function(require,module,exports){
 module.exports=require(99)
-},{"./SyntheticUIEvent":273,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/SyntheticFocusEvent.js":99}],269:[function(require,module,exports){
+},{"./SyntheticUIEvent":273,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/SyntheticFocusEvent.js":99}],269:[function(require,module,exports){
 module.exports=require(100)
-},{"./SyntheticEvent":267,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/SyntheticInputEvent.js":100}],270:[function(require,module,exports){
+},{"./SyntheticEvent":267,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/SyntheticInputEvent.js":100}],270:[function(require,module,exports){
 module.exports=require(101)
-},{"./SyntheticUIEvent":273,"./getEventKey":294,"./getEventModifierState":295,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/SyntheticKeyboardEvent.js":101}],271:[function(require,module,exports){
+},{"./SyntheticUIEvent":273,"./getEventKey":294,"./getEventModifierState":295,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/SyntheticKeyboardEvent.js":101}],271:[function(require,module,exports){
 module.exports=require(102)
-},{"./SyntheticUIEvent":273,"./ViewportMetrics":276,"./getEventModifierState":295,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/SyntheticMouseEvent.js":102}],272:[function(require,module,exports){
+},{"./SyntheticUIEvent":273,"./ViewportMetrics":276,"./getEventModifierState":295,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/SyntheticMouseEvent.js":102}],272:[function(require,module,exports){
 module.exports=require(103)
-},{"./SyntheticUIEvent":273,"./getEventModifierState":295,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/SyntheticTouchEvent.js":103}],273:[function(require,module,exports){
+},{"./SyntheticUIEvent":273,"./getEventModifierState":295,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/SyntheticTouchEvent.js":103}],273:[function(require,module,exports){
 module.exports=require(104)
-},{"./SyntheticEvent":267,"./getEventTarget":296,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/SyntheticUIEvent.js":104}],274:[function(require,module,exports){
+},{"./SyntheticEvent":267,"./getEventTarget":296,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/SyntheticUIEvent.js":104}],274:[function(require,module,exports){
 module.exports=require(105)
-},{"./SyntheticMouseEvent":271,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/SyntheticWheelEvent.js":105}],275:[function(require,module,exports){
+},{"./SyntheticMouseEvent":271,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/SyntheticWheelEvent.js":105}],275:[function(require,module,exports){
 module.exports=require(106)
-},{"./invariant":305,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/Transaction.js":106,"_process":1}],276:[function(require,module,exports){
+},{"./invariant":305,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/Transaction.js":106,"_process":1}],276:[function(require,module,exports){
 module.exports=require(107)
-},{"./getUnboundedScrollPosition":301,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ViewportMetrics.js":107}],277:[function(require,module,exports){
+},{"./getUnboundedScrollPosition":301,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/ViewportMetrics.js":107}],277:[function(require,module,exports){
 module.exports=require(108)
-},{"./invariant":305,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/accumulate.js":108,"_process":1}],278:[function(require,module,exports){
+},{"./invariant":305,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/accumulate.js":108,"_process":1}],278:[function(require,module,exports){
 module.exports=require(109)
-},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/adler32.js":109}],279:[function(require,module,exports){
+},{"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/adler32.js":109}],279:[function(require,module,exports){
 module.exports=require(110)
-},{"./ReactPropTransferer":243,"./keyOf":312,"./warning":329,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/cloneWithProps.js":110,"_process":1}],280:[function(require,module,exports){
+},{"./ReactPropTransferer":243,"./keyOf":312,"./warning":329,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/cloneWithProps.js":110,"_process":1}],280:[function(require,module,exports){
 module.exports=require(111)
-},{"./isTextNode":309,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/containsNode.js":111}],281:[function(require,module,exports){
+},{"./isTextNode":309,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/containsNode.js":111}],281:[function(require,module,exports){
 module.exports=require(112)
-},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/copyProperties.js":112,"_process":1}],282:[function(require,module,exports){
+},{"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/copyProperties.js":112,"_process":1}],282:[function(require,module,exports){
 module.exports=require(113)
-},{"./toArray":326,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/createArrayFrom.js":113}],283:[function(require,module,exports){
+},{"./toArray":326,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/createArrayFrom.js":113}],283:[function(require,module,exports){
 module.exports=require(114)
-},{"./ReactCompositeComponent":209,"./invariant":305,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/createFullPageComponent.js":114,"_process":1}],284:[function(require,module,exports){
+},{"./ReactCompositeComponent":209,"./invariant":305,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/createFullPageComponent.js":114,"_process":1}],284:[function(require,module,exports){
 module.exports=require(115)
-},{"./ExecutionEnvironment":193,"./createArrayFrom":282,"./getMarkupWrap":297,"./invariant":305,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/createNodesFromMarkup.js":115,"_process":1}],285:[function(require,module,exports){
+},{"./ExecutionEnvironment":193,"./createArrayFrom":282,"./getMarkupWrap":297,"./invariant":305,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/createNodesFromMarkup.js":115,"_process":1}],285:[function(require,module,exports){
 module.exports=require(116)
-},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/cx.js":116}],286:[function(require,module,exports){
+},{"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/cx.js":116}],286:[function(require,module,exports){
 module.exports=require(117)
-},{"./CSSProperty":175,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/dangerousStyleValue.js":117}],287:[function(require,module,exports){
+},{"./CSSProperty":175,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/dangerousStyleValue.js":117}],287:[function(require,module,exports){
 module.exports=require(118)
-},{"./copyProperties":281,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/emptyFunction.js":118}],288:[function(require,module,exports){
+},{"./copyProperties":281,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/emptyFunction.js":118}],288:[function(require,module,exports){
 module.exports=require(119)
-},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/emptyObject.js":119,"_process":1}],289:[function(require,module,exports){
+},{"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/emptyObject.js":119,"_process":1}],289:[function(require,module,exports){
 module.exports=require(120)
-},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/escapeTextForBrowser.js":120}],290:[function(require,module,exports){
+},{"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/escapeTextForBrowser.js":120}],290:[function(require,module,exports){
 module.exports=require(121)
-},{"./traverseAllChildren":327,"./warning":329,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/flattenChildren.js":121,"_process":1}],291:[function(require,module,exports){
+},{"./traverseAllChildren":327,"./warning":329,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/flattenChildren.js":121,"_process":1}],291:[function(require,module,exports){
 module.exports=require(122)
-},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/focusNode.js":122}],292:[function(require,module,exports){
+},{"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/focusNode.js":122}],292:[function(require,module,exports){
 module.exports=require(123)
-},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/forEachAccumulated.js":123}],293:[function(require,module,exports){
+},{"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/forEachAccumulated.js":123}],293:[function(require,module,exports){
 module.exports=require(124)
-},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/getActiveElement.js":124}],294:[function(require,module,exports){
+},{"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/getActiveElement.js":124}],294:[function(require,module,exports){
 module.exports=require(125)
-},{"./invariant":305,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/getEventKey.js":125,"_process":1}],295:[function(require,module,exports){
+},{"./invariant":305,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/getEventKey.js":125,"_process":1}],295:[function(require,module,exports){
 module.exports=require(126)
-},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/getEventModifierState.js":126}],296:[function(require,module,exports){
+},{"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/getEventModifierState.js":126}],296:[function(require,module,exports){
 module.exports=require(127)
-},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/getEventTarget.js":127}],297:[function(require,module,exports){
+},{"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/getEventTarget.js":127}],297:[function(require,module,exports){
 module.exports=require(128)
-},{"./ExecutionEnvironment":193,"./invariant":305,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/getMarkupWrap.js":128,"_process":1}],298:[function(require,module,exports){
+},{"./ExecutionEnvironment":193,"./invariant":305,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/getMarkupWrap.js":128,"_process":1}],298:[function(require,module,exports){
 module.exports=require(129)
-},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/getNodeForCharacterOffset.js":129}],299:[function(require,module,exports){
+},{"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/getNodeForCharacterOffset.js":129}],299:[function(require,module,exports){
 module.exports=require(130)
-},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/getReactRootElementInContainer.js":130}],300:[function(require,module,exports){
+},{"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/getReactRootElementInContainer.js":130}],300:[function(require,module,exports){
 module.exports=require(131)
-},{"./ExecutionEnvironment":193,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/getTextContentAccessor.js":131}],301:[function(require,module,exports){
+},{"./ExecutionEnvironment":193,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/getTextContentAccessor.js":131}],301:[function(require,module,exports){
 module.exports=require(132)
-},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/getUnboundedScrollPosition.js":132}],302:[function(require,module,exports){
+},{"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/getUnboundedScrollPosition.js":132}],302:[function(require,module,exports){
 module.exports=require(133)
-},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/hyphenate.js":133}],303:[function(require,module,exports){
+},{"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/hyphenate.js":133}],303:[function(require,module,exports){
 module.exports=require(134)
-},{"./hyphenate":302,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/hyphenateStyleName.js":134}],304:[function(require,module,exports){
+},{"./hyphenate":302,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/hyphenateStyleName.js":134}],304:[function(require,module,exports){
 module.exports=require(135)
-},{"./invariant":305,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/instantiateReactComponent.js":135,"_process":1}],305:[function(require,module,exports){
+},{"./invariant":305,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/instantiateReactComponent.js":135,"_process":1}],305:[function(require,module,exports){
 module.exports=require(136)
-},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/invariant.js":136,"_process":1}],306:[function(require,module,exports){
+},{"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/invariant.js":136,"_process":1}],306:[function(require,module,exports){
 module.exports=require(137)
-},{"./ExecutionEnvironment":193,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/isEventSupported.js":137}],307:[function(require,module,exports){
+},{"./ExecutionEnvironment":193,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/isEventSupported.js":137}],307:[function(require,module,exports){
 module.exports=require(138)
-},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/isNode.js":138}],308:[function(require,module,exports){
+},{"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/isNode.js":138}],308:[function(require,module,exports){
 module.exports=require(139)
-},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/isTextInputElement.js":139}],309:[function(require,module,exports){
+},{"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/isTextInputElement.js":139}],309:[function(require,module,exports){
 module.exports=require(140)
-},{"./isNode":307,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/isTextNode.js":140}],310:[function(require,module,exports){
+},{"./isNode":307,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/isTextNode.js":140}],310:[function(require,module,exports){
 module.exports=require(141)
-},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/joinClasses.js":141}],311:[function(require,module,exports){
+},{"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/joinClasses.js":141}],311:[function(require,module,exports){
 module.exports=require(142)
-},{"./invariant":305,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/keyMirror.js":142,"_process":1}],312:[function(require,module,exports){
+},{"./invariant":305,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/keyMirror.js":142,"_process":1}],312:[function(require,module,exports){
 module.exports=require(143)
-},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/keyOf.js":143}],313:[function(require,module,exports){
+},{"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/keyOf.js":143}],313:[function(require,module,exports){
 module.exports=require(144)
-},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/mapObject.js":144}],314:[function(require,module,exports){
+},{"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/mapObject.js":144}],314:[function(require,module,exports){
 module.exports=require(145)
-},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/memoizeStringOnly.js":145}],315:[function(require,module,exports){
+},{"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/memoizeStringOnly.js":145}],315:[function(require,module,exports){
 module.exports=require(146)
-},{"./mergeInto":317,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/merge.js":146}],316:[function(require,module,exports){
+},{"./mergeInto":317,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/merge.js":146}],316:[function(require,module,exports){
 module.exports=require(147)
-},{"./invariant":305,"./keyMirror":311,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/mergeHelpers.js":147,"_process":1}],317:[function(require,module,exports){
+},{"./invariant":305,"./keyMirror":311,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/mergeHelpers.js":147,"_process":1}],317:[function(require,module,exports){
 module.exports=require(148)
-},{"./mergeHelpers":316,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/mergeInto.js":148}],318:[function(require,module,exports){
+},{"./mergeHelpers":316,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/mergeInto.js":148}],318:[function(require,module,exports){
 module.exports=require(149)
-},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/mixInto.js":149}],319:[function(require,module,exports){
+},{"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/mixInto.js":149}],319:[function(require,module,exports){
 module.exports=require(150)
-},{"./invariant":305,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/monitorCodeUse.js":150,"_process":1}],320:[function(require,module,exports){
+},{"./invariant":305,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/monitorCodeUse.js":150,"_process":1}],320:[function(require,module,exports){
 module.exports=require(151)
-},{"./ReactDescriptor":227,"./invariant":305,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/onlyChild.js":151,"_process":1}],321:[function(require,module,exports){
+},{"./ReactDescriptor":227,"./invariant":305,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/onlyChild.js":151,"_process":1}],321:[function(require,module,exports){
 module.exports=require(152)
-},{"./ExecutionEnvironment":193,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/performance.js":152}],322:[function(require,module,exports){
+},{"./ExecutionEnvironment":193,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/performance.js":152}],322:[function(require,module,exports){
 module.exports=require(153)
-},{"./performance":321,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/performanceNow.js":153}],323:[function(require,module,exports){
+},{"./performance":321,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/performanceNow.js":153}],323:[function(require,module,exports){
 module.exports=require(154)
-},{"./ExecutionEnvironment":193,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/setInnerHTML.js":154}],324:[function(require,module,exports){
+},{"./ExecutionEnvironment":193,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/setInnerHTML.js":154}],324:[function(require,module,exports){
 module.exports=require(155)
-},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/shallowEqual.js":155}],325:[function(require,module,exports){
+},{"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/shallowEqual.js":155}],325:[function(require,module,exports){
 module.exports=require(156)
-},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/shouldUpdateReactComponent.js":156}],326:[function(require,module,exports){
+},{"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/shouldUpdateReactComponent.js":156}],326:[function(require,module,exports){
 module.exports=require(157)
-},{"./invariant":305,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/toArray.js":157,"_process":1}],327:[function(require,module,exports){
+},{"./invariant":305,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/toArray.js":157,"_process":1}],327:[function(require,module,exports){
 module.exports=require(158)
-},{"./ReactInstanceHandles":235,"./ReactTextComponent":254,"./invariant":305,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/traverseAllChildren.js":158,"_process":1}],328:[function(require,module,exports){
+},{"./ReactInstanceHandles":235,"./ReactTextComponent":254,"./invariant":305,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/traverseAllChildren.js":158,"_process":1}],328:[function(require,module,exports){
 module.exports=require(159)
-},{"./copyProperties":281,"./invariant":305,"./keyOf":312,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/update.js":159,"_process":1}],329:[function(require,module,exports){
+},{"./copyProperties":281,"./invariant":305,"./keyOf":312,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/update.js":159,"_process":1}],329:[function(require,module,exports){
 module.exports=require(160)
-},{"./emptyFunction":287,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/warning.js":160,"_process":1}],330:[function(require,module,exports){
+},{"./emptyFunction":287,"/Users/dustingetz/src/react-cursor/examples/helloworld/node_modules/react/lib/warning.js":160,"_process":1}],330:[function(require,module,exports){
 var React = require('react/addons');
 var util  = require('./util');
 
@@ -22843,7 +22843,7 @@ module.exports = {
   isEqual: isEqual,
   union: union,
   omit: omit,
-  find: find,
+  find: find
 };
 
 },{"array-union":163,"deep-equal":165,"omit-keys":168}]},{},[162]);
