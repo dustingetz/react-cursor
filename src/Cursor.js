@@ -1,6 +1,5 @@
-var React = require('react/addons');
-var _     = require('underscore');
-var util  = require('./util');
+var React   = require('react/addons');
+var util    = require('./util');
 
 'use strict';
 
@@ -13,19 +12,19 @@ function Cursor(cmp, path, value) {
     return util.getRefAtPath(cmp._pendingState || cmp.state, path);
   };
 
-  this.onChange = _.partial(onChange, cmp, path);
+  this.transact = util.partial(transact, cmp, path);
 
   this.refine = function (/* one or more paths through the tree */) {
     // When refining inside a lifecycle method, same cmp and same path isn't enough.
     // this.props and nextProps have different subtree values, and refining memoizer must account for that
 
     var nextPath = [].concat(path, util.flatten(arguments));
-    var nextValue = util.getRefAtPath(this.value, _.toArray(arguments));
+    var nextValue = util.getRefAtPath(this.value, util.toArray(arguments));
     return build(cmp, nextPath, nextValue); // memoized
   };
 }
 
-function onChange(cmp, path, nextValue) {
+function transact(cmp, path, nextValue) {
   var nextState;
 
   if (path.length > 0) {
