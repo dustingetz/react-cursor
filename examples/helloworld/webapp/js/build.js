@@ -21973,329 +21973,618 @@ function entrypoint(rootEl) {
 window.entrypoint = entrypoint;
 
 
-},{"../../../../src/react-cursor":325,"react/addons":2,"underscore":161}],163:[function(require,module,exports){
+},{"../../../../src/react-cursor":333,"react/addons":2,"underscore":161}],163:[function(require,module,exports){
+'use strict';
+var arrayUniq = require('array-uniq');
+
+module.exports = function () {
+	return arrayUniq([].concat.apply([], arguments));
+};
+
+},{"array-uniq":164}],164:[function(require,module,exports){
+(function (global){
+'use strict';
+
+// there's 3 implementations written in increasing order of efficiency
+
+// 1 - no Set type is defined
+function uniqNoSet(arr) {
+	var ret = [];
+
+	for (var i = 0; i < arr.length; i++) {
+		if (ret.indexOf(arr[i]) === -1) {
+			ret.push(arr[i]);
+		}
+	}
+
+	return ret;
+}
+
+// 2 - a simple Set type is defined
+function uniqSet(arr) {
+	var seen = new Set();
+	return arr.filter(function (el) {
+		if (!seen.has(el)) {
+			seen.add(el);
+			return true;
+		}
+	});
+}
+
+// 3 - a standard Set type is defined and it has a forEach method
+function uniqSetWithForEach(arr) {
+	var ret = [];
+
+	(new Set(arr)).forEach(function (el) {
+		ret.push(el);
+	});
+
+	return ret;
+}
+
+if ('Set' in global) {
+	if (typeof Set.prototype.forEach === 'function') {
+		module.exports = uniqSetWithForEach;
+	} else {
+		module.exports = uniqSet;
+	}
+} else {
+	module.exports = uniqNoSet;
+}
+
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{}],165:[function(require,module,exports){
+var pSlice = Array.prototype.slice;
+var objectKeys = require('./lib/keys.js');
+var isArguments = require('./lib/is_arguments.js');
+
+var deepEqual = module.exports = function (actual, expected, opts) {
+  if (!opts) opts = {};
+  // 7.1. All identical values are equivalent, as determined by ===.
+  if (actual === expected) {
+    return true;
+
+  } else if (actual instanceof Date && expected instanceof Date) {
+    return actual.getTime() === expected.getTime();
+
+  // 7.3. Other pairs that do not both pass typeof value == 'object',
+  // equivalence is determined by ==.
+  } else if (typeof actual != 'object' && typeof expected != 'object') {
+    return opts.strict ? actual === expected : actual == expected;
+
+  // 7.4. For all other Object pairs, including Array objects, equivalence is
+  // determined by having the same number of owned properties (as verified
+  // with Object.prototype.hasOwnProperty.call), the same set of keys
+  // (although not necessarily the same order), equivalent values for every
+  // corresponding key, and an identical 'prototype' property. Note: this
+  // accounts for both named and indexed properties on Arrays.
+  } else {
+    return objEquiv(actual, expected, opts);
+  }
+}
+
+function isUndefinedOrNull(value) {
+  return value === null || value === undefined;
+}
+
+function isBuffer (x) {
+  if (!x || typeof x !== 'object' || typeof x.length !== 'number') return false;
+  if (typeof x.copy !== 'function' || typeof x.slice !== 'function') {
+    return false;
+  }
+  if (x.length > 0 && typeof x[0] !== 'number') return false;
+  return true;
+}
+
+function objEquiv(a, b, opts) {
+  var i, key;
+  if (isUndefinedOrNull(a) || isUndefinedOrNull(b))
+    return false;
+  // an identical 'prototype' property.
+  if (a.prototype !== b.prototype) return false;
+  //~~~I've managed to break Object.keys through screwy arguments passing.
+  //   Converting to array solves the problem.
+  if (isArguments(a)) {
+    if (!isArguments(b)) {
+      return false;
+    }
+    a = pSlice.call(a);
+    b = pSlice.call(b);
+    return deepEqual(a, b, opts);
+  }
+  if (isBuffer(a)) {
+    if (!isBuffer(b)) {
+      return false;
+    }
+    if (a.length !== b.length) return false;
+    for (i = 0; i < a.length; i++) {
+      if (a[i] !== b[i]) return false;
+    }
+    return true;
+  }
+  try {
+    var ka = objectKeys(a),
+        kb = objectKeys(b);
+  } catch (e) {//happens when one is a string literal and the other isn't
+    return false;
+  }
+  // having the same number of owned properties (keys incorporates
+  // hasOwnProperty)
+  if (ka.length != kb.length)
+    return false;
+  //the same set of keys (although not necessarily the same order),
+  ka.sort();
+  kb.sort();
+  //~~~cheap key test
+  for (i = ka.length - 1; i >= 0; i--) {
+    if (ka[i] != kb[i])
+      return false;
+  }
+  //equivalent values for every corresponding key, and
+  //~~~possibly expensive deep test
+  for (i = ka.length - 1; i >= 0; i--) {
+    key = ka[i];
+    if (!deepEqual(a[key], b[key], opts)) return false;
+  }
+  return true;
+}
+
+},{"./lib/is_arguments.js":166,"./lib/keys.js":167}],166:[function(require,module,exports){
+var supportsArgumentsClass = (function(){
+  return Object.prototype.toString.call(arguments)
+})() == '[object Arguments]';
+
+exports = module.exports = supportsArgumentsClass ? supported : unsupported;
+
+exports.supported = supported;
+function supported(object) {
+  return Object.prototype.toString.call(object) == '[object Arguments]';
+};
+
+exports.unsupported = unsupported;
+function unsupported(object){
+  return object &&
+    typeof object == 'object' &&
+    typeof object.length == 'number' &&
+    Object.prototype.hasOwnProperty.call(object, 'callee') &&
+    !Object.prototype.propertyIsEnumerable.call(object, 'callee') ||
+    false;
+};
+
+},{}],167:[function(require,module,exports){
+exports = module.exports = typeof Object.keys === 'function'
+  ? Object.keys : shim;
+
+exports.shim = shim;
+function shim (obj) {
+  var keys = [];
+  for (var key in obj) keys.push(key);
+  return keys;
+}
+
+},{}],168:[function(require,module,exports){
+/*!
+ * omit-key <https://github.com/jonschlinkert/omit-key>
+ *
+ * Copyright (c) 2014 Jon Schlinkert, contributors.
+ * Licensed under the MIT License
+ */
+
+'use strict';
+
+var isObject = require('isobject');
+var difference = require('array-difference');
+
+module.exports = function omit(obj, keys) {
+  if (!isObject(obj)) {
+    return {};
+  }
+
+  var props = Object.keys(obj);
+  var len = props.length;
+
+  keys = Array.isArray(keys) ? keys : [keys];
+  var diff = difference(props, keys);
+  var o = {};
+
+  for (var i = 0; i < len; i++) {
+    var key = diff[i];
+
+    if (obj.hasOwnProperty(key)) {
+      o[key] = obj[key];
+    }
+  }
+  return o;
+};
+},{"array-difference":169,"isobject":170}],169:[function(require,module,exports){
+(function(global) {
+
+	var indexOf = Array.prototype.indexOf || function(elem) {
+		var idx, len;
+
+		if (this == null) {
+			throw new TypeError("indexOf called on null or undefined");
+		}
+
+		for (idx = 0, len = this.length; idx < len; ++idx) {
+			if (this[idx] === elem) {
+				return idx;
+			}
+		}
+
+		return -1;
+	};
+
+	function difference(a, b) {
+		var idx, len;
+		var res = [];
+
+		for (idx = 0, len = a.length; idx < len; ++idx) {
+			if (indexOf.call(b, a[idx]) === -1) {
+				res.push(a[idx]);
+			}
+		}
+		for (idx = 0, len = b.length; idx < len; ++idx) {
+			if (indexOf.call(a, b[idx]) === -1) {
+				res.push(b[idx]);
+			}
+		}
+		return res;
+	}
+
+	if (typeof module === "object" && module.exports) {
+		module.exports = difference;
+	} else if (typeof define === "function" && define.amd) {
+		define(function() {
+			return difference;
+		});
+	} else {
+		global.difference = difference;
+	}
+
+}(this));
+
+},{}],170:[function(require,module,exports){
+/*!
+ * isobject <https://github.com/jonschlinkert/isobject>
+ *
+ * Copyright (c) 2014 Jon Schlinkert, contributors.
+ * Licensed under the MIT License
+ */
+
+'use strict';
+
+/**
+ * is the value an object, and not an array?
+ *
+ * @param  {*} `value`
+ * @return {Boolean}
+ */
+
+module.exports = function isObject(o) {
+  return o != null && typeof o === 'object'
+    && !Array.isArray(o);
+};
+},{}],171:[function(require,module,exports){
 module.exports=require(2)
-},{"./lib/ReactWithAddons":251,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/addons.js":2}],164:[function(require,module,exports){
+},{"./lib/ReactWithAddons":259,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/addons.js":2}],172:[function(require,module,exports){
 module.exports=require(3)
-},{"./focusNode":283,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/AutoFocusMixin.js":3}],165:[function(require,module,exports){
+},{"./focusNode":291,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/AutoFocusMixin.js":3}],173:[function(require,module,exports){
 module.exports=require(4)
-},{"./EventConstants":179,"./EventPropagators":184,"./ExecutionEnvironment":185,"./SyntheticInputEvent":261,"./keyOf":304,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/BeforeInputEventPlugin.js":4}],166:[function(require,module,exports){
+},{"./EventConstants":187,"./EventPropagators":192,"./ExecutionEnvironment":193,"./SyntheticInputEvent":269,"./keyOf":312,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/BeforeInputEventPlugin.js":4}],174:[function(require,module,exports){
 module.exports=require(5)
-},{"./invariant":297,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/CSSCore.js":5,"_process":1}],167:[function(require,module,exports){
+},{"./invariant":305,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/CSSCore.js":5,"_process":1}],175:[function(require,module,exports){
 module.exports=require(6)
-},{"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/CSSProperty.js":6}],168:[function(require,module,exports){
+},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/CSSProperty.js":6}],176:[function(require,module,exports){
 module.exports=require(7)
-},{"./CSSProperty":167,"./dangerousStyleValue":278,"./hyphenateStyleName":295,"./memoizeStringOnly":306,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/CSSPropertyOperations.js":7}],169:[function(require,module,exports){
+},{"./CSSProperty":175,"./dangerousStyleValue":286,"./hyphenateStyleName":303,"./memoizeStringOnly":314,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/CSSPropertyOperations.js":7}],177:[function(require,module,exports){
 module.exports=require(8)
-},{"./PooledClass":191,"./invariant":297,"./mixInto":310,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/CallbackQueue.js":8,"_process":1}],170:[function(require,module,exports){
+},{"./PooledClass":199,"./invariant":305,"./mixInto":318,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/CallbackQueue.js":8,"_process":1}],178:[function(require,module,exports){
 module.exports=require(9)
-},{"./EventConstants":179,"./EventPluginHub":181,"./EventPropagators":184,"./ExecutionEnvironment":185,"./ReactUpdates":250,"./SyntheticEvent":259,"./isEventSupported":298,"./isTextInputElement":300,"./keyOf":304,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/ChangeEventPlugin.js":9}],171:[function(require,module,exports){
+},{"./EventConstants":187,"./EventPluginHub":189,"./EventPropagators":192,"./ExecutionEnvironment":193,"./ReactUpdates":258,"./SyntheticEvent":267,"./isEventSupported":306,"./isTextInputElement":308,"./keyOf":312,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ChangeEventPlugin.js":9}],179:[function(require,module,exports){
 module.exports=require(10)
-},{"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/ClientReactRootIndex.js":10}],172:[function(require,module,exports){
+},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ClientReactRootIndex.js":10}],180:[function(require,module,exports){
 module.exports=require(11)
-},{"./EventConstants":179,"./EventPropagators":184,"./ExecutionEnvironment":185,"./ReactInputSelection":226,"./SyntheticCompositionEvent":257,"./getTextContentAccessor":292,"./keyOf":304,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/CompositionEventPlugin.js":11}],173:[function(require,module,exports){
+},{"./EventConstants":187,"./EventPropagators":192,"./ExecutionEnvironment":193,"./ReactInputSelection":234,"./SyntheticCompositionEvent":265,"./getTextContentAccessor":300,"./keyOf":312,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/CompositionEventPlugin.js":11}],181:[function(require,module,exports){
 module.exports=require(12)
-},{"./Danger":176,"./ReactMultiChildUpdateTypes":232,"./getTextContentAccessor":292,"./invariant":297,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/DOMChildrenOperations.js":12,"_process":1}],174:[function(require,module,exports){
+},{"./Danger":184,"./ReactMultiChildUpdateTypes":240,"./getTextContentAccessor":300,"./invariant":305,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/DOMChildrenOperations.js":12,"_process":1}],182:[function(require,module,exports){
 module.exports=require(13)
-},{"./invariant":297,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/DOMProperty.js":13,"_process":1}],175:[function(require,module,exports){
+},{"./invariant":305,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/DOMProperty.js":13,"_process":1}],183:[function(require,module,exports){
 module.exports=require(14)
-},{"./DOMProperty":174,"./escapeTextForBrowser":281,"./memoizeStringOnly":306,"./warning":321,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/DOMPropertyOperations.js":14,"_process":1}],176:[function(require,module,exports){
+},{"./DOMProperty":182,"./escapeTextForBrowser":289,"./memoizeStringOnly":314,"./warning":329,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/DOMPropertyOperations.js":14,"_process":1}],184:[function(require,module,exports){
 module.exports=require(15)
-},{"./ExecutionEnvironment":185,"./createNodesFromMarkup":276,"./emptyFunction":279,"./getMarkupWrap":289,"./invariant":297,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/Danger.js":15,"_process":1}],177:[function(require,module,exports){
+},{"./ExecutionEnvironment":193,"./createNodesFromMarkup":284,"./emptyFunction":287,"./getMarkupWrap":297,"./invariant":305,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/Danger.js":15,"_process":1}],185:[function(require,module,exports){
 module.exports=require(16)
-},{"./keyOf":304,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/DefaultEventPluginOrder.js":16}],178:[function(require,module,exports){
+},{"./keyOf":312,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/DefaultEventPluginOrder.js":16}],186:[function(require,module,exports){
 module.exports=require(17)
-},{"./EventConstants":179,"./EventPropagators":184,"./ReactMount":230,"./SyntheticMouseEvent":263,"./keyOf":304,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/EnterLeaveEventPlugin.js":17}],179:[function(require,module,exports){
+},{"./EventConstants":187,"./EventPropagators":192,"./ReactMount":238,"./SyntheticMouseEvent":271,"./keyOf":312,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/EnterLeaveEventPlugin.js":17}],187:[function(require,module,exports){
 module.exports=require(18)
-},{"./keyMirror":303,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/EventConstants.js":18}],180:[function(require,module,exports){
+},{"./keyMirror":311,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/EventConstants.js":18}],188:[function(require,module,exports){
 module.exports=require(19)
-},{"./emptyFunction":279,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/EventListener.js":19,"_process":1}],181:[function(require,module,exports){
+},{"./emptyFunction":287,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/EventListener.js":19,"_process":1}],189:[function(require,module,exports){
 module.exports=require(20)
-},{"./EventPluginRegistry":182,"./EventPluginUtils":183,"./accumulate":269,"./forEachAccumulated":284,"./invariant":297,"./isEventSupported":298,"./monitorCodeUse":311,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/EventPluginHub.js":20,"_process":1}],182:[function(require,module,exports){
+},{"./EventPluginRegistry":190,"./EventPluginUtils":191,"./accumulate":277,"./forEachAccumulated":292,"./invariant":305,"./isEventSupported":306,"./monitorCodeUse":319,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/EventPluginHub.js":20,"_process":1}],190:[function(require,module,exports){
 module.exports=require(21)
-},{"./invariant":297,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/EventPluginRegistry.js":21,"_process":1}],183:[function(require,module,exports){
+},{"./invariant":305,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/EventPluginRegistry.js":21,"_process":1}],191:[function(require,module,exports){
 module.exports=require(22)
-},{"./EventConstants":179,"./invariant":297,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/EventPluginUtils.js":22,"_process":1}],184:[function(require,module,exports){
+},{"./EventConstants":187,"./invariant":305,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/EventPluginUtils.js":22,"_process":1}],192:[function(require,module,exports){
 module.exports=require(23)
-},{"./EventConstants":179,"./EventPluginHub":181,"./accumulate":269,"./forEachAccumulated":284,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/EventPropagators.js":23,"_process":1}],185:[function(require,module,exports){
+},{"./EventConstants":187,"./EventPluginHub":189,"./accumulate":277,"./forEachAccumulated":292,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/EventPropagators.js":23,"_process":1}],193:[function(require,module,exports){
 module.exports=require(24)
-},{"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/ExecutionEnvironment.js":24}],186:[function(require,module,exports){
+},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ExecutionEnvironment.js":24}],194:[function(require,module,exports){
 module.exports=require(25)
-},{"./DOMProperty":174,"./ExecutionEnvironment":185,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/HTMLDOMPropertyConfig.js":25}],187:[function(require,module,exports){
+},{"./DOMProperty":182,"./ExecutionEnvironment":193,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/HTMLDOMPropertyConfig.js":25}],195:[function(require,module,exports){
 module.exports=require(26)
-},{"./ReactLink":228,"./ReactStateSetters":244,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/LinkedStateMixin.js":26}],188:[function(require,module,exports){
+},{"./ReactLink":236,"./ReactStateSetters":252,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/LinkedStateMixin.js":26}],196:[function(require,module,exports){
 module.exports=require(27)
-},{"./ReactPropTypes":238,"./invariant":297,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/LinkedValueUtils.js":27,"_process":1}],189:[function(require,module,exports){
+},{"./ReactPropTypes":246,"./invariant":305,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/LinkedValueUtils.js":27,"_process":1}],197:[function(require,module,exports){
 module.exports=require(28)
-},{"./ReactBrowserEventEmitter":194,"./accumulate":269,"./forEachAccumulated":284,"./invariant":297,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/LocalEventTrapMixin.js":28,"_process":1}],190:[function(require,module,exports){
+},{"./ReactBrowserEventEmitter":202,"./accumulate":277,"./forEachAccumulated":292,"./invariant":305,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/LocalEventTrapMixin.js":28,"_process":1}],198:[function(require,module,exports){
 module.exports=require(29)
-},{"./EventConstants":179,"./emptyFunction":279,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/MobileSafariClickEventPlugin.js":29}],191:[function(require,module,exports){
+},{"./EventConstants":187,"./emptyFunction":287,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/MobileSafariClickEventPlugin.js":29}],199:[function(require,module,exports){
 module.exports=require(30)
-},{"./invariant":297,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/PooledClass.js":30,"_process":1}],192:[function(require,module,exports){
+},{"./invariant":305,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/PooledClass.js":30,"_process":1}],200:[function(require,module,exports){
 module.exports=require(31)
-},{"./DOMPropertyOperations":175,"./EventPluginUtils":183,"./ExecutionEnvironment":185,"./ReactChildren":197,"./ReactComponent":198,"./ReactCompositeComponent":201,"./ReactContext":202,"./ReactCurrentOwner":203,"./ReactDOM":204,"./ReactDOMComponent":206,"./ReactDefaultInjection":216,"./ReactDescriptor":219,"./ReactInstanceHandles":227,"./ReactMount":230,"./ReactMultiChild":231,"./ReactPerf":234,"./ReactPropTypes":238,"./ReactServerRendering":242,"./ReactTextComponent":246,"./onlyChild":312,"./warning":321,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/React.js":31,"_process":1}],193:[function(require,module,exports){
+},{"./DOMPropertyOperations":183,"./EventPluginUtils":191,"./ExecutionEnvironment":193,"./ReactChildren":205,"./ReactComponent":206,"./ReactCompositeComponent":209,"./ReactContext":210,"./ReactCurrentOwner":211,"./ReactDOM":212,"./ReactDOMComponent":214,"./ReactDefaultInjection":224,"./ReactDescriptor":227,"./ReactInstanceHandles":235,"./ReactMount":238,"./ReactMultiChild":239,"./ReactPerf":242,"./ReactPropTypes":246,"./ReactServerRendering":250,"./ReactTextComponent":254,"./onlyChild":320,"./warning":329,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/React.js":31,"_process":1}],201:[function(require,module,exports){
 module.exports=require(32)
-},{"./ReactEmptyComponent":221,"./ReactMount":230,"./invariant":297,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/ReactBrowserComponentMixin.js":32,"_process":1}],194:[function(require,module,exports){
+},{"./ReactEmptyComponent":229,"./ReactMount":238,"./invariant":305,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactBrowserComponentMixin.js":32,"_process":1}],202:[function(require,module,exports){
 module.exports=require(33)
-},{"./EventConstants":179,"./EventPluginHub":181,"./EventPluginRegistry":182,"./ReactEventEmitterMixin":223,"./ViewportMetrics":268,"./isEventSupported":298,"./merge":307,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/ReactBrowserEventEmitter.js":33}],195:[function(require,module,exports){
+},{"./EventConstants":187,"./EventPluginHub":189,"./EventPluginRegistry":190,"./ReactEventEmitterMixin":231,"./ViewportMetrics":276,"./isEventSupported":306,"./merge":315,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactBrowserEventEmitter.js":33}],203:[function(require,module,exports){
 module.exports=require(34)
-},{"./React":192,"./ReactCSSTransitionGroupChild":196,"./ReactTransitionGroup":249,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/ReactCSSTransitionGroup.js":34}],196:[function(require,module,exports){
+},{"./React":200,"./ReactCSSTransitionGroupChild":204,"./ReactTransitionGroup":257,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactCSSTransitionGroup.js":34}],204:[function(require,module,exports){
 module.exports=require(35)
-},{"./CSSCore":166,"./React":192,"./ReactTransitionEvents":248,"./onlyChild":312,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/ReactCSSTransitionGroupChild.js":35,"_process":1}],197:[function(require,module,exports){
+},{"./CSSCore":174,"./React":200,"./ReactTransitionEvents":256,"./onlyChild":320,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactCSSTransitionGroupChild.js":35,"_process":1}],205:[function(require,module,exports){
 module.exports=require(36)
-},{"./PooledClass":191,"./traverseAllChildren":319,"./warning":321,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/ReactChildren.js":36,"_process":1}],198:[function(require,module,exports){
+},{"./PooledClass":199,"./traverseAllChildren":327,"./warning":329,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactChildren.js":36,"_process":1}],206:[function(require,module,exports){
 module.exports=require(37)
-},{"./ReactDescriptor":219,"./ReactOwner":233,"./ReactUpdates":250,"./invariant":297,"./keyMirror":303,"./merge":307,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/ReactComponent.js":37,"_process":1}],199:[function(require,module,exports){
+},{"./ReactDescriptor":227,"./ReactOwner":241,"./ReactUpdates":258,"./invariant":305,"./keyMirror":311,"./merge":315,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactComponent.js":37,"_process":1}],207:[function(require,module,exports){
 module.exports=require(38)
-},{"./ReactDOMIDOperations":208,"./ReactMarkupChecksum":229,"./ReactMount":230,"./ReactPerf":234,"./ReactReconcileTransaction":240,"./getReactRootElementInContainer":291,"./invariant":297,"./setInnerHTML":315,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/ReactComponentBrowserEnvironment.js":38,"_process":1}],200:[function(require,module,exports){
+},{"./ReactDOMIDOperations":216,"./ReactMarkupChecksum":237,"./ReactMount":238,"./ReactPerf":242,"./ReactReconcileTransaction":248,"./getReactRootElementInContainer":299,"./invariant":305,"./setInnerHTML":323,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactComponentBrowserEnvironment.js":38,"_process":1}],208:[function(require,module,exports){
 module.exports=require(39)
-},{"./shallowEqual":316,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/ReactComponentWithPureRenderMixin.js":39}],201:[function(require,module,exports){
+},{"./shallowEqual":324,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactComponentWithPureRenderMixin.js":39}],209:[function(require,module,exports){
 module.exports=require(40)
-},{"./ReactComponent":198,"./ReactContext":202,"./ReactCurrentOwner":203,"./ReactDescriptor":219,"./ReactDescriptorValidator":220,"./ReactEmptyComponent":221,"./ReactErrorUtils":222,"./ReactOwner":233,"./ReactPerf":234,"./ReactPropTransferer":235,"./ReactPropTypeLocationNames":236,"./ReactPropTypeLocations":237,"./ReactUpdates":250,"./instantiateReactComponent":296,"./invariant":297,"./keyMirror":303,"./mapObject":305,"./merge":307,"./mixInto":310,"./monitorCodeUse":311,"./shouldUpdateReactComponent":317,"./warning":321,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/ReactCompositeComponent.js":40,"_process":1}],202:[function(require,module,exports){
+},{"./ReactComponent":206,"./ReactContext":210,"./ReactCurrentOwner":211,"./ReactDescriptor":227,"./ReactDescriptorValidator":228,"./ReactEmptyComponent":229,"./ReactErrorUtils":230,"./ReactOwner":241,"./ReactPerf":242,"./ReactPropTransferer":243,"./ReactPropTypeLocationNames":244,"./ReactPropTypeLocations":245,"./ReactUpdates":258,"./instantiateReactComponent":304,"./invariant":305,"./keyMirror":311,"./mapObject":313,"./merge":315,"./mixInto":318,"./monitorCodeUse":319,"./shouldUpdateReactComponent":325,"./warning":329,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactCompositeComponent.js":40,"_process":1}],210:[function(require,module,exports){
 module.exports=require(41)
-},{"./merge":307,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/ReactContext.js":41}],203:[function(require,module,exports){
+},{"./merge":315,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactContext.js":41}],211:[function(require,module,exports){
 module.exports=require(42)
-},{"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/ReactCurrentOwner.js":42}],204:[function(require,module,exports){
+},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactCurrentOwner.js":42}],212:[function(require,module,exports){
 module.exports=require(43)
-},{"./ReactDOMComponent":206,"./ReactDescriptor":219,"./ReactDescriptorValidator":220,"./mapObject":305,"./mergeInto":309,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/ReactDOM.js":43,"_process":1}],205:[function(require,module,exports){
+},{"./ReactDOMComponent":214,"./ReactDescriptor":227,"./ReactDescriptorValidator":228,"./mapObject":313,"./mergeInto":317,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactDOM.js":43,"_process":1}],213:[function(require,module,exports){
 module.exports=require(44)
-},{"./AutoFocusMixin":164,"./ReactBrowserComponentMixin":193,"./ReactCompositeComponent":201,"./ReactDOM":204,"./keyMirror":303,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/ReactDOMButton.js":44}],206:[function(require,module,exports){
+},{"./AutoFocusMixin":172,"./ReactBrowserComponentMixin":201,"./ReactCompositeComponent":209,"./ReactDOM":212,"./keyMirror":311,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactDOMButton.js":44}],214:[function(require,module,exports){
 module.exports=require(45)
-},{"./CSSPropertyOperations":168,"./DOMProperty":174,"./DOMPropertyOperations":175,"./ReactBrowserComponentMixin":193,"./ReactBrowserEventEmitter":194,"./ReactComponent":198,"./ReactMount":230,"./ReactMultiChild":231,"./ReactPerf":234,"./escapeTextForBrowser":281,"./invariant":297,"./keyOf":304,"./merge":307,"./mixInto":310,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/ReactDOMComponent.js":45,"_process":1}],207:[function(require,module,exports){
+},{"./CSSPropertyOperations":176,"./DOMProperty":182,"./DOMPropertyOperations":183,"./ReactBrowserComponentMixin":201,"./ReactBrowserEventEmitter":202,"./ReactComponent":206,"./ReactMount":238,"./ReactMultiChild":239,"./ReactPerf":242,"./escapeTextForBrowser":289,"./invariant":305,"./keyOf":312,"./merge":315,"./mixInto":318,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactDOMComponent.js":45,"_process":1}],215:[function(require,module,exports){
 module.exports=require(46)
-},{"./EventConstants":179,"./LocalEventTrapMixin":189,"./ReactBrowserComponentMixin":193,"./ReactCompositeComponent":201,"./ReactDOM":204,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/ReactDOMForm.js":46}],208:[function(require,module,exports){
+},{"./EventConstants":187,"./LocalEventTrapMixin":197,"./ReactBrowserComponentMixin":201,"./ReactCompositeComponent":209,"./ReactDOM":212,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactDOMForm.js":46}],216:[function(require,module,exports){
 module.exports=require(47)
-},{"./CSSPropertyOperations":168,"./DOMChildrenOperations":173,"./DOMPropertyOperations":175,"./ReactMount":230,"./ReactPerf":234,"./invariant":297,"./setInnerHTML":315,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/ReactDOMIDOperations.js":47,"_process":1}],209:[function(require,module,exports){
+},{"./CSSPropertyOperations":176,"./DOMChildrenOperations":181,"./DOMPropertyOperations":183,"./ReactMount":238,"./ReactPerf":242,"./invariant":305,"./setInnerHTML":323,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactDOMIDOperations.js":47,"_process":1}],217:[function(require,module,exports){
 module.exports=require(48)
-},{"./EventConstants":179,"./LocalEventTrapMixin":189,"./ReactBrowserComponentMixin":193,"./ReactCompositeComponent":201,"./ReactDOM":204,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/ReactDOMImg.js":48}],210:[function(require,module,exports){
+},{"./EventConstants":187,"./LocalEventTrapMixin":197,"./ReactBrowserComponentMixin":201,"./ReactCompositeComponent":209,"./ReactDOM":212,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactDOMImg.js":48}],218:[function(require,module,exports){
 module.exports=require(49)
-},{"./AutoFocusMixin":164,"./DOMPropertyOperations":175,"./LinkedValueUtils":188,"./ReactBrowserComponentMixin":193,"./ReactCompositeComponent":201,"./ReactDOM":204,"./ReactMount":230,"./invariant":297,"./merge":307,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/ReactDOMInput.js":49,"_process":1}],211:[function(require,module,exports){
+},{"./AutoFocusMixin":172,"./DOMPropertyOperations":183,"./LinkedValueUtils":196,"./ReactBrowserComponentMixin":201,"./ReactCompositeComponent":209,"./ReactDOM":212,"./ReactMount":238,"./invariant":305,"./merge":315,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactDOMInput.js":49,"_process":1}],219:[function(require,module,exports){
 module.exports=require(50)
-},{"./ReactBrowserComponentMixin":193,"./ReactCompositeComponent":201,"./ReactDOM":204,"./warning":321,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/ReactDOMOption.js":50,"_process":1}],212:[function(require,module,exports){
+},{"./ReactBrowserComponentMixin":201,"./ReactCompositeComponent":209,"./ReactDOM":212,"./warning":329,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactDOMOption.js":50,"_process":1}],220:[function(require,module,exports){
 module.exports=require(51)
-},{"./AutoFocusMixin":164,"./LinkedValueUtils":188,"./ReactBrowserComponentMixin":193,"./ReactCompositeComponent":201,"./ReactDOM":204,"./merge":307,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/ReactDOMSelect.js":51}],213:[function(require,module,exports){
+},{"./AutoFocusMixin":172,"./LinkedValueUtils":196,"./ReactBrowserComponentMixin":201,"./ReactCompositeComponent":209,"./ReactDOM":212,"./merge":315,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactDOMSelect.js":51}],221:[function(require,module,exports){
 module.exports=require(52)
-},{"./ExecutionEnvironment":185,"./getNodeForCharacterOffset":290,"./getTextContentAccessor":292,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/ReactDOMSelection.js":52}],214:[function(require,module,exports){
+},{"./ExecutionEnvironment":193,"./getNodeForCharacterOffset":298,"./getTextContentAccessor":300,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactDOMSelection.js":52}],222:[function(require,module,exports){
 module.exports=require(53)
-},{"./AutoFocusMixin":164,"./DOMPropertyOperations":175,"./LinkedValueUtils":188,"./ReactBrowserComponentMixin":193,"./ReactCompositeComponent":201,"./ReactDOM":204,"./invariant":297,"./merge":307,"./warning":321,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/ReactDOMTextarea.js":53,"_process":1}],215:[function(require,module,exports){
+},{"./AutoFocusMixin":172,"./DOMPropertyOperations":183,"./LinkedValueUtils":196,"./ReactBrowserComponentMixin":201,"./ReactCompositeComponent":209,"./ReactDOM":212,"./invariant":305,"./merge":315,"./warning":329,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactDOMTextarea.js":53,"_process":1}],223:[function(require,module,exports){
 module.exports=require(54)
-},{"./ReactUpdates":250,"./Transaction":267,"./emptyFunction":279,"./mixInto":310,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/ReactDefaultBatchingStrategy.js":54}],216:[function(require,module,exports){
+},{"./ReactUpdates":258,"./Transaction":275,"./emptyFunction":287,"./mixInto":318,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactDefaultBatchingStrategy.js":54}],224:[function(require,module,exports){
 module.exports=require(55)
-},{"./BeforeInputEventPlugin":165,"./ChangeEventPlugin":170,"./ClientReactRootIndex":171,"./CompositionEventPlugin":172,"./DefaultEventPluginOrder":177,"./EnterLeaveEventPlugin":178,"./ExecutionEnvironment":185,"./HTMLDOMPropertyConfig":186,"./MobileSafariClickEventPlugin":190,"./ReactBrowserComponentMixin":193,"./ReactComponentBrowserEnvironment":199,"./ReactDOM":204,"./ReactDOMButton":205,"./ReactDOMForm":207,"./ReactDOMImg":209,"./ReactDOMInput":210,"./ReactDOMOption":211,"./ReactDOMSelect":212,"./ReactDOMTextarea":214,"./ReactDefaultBatchingStrategy":215,"./ReactDefaultPerf":217,"./ReactEventListener":224,"./ReactInjection":225,"./ReactInstanceHandles":227,"./ReactMount":230,"./SVGDOMPropertyConfig":252,"./SelectEventPlugin":253,"./ServerReactRootIndex":254,"./SimpleEventPlugin":255,"./createFullPageComponent":275,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/ReactDefaultInjection.js":55,"_process":1}],217:[function(require,module,exports){
+},{"./BeforeInputEventPlugin":173,"./ChangeEventPlugin":178,"./ClientReactRootIndex":179,"./CompositionEventPlugin":180,"./DefaultEventPluginOrder":185,"./EnterLeaveEventPlugin":186,"./ExecutionEnvironment":193,"./HTMLDOMPropertyConfig":194,"./MobileSafariClickEventPlugin":198,"./ReactBrowserComponentMixin":201,"./ReactComponentBrowserEnvironment":207,"./ReactDOM":212,"./ReactDOMButton":213,"./ReactDOMForm":215,"./ReactDOMImg":217,"./ReactDOMInput":218,"./ReactDOMOption":219,"./ReactDOMSelect":220,"./ReactDOMTextarea":222,"./ReactDefaultBatchingStrategy":223,"./ReactDefaultPerf":225,"./ReactEventListener":232,"./ReactInjection":233,"./ReactInstanceHandles":235,"./ReactMount":238,"./SVGDOMPropertyConfig":260,"./SelectEventPlugin":261,"./ServerReactRootIndex":262,"./SimpleEventPlugin":263,"./createFullPageComponent":283,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactDefaultInjection.js":55,"_process":1}],225:[function(require,module,exports){
 module.exports=require(56)
-},{"./DOMProperty":174,"./ReactDefaultPerfAnalysis":218,"./ReactMount":230,"./ReactPerf":234,"./performanceNow":314,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/ReactDefaultPerf.js":56}],218:[function(require,module,exports){
+},{"./DOMProperty":182,"./ReactDefaultPerfAnalysis":226,"./ReactMount":238,"./ReactPerf":242,"./performanceNow":322,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactDefaultPerf.js":56}],226:[function(require,module,exports){
 module.exports=require(57)
-},{"./merge":307,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/ReactDefaultPerfAnalysis.js":57}],219:[function(require,module,exports){
+},{"./merge":315,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactDefaultPerfAnalysis.js":57}],227:[function(require,module,exports){
 module.exports=require(58)
-},{"./ReactContext":202,"./ReactCurrentOwner":203,"./merge":307,"./warning":321,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/ReactDescriptor.js":58,"_process":1}],220:[function(require,module,exports){
+},{"./ReactContext":210,"./ReactCurrentOwner":211,"./merge":315,"./warning":329,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactDescriptor.js":58,"_process":1}],228:[function(require,module,exports){
 module.exports=require(59)
-},{"./ReactCurrentOwner":203,"./ReactDescriptor":219,"./ReactPropTypeLocations":237,"./monitorCodeUse":311,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/ReactDescriptorValidator.js":59}],221:[function(require,module,exports){
+},{"./ReactCurrentOwner":211,"./ReactDescriptor":227,"./ReactPropTypeLocations":245,"./monitorCodeUse":319,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactDescriptorValidator.js":59}],229:[function(require,module,exports){
 module.exports=require(60)
-},{"./invariant":297,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/ReactEmptyComponent.js":60,"_process":1}],222:[function(require,module,exports){
+},{"./invariant":305,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactEmptyComponent.js":60,"_process":1}],230:[function(require,module,exports){
 module.exports=require(61)
-},{"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/ReactErrorUtils.js":61}],223:[function(require,module,exports){
+},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactErrorUtils.js":61}],231:[function(require,module,exports){
 module.exports=require(62)
-},{"./EventPluginHub":181,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/ReactEventEmitterMixin.js":62}],224:[function(require,module,exports){
+},{"./EventPluginHub":189,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactEventEmitterMixin.js":62}],232:[function(require,module,exports){
 module.exports=require(63)
-},{"./EventListener":180,"./ExecutionEnvironment":185,"./PooledClass":191,"./ReactInstanceHandles":227,"./ReactMount":230,"./ReactUpdates":250,"./getEventTarget":288,"./getUnboundedScrollPosition":293,"./mixInto":310,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/ReactEventListener.js":63}],225:[function(require,module,exports){
+},{"./EventListener":188,"./ExecutionEnvironment":193,"./PooledClass":199,"./ReactInstanceHandles":235,"./ReactMount":238,"./ReactUpdates":258,"./getEventTarget":296,"./getUnboundedScrollPosition":301,"./mixInto":318,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactEventListener.js":63}],233:[function(require,module,exports){
 module.exports=require(64)
-},{"./DOMProperty":174,"./EventPluginHub":181,"./ReactBrowserEventEmitter":194,"./ReactComponent":198,"./ReactCompositeComponent":201,"./ReactDOM":204,"./ReactEmptyComponent":221,"./ReactPerf":234,"./ReactRootIndex":241,"./ReactUpdates":250,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/ReactInjection.js":64}],226:[function(require,module,exports){
+},{"./DOMProperty":182,"./EventPluginHub":189,"./ReactBrowserEventEmitter":202,"./ReactComponent":206,"./ReactCompositeComponent":209,"./ReactDOM":212,"./ReactEmptyComponent":229,"./ReactPerf":242,"./ReactRootIndex":249,"./ReactUpdates":258,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactInjection.js":64}],234:[function(require,module,exports){
 module.exports=require(65)
-},{"./ReactDOMSelection":213,"./containsNode":272,"./focusNode":283,"./getActiveElement":285,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/ReactInputSelection.js":65}],227:[function(require,module,exports){
+},{"./ReactDOMSelection":221,"./containsNode":280,"./focusNode":291,"./getActiveElement":293,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactInputSelection.js":65}],235:[function(require,module,exports){
 module.exports=require(66)
-},{"./ReactRootIndex":241,"./invariant":297,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/ReactInstanceHandles.js":66,"_process":1}],228:[function(require,module,exports){
+},{"./ReactRootIndex":249,"./invariant":305,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactInstanceHandles.js":66,"_process":1}],236:[function(require,module,exports){
 module.exports=require(67)
-},{"./React":192,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/ReactLink.js":67}],229:[function(require,module,exports){
+},{"./React":200,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactLink.js":67}],237:[function(require,module,exports){
 module.exports=require(68)
-},{"./adler32":270,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/ReactMarkupChecksum.js":68}],230:[function(require,module,exports){
+},{"./adler32":278,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactMarkupChecksum.js":68}],238:[function(require,module,exports){
 module.exports=require(69)
-},{"./DOMProperty":174,"./ReactBrowserEventEmitter":194,"./ReactCurrentOwner":203,"./ReactDescriptor":219,"./ReactInstanceHandles":227,"./ReactPerf":234,"./containsNode":272,"./getReactRootElementInContainer":291,"./instantiateReactComponent":296,"./invariant":297,"./shouldUpdateReactComponent":317,"./warning":321,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/ReactMount.js":69,"_process":1}],231:[function(require,module,exports){
+},{"./DOMProperty":182,"./ReactBrowserEventEmitter":202,"./ReactCurrentOwner":211,"./ReactDescriptor":227,"./ReactInstanceHandles":235,"./ReactPerf":242,"./containsNode":280,"./getReactRootElementInContainer":299,"./instantiateReactComponent":304,"./invariant":305,"./shouldUpdateReactComponent":325,"./warning":329,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactMount.js":69,"_process":1}],239:[function(require,module,exports){
 module.exports=require(70)
-},{"./ReactComponent":198,"./ReactMultiChildUpdateTypes":232,"./flattenChildren":282,"./instantiateReactComponent":296,"./shouldUpdateReactComponent":317,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/ReactMultiChild.js":70}],232:[function(require,module,exports){
+},{"./ReactComponent":206,"./ReactMultiChildUpdateTypes":240,"./flattenChildren":290,"./instantiateReactComponent":304,"./shouldUpdateReactComponent":325,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactMultiChild.js":70}],240:[function(require,module,exports){
 module.exports=require(71)
-},{"./keyMirror":303,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/ReactMultiChildUpdateTypes.js":71}],233:[function(require,module,exports){
+},{"./keyMirror":311,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactMultiChildUpdateTypes.js":71}],241:[function(require,module,exports){
 module.exports=require(72)
-},{"./emptyObject":280,"./invariant":297,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/ReactOwner.js":72,"_process":1}],234:[function(require,module,exports){
+},{"./emptyObject":288,"./invariant":305,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactOwner.js":72,"_process":1}],242:[function(require,module,exports){
 module.exports=require(73)
-},{"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/ReactPerf.js":73,"_process":1}],235:[function(require,module,exports){
+},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactPerf.js":73,"_process":1}],243:[function(require,module,exports){
 module.exports=require(74)
-},{"./emptyFunction":279,"./invariant":297,"./joinClasses":302,"./merge":307,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/ReactPropTransferer.js":74,"_process":1}],236:[function(require,module,exports){
+},{"./emptyFunction":287,"./invariant":305,"./joinClasses":310,"./merge":315,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactPropTransferer.js":74,"_process":1}],244:[function(require,module,exports){
 module.exports=require(75)
-},{"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/ReactPropTypeLocationNames.js":75,"_process":1}],237:[function(require,module,exports){
+},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactPropTypeLocationNames.js":75,"_process":1}],245:[function(require,module,exports){
 module.exports=require(76)
-},{"./keyMirror":303,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/ReactPropTypeLocations.js":76}],238:[function(require,module,exports){
+},{"./keyMirror":311,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactPropTypeLocations.js":76}],246:[function(require,module,exports){
 module.exports=require(77)
-},{"./ReactDescriptor":219,"./ReactPropTypeLocationNames":236,"./emptyFunction":279,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/ReactPropTypes.js":77}],239:[function(require,module,exports){
+},{"./ReactDescriptor":227,"./ReactPropTypeLocationNames":244,"./emptyFunction":287,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactPropTypes.js":77}],247:[function(require,module,exports){
 module.exports=require(78)
-},{"./PooledClass":191,"./ReactBrowserEventEmitter":194,"./mixInto":310,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/ReactPutListenerQueue.js":78}],240:[function(require,module,exports){
+},{"./PooledClass":199,"./ReactBrowserEventEmitter":202,"./mixInto":318,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactPutListenerQueue.js":78}],248:[function(require,module,exports){
 module.exports=require(79)
-},{"./CallbackQueue":169,"./PooledClass":191,"./ReactBrowserEventEmitter":194,"./ReactInputSelection":226,"./ReactPutListenerQueue":239,"./Transaction":267,"./mixInto":310,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/ReactReconcileTransaction.js":79}],241:[function(require,module,exports){
+},{"./CallbackQueue":177,"./PooledClass":199,"./ReactBrowserEventEmitter":202,"./ReactInputSelection":234,"./ReactPutListenerQueue":247,"./Transaction":275,"./mixInto":318,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactReconcileTransaction.js":79}],249:[function(require,module,exports){
 module.exports=require(80)
-},{"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/ReactRootIndex.js":80}],242:[function(require,module,exports){
+},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactRootIndex.js":80}],250:[function(require,module,exports){
 module.exports=require(81)
-},{"./ReactDescriptor":219,"./ReactInstanceHandles":227,"./ReactMarkupChecksum":229,"./ReactServerRenderingTransaction":243,"./instantiateReactComponent":296,"./invariant":297,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/ReactServerRendering.js":81,"_process":1}],243:[function(require,module,exports){
+},{"./ReactDescriptor":227,"./ReactInstanceHandles":235,"./ReactMarkupChecksum":237,"./ReactServerRenderingTransaction":251,"./instantiateReactComponent":304,"./invariant":305,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactServerRendering.js":81,"_process":1}],251:[function(require,module,exports){
 module.exports=require(82)
-},{"./CallbackQueue":169,"./PooledClass":191,"./ReactPutListenerQueue":239,"./Transaction":267,"./emptyFunction":279,"./mixInto":310,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/ReactServerRenderingTransaction.js":82}],244:[function(require,module,exports){
+},{"./CallbackQueue":177,"./PooledClass":199,"./ReactPutListenerQueue":247,"./Transaction":275,"./emptyFunction":287,"./mixInto":318,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactServerRenderingTransaction.js":82}],252:[function(require,module,exports){
 module.exports=require(83)
-},{"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/ReactStateSetters.js":83}],245:[function(require,module,exports){
+},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactStateSetters.js":83}],253:[function(require,module,exports){
 module.exports=require(84)
-},{"./EventConstants":179,"./EventPluginHub":181,"./EventPropagators":184,"./React":192,"./ReactBrowserEventEmitter":194,"./ReactDOM":204,"./ReactDescriptor":219,"./ReactMount":230,"./ReactTextComponent":246,"./ReactUpdates":250,"./SyntheticEvent":259,"./copyProperties":273,"./mergeInto":309,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/ReactTestUtils.js":84}],246:[function(require,module,exports){
+},{"./EventConstants":187,"./EventPluginHub":189,"./EventPropagators":192,"./React":200,"./ReactBrowserEventEmitter":202,"./ReactDOM":212,"./ReactDescriptor":227,"./ReactMount":238,"./ReactTextComponent":254,"./ReactUpdates":258,"./SyntheticEvent":267,"./copyProperties":281,"./mergeInto":317,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactTestUtils.js":84}],254:[function(require,module,exports){
 module.exports=require(85)
-},{"./DOMPropertyOperations":175,"./ReactBrowserComponentMixin":193,"./ReactComponent":198,"./ReactDescriptor":219,"./escapeTextForBrowser":281,"./mixInto":310,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/ReactTextComponent.js":85}],247:[function(require,module,exports){
+},{"./DOMPropertyOperations":183,"./ReactBrowserComponentMixin":201,"./ReactComponent":206,"./ReactDescriptor":227,"./escapeTextForBrowser":289,"./mixInto":318,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactTextComponent.js":85}],255:[function(require,module,exports){
 module.exports=require(86)
-},{"./ReactChildren":197,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/ReactTransitionChildMapping.js":86}],248:[function(require,module,exports){
+},{"./ReactChildren":205,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactTransitionChildMapping.js":86}],256:[function(require,module,exports){
 module.exports=require(87)
-},{"./ExecutionEnvironment":185,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/ReactTransitionEvents.js":87}],249:[function(require,module,exports){
+},{"./ExecutionEnvironment":193,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactTransitionEvents.js":87}],257:[function(require,module,exports){
 module.exports=require(88)
-},{"./React":192,"./ReactTransitionChildMapping":247,"./cloneWithProps":271,"./emptyFunction":279,"./merge":307,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/ReactTransitionGroup.js":88}],250:[function(require,module,exports){
+},{"./React":200,"./ReactTransitionChildMapping":255,"./cloneWithProps":279,"./emptyFunction":287,"./merge":315,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactTransitionGroup.js":88}],258:[function(require,module,exports){
 module.exports=require(89)
-},{"./CallbackQueue":169,"./PooledClass":191,"./ReactCurrentOwner":203,"./ReactPerf":234,"./Transaction":267,"./invariant":297,"./mixInto":310,"./warning":321,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/ReactUpdates.js":89,"_process":1}],251:[function(require,module,exports){
+},{"./CallbackQueue":177,"./PooledClass":199,"./ReactCurrentOwner":211,"./ReactPerf":242,"./Transaction":275,"./invariant":305,"./mixInto":318,"./warning":329,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactUpdates.js":89,"_process":1}],259:[function(require,module,exports){
 module.exports=require(90)
-},{"./LinkedStateMixin":187,"./React":192,"./ReactCSSTransitionGroup":195,"./ReactComponentWithPureRenderMixin":200,"./ReactDefaultPerf":217,"./ReactTestUtils":245,"./ReactTransitionGroup":249,"./cloneWithProps":271,"./cx":277,"./update":320,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/ReactWithAddons.js":90,"_process":1}],252:[function(require,module,exports){
+},{"./LinkedStateMixin":195,"./React":200,"./ReactCSSTransitionGroup":203,"./ReactComponentWithPureRenderMixin":208,"./ReactDefaultPerf":225,"./ReactTestUtils":253,"./ReactTransitionGroup":257,"./cloneWithProps":279,"./cx":285,"./update":328,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ReactWithAddons.js":90,"_process":1}],260:[function(require,module,exports){
 module.exports=require(91)
-},{"./DOMProperty":174,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/SVGDOMPropertyConfig.js":91}],253:[function(require,module,exports){
+},{"./DOMProperty":182,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/SVGDOMPropertyConfig.js":91}],261:[function(require,module,exports){
 module.exports=require(92)
-},{"./EventConstants":179,"./EventPropagators":184,"./ReactInputSelection":226,"./SyntheticEvent":259,"./getActiveElement":285,"./isTextInputElement":300,"./keyOf":304,"./shallowEqual":316,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/SelectEventPlugin.js":92}],254:[function(require,module,exports){
+},{"./EventConstants":187,"./EventPropagators":192,"./ReactInputSelection":234,"./SyntheticEvent":267,"./getActiveElement":293,"./isTextInputElement":308,"./keyOf":312,"./shallowEqual":324,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/SelectEventPlugin.js":92}],262:[function(require,module,exports){
 module.exports=require(93)
-},{"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/ServerReactRootIndex.js":93}],255:[function(require,module,exports){
+},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ServerReactRootIndex.js":93}],263:[function(require,module,exports){
 module.exports=require(94)
-},{"./EventConstants":179,"./EventPluginUtils":183,"./EventPropagators":184,"./SyntheticClipboardEvent":256,"./SyntheticDragEvent":258,"./SyntheticEvent":259,"./SyntheticFocusEvent":260,"./SyntheticKeyboardEvent":262,"./SyntheticMouseEvent":263,"./SyntheticTouchEvent":264,"./SyntheticUIEvent":265,"./SyntheticWheelEvent":266,"./invariant":297,"./keyOf":304,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/SimpleEventPlugin.js":94,"_process":1}],256:[function(require,module,exports){
+},{"./EventConstants":187,"./EventPluginUtils":191,"./EventPropagators":192,"./SyntheticClipboardEvent":264,"./SyntheticDragEvent":266,"./SyntheticEvent":267,"./SyntheticFocusEvent":268,"./SyntheticKeyboardEvent":270,"./SyntheticMouseEvent":271,"./SyntheticTouchEvent":272,"./SyntheticUIEvent":273,"./SyntheticWheelEvent":274,"./invariant":305,"./keyOf":312,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/SimpleEventPlugin.js":94,"_process":1}],264:[function(require,module,exports){
 module.exports=require(95)
-},{"./SyntheticEvent":259,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/SyntheticClipboardEvent.js":95}],257:[function(require,module,exports){
+},{"./SyntheticEvent":267,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/SyntheticClipboardEvent.js":95}],265:[function(require,module,exports){
 module.exports=require(96)
-},{"./SyntheticEvent":259,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/SyntheticCompositionEvent.js":96}],258:[function(require,module,exports){
+},{"./SyntheticEvent":267,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/SyntheticCompositionEvent.js":96}],266:[function(require,module,exports){
 module.exports=require(97)
-},{"./SyntheticMouseEvent":263,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/SyntheticDragEvent.js":97}],259:[function(require,module,exports){
+},{"./SyntheticMouseEvent":271,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/SyntheticDragEvent.js":97}],267:[function(require,module,exports){
 module.exports=require(98)
-},{"./PooledClass":191,"./emptyFunction":279,"./getEventTarget":288,"./merge":307,"./mergeInto":309,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/SyntheticEvent.js":98}],260:[function(require,module,exports){
+},{"./PooledClass":199,"./emptyFunction":287,"./getEventTarget":296,"./merge":315,"./mergeInto":317,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/SyntheticEvent.js":98}],268:[function(require,module,exports){
 module.exports=require(99)
-},{"./SyntheticUIEvent":265,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/SyntheticFocusEvent.js":99}],261:[function(require,module,exports){
+},{"./SyntheticUIEvent":273,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/SyntheticFocusEvent.js":99}],269:[function(require,module,exports){
 module.exports=require(100)
-},{"./SyntheticEvent":259,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/SyntheticInputEvent.js":100}],262:[function(require,module,exports){
+},{"./SyntheticEvent":267,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/SyntheticInputEvent.js":100}],270:[function(require,module,exports){
 module.exports=require(101)
-},{"./SyntheticUIEvent":265,"./getEventKey":286,"./getEventModifierState":287,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/SyntheticKeyboardEvent.js":101}],263:[function(require,module,exports){
+},{"./SyntheticUIEvent":273,"./getEventKey":294,"./getEventModifierState":295,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/SyntheticKeyboardEvent.js":101}],271:[function(require,module,exports){
 module.exports=require(102)
-},{"./SyntheticUIEvent":265,"./ViewportMetrics":268,"./getEventModifierState":287,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/SyntheticMouseEvent.js":102}],264:[function(require,module,exports){
+},{"./SyntheticUIEvent":273,"./ViewportMetrics":276,"./getEventModifierState":295,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/SyntheticMouseEvent.js":102}],272:[function(require,module,exports){
 module.exports=require(103)
-},{"./SyntheticUIEvent":265,"./getEventModifierState":287,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/SyntheticTouchEvent.js":103}],265:[function(require,module,exports){
+},{"./SyntheticUIEvent":273,"./getEventModifierState":295,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/SyntheticTouchEvent.js":103}],273:[function(require,module,exports){
 module.exports=require(104)
-},{"./SyntheticEvent":259,"./getEventTarget":288,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/SyntheticUIEvent.js":104}],266:[function(require,module,exports){
+},{"./SyntheticEvent":267,"./getEventTarget":296,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/SyntheticUIEvent.js":104}],274:[function(require,module,exports){
 module.exports=require(105)
-},{"./SyntheticMouseEvent":263,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/SyntheticWheelEvent.js":105}],267:[function(require,module,exports){
+},{"./SyntheticMouseEvent":271,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/SyntheticWheelEvent.js":105}],275:[function(require,module,exports){
 module.exports=require(106)
-},{"./invariant":297,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/Transaction.js":106,"_process":1}],268:[function(require,module,exports){
+},{"./invariant":305,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/Transaction.js":106,"_process":1}],276:[function(require,module,exports){
 module.exports=require(107)
-},{"./getUnboundedScrollPosition":293,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/ViewportMetrics.js":107}],269:[function(require,module,exports){
+},{"./getUnboundedScrollPosition":301,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/ViewportMetrics.js":107}],277:[function(require,module,exports){
 module.exports=require(108)
-},{"./invariant":297,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/accumulate.js":108,"_process":1}],270:[function(require,module,exports){
+},{"./invariant":305,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/accumulate.js":108,"_process":1}],278:[function(require,module,exports){
 module.exports=require(109)
-},{"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/adler32.js":109}],271:[function(require,module,exports){
+},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/adler32.js":109}],279:[function(require,module,exports){
 module.exports=require(110)
-},{"./ReactPropTransferer":235,"./keyOf":304,"./warning":321,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/cloneWithProps.js":110,"_process":1}],272:[function(require,module,exports){
+},{"./ReactPropTransferer":243,"./keyOf":312,"./warning":329,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/cloneWithProps.js":110,"_process":1}],280:[function(require,module,exports){
 module.exports=require(111)
-},{"./isTextNode":301,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/containsNode.js":111}],273:[function(require,module,exports){
+},{"./isTextNode":309,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/containsNode.js":111}],281:[function(require,module,exports){
 module.exports=require(112)
-},{"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/copyProperties.js":112,"_process":1}],274:[function(require,module,exports){
+},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/copyProperties.js":112,"_process":1}],282:[function(require,module,exports){
 module.exports=require(113)
-},{"./toArray":318,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/createArrayFrom.js":113}],275:[function(require,module,exports){
+},{"./toArray":326,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/createArrayFrom.js":113}],283:[function(require,module,exports){
 module.exports=require(114)
-},{"./ReactCompositeComponent":201,"./invariant":297,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/createFullPageComponent.js":114,"_process":1}],276:[function(require,module,exports){
+},{"./ReactCompositeComponent":209,"./invariant":305,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/createFullPageComponent.js":114,"_process":1}],284:[function(require,module,exports){
 module.exports=require(115)
-},{"./ExecutionEnvironment":185,"./createArrayFrom":274,"./getMarkupWrap":289,"./invariant":297,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/createNodesFromMarkup.js":115,"_process":1}],277:[function(require,module,exports){
+},{"./ExecutionEnvironment":193,"./createArrayFrom":282,"./getMarkupWrap":297,"./invariant":305,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/createNodesFromMarkup.js":115,"_process":1}],285:[function(require,module,exports){
 module.exports=require(116)
-},{"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/cx.js":116}],278:[function(require,module,exports){
+},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/cx.js":116}],286:[function(require,module,exports){
 module.exports=require(117)
-},{"./CSSProperty":167,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/dangerousStyleValue.js":117}],279:[function(require,module,exports){
+},{"./CSSProperty":175,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/dangerousStyleValue.js":117}],287:[function(require,module,exports){
 module.exports=require(118)
-},{"./copyProperties":273,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/emptyFunction.js":118}],280:[function(require,module,exports){
+},{"./copyProperties":281,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/emptyFunction.js":118}],288:[function(require,module,exports){
 module.exports=require(119)
-},{"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/emptyObject.js":119,"_process":1}],281:[function(require,module,exports){
+},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/emptyObject.js":119,"_process":1}],289:[function(require,module,exports){
 module.exports=require(120)
-},{"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/escapeTextForBrowser.js":120}],282:[function(require,module,exports){
+},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/escapeTextForBrowser.js":120}],290:[function(require,module,exports){
 module.exports=require(121)
-},{"./traverseAllChildren":319,"./warning":321,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/flattenChildren.js":121,"_process":1}],283:[function(require,module,exports){
+},{"./traverseAllChildren":327,"./warning":329,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/flattenChildren.js":121,"_process":1}],291:[function(require,module,exports){
 module.exports=require(122)
-},{"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/focusNode.js":122}],284:[function(require,module,exports){
+},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/focusNode.js":122}],292:[function(require,module,exports){
 module.exports=require(123)
-},{"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/forEachAccumulated.js":123}],285:[function(require,module,exports){
+},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/forEachAccumulated.js":123}],293:[function(require,module,exports){
 module.exports=require(124)
-},{"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/getActiveElement.js":124}],286:[function(require,module,exports){
+},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/getActiveElement.js":124}],294:[function(require,module,exports){
 module.exports=require(125)
-},{"./invariant":297,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/getEventKey.js":125,"_process":1}],287:[function(require,module,exports){
+},{"./invariant":305,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/getEventKey.js":125,"_process":1}],295:[function(require,module,exports){
 module.exports=require(126)
-},{"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/getEventModifierState.js":126}],288:[function(require,module,exports){
+},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/getEventModifierState.js":126}],296:[function(require,module,exports){
 module.exports=require(127)
-},{"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/getEventTarget.js":127}],289:[function(require,module,exports){
+},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/getEventTarget.js":127}],297:[function(require,module,exports){
 module.exports=require(128)
-},{"./ExecutionEnvironment":185,"./invariant":297,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/getMarkupWrap.js":128,"_process":1}],290:[function(require,module,exports){
+},{"./ExecutionEnvironment":193,"./invariant":305,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/getMarkupWrap.js":128,"_process":1}],298:[function(require,module,exports){
 module.exports=require(129)
-},{"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/getNodeForCharacterOffset.js":129}],291:[function(require,module,exports){
+},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/getNodeForCharacterOffset.js":129}],299:[function(require,module,exports){
 module.exports=require(130)
-},{"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/getReactRootElementInContainer.js":130}],292:[function(require,module,exports){
+},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/getReactRootElementInContainer.js":130}],300:[function(require,module,exports){
 module.exports=require(131)
-},{"./ExecutionEnvironment":185,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/getTextContentAccessor.js":131}],293:[function(require,module,exports){
+},{"./ExecutionEnvironment":193,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/getTextContentAccessor.js":131}],301:[function(require,module,exports){
 module.exports=require(132)
-},{"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/getUnboundedScrollPosition.js":132}],294:[function(require,module,exports){
+},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/getUnboundedScrollPosition.js":132}],302:[function(require,module,exports){
 module.exports=require(133)
-},{"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/hyphenate.js":133}],295:[function(require,module,exports){
+},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/hyphenate.js":133}],303:[function(require,module,exports){
 module.exports=require(134)
-},{"./hyphenate":294,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/hyphenateStyleName.js":134}],296:[function(require,module,exports){
+},{"./hyphenate":302,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/hyphenateStyleName.js":134}],304:[function(require,module,exports){
 module.exports=require(135)
-},{"./invariant":297,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/instantiateReactComponent.js":135,"_process":1}],297:[function(require,module,exports){
+},{"./invariant":305,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/instantiateReactComponent.js":135,"_process":1}],305:[function(require,module,exports){
 module.exports=require(136)
-},{"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/invariant.js":136,"_process":1}],298:[function(require,module,exports){
+},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/invariant.js":136,"_process":1}],306:[function(require,module,exports){
 module.exports=require(137)
-},{"./ExecutionEnvironment":185,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/isEventSupported.js":137}],299:[function(require,module,exports){
+},{"./ExecutionEnvironment":193,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/isEventSupported.js":137}],307:[function(require,module,exports){
 module.exports=require(138)
-},{"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/isNode.js":138}],300:[function(require,module,exports){
+},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/isNode.js":138}],308:[function(require,module,exports){
 module.exports=require(139)
-},{"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/isTextInputElement.js":139}],301:[function(require,module,exports){
+},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/isTextInputElement.js":139}],309:[function(require,module,exports){
 module.exports=require(140)
-},{"./isNode":299,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/isTextNode.js":140}],302:[function(require,module,exports){
+},{"./isNode":307,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/isTextNode.js":140}],310:[function(require,module,exports){
 module.exports=require(141)
-},{"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/joinClasses.js":141}],303:[function(require,module,exports){
+},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/joinClasses.js":141}],311:[function(require,module,exports){
 module.exports=require(142)
-},{"./invariant":297,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/keyMirror.js":142,"_process":1}],304:[function(require,module,exports){
+},{"./invariant":305,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/keyMirror.js":142,"_process":1}],312:[function(require,module,exports){
 module.exports=require(143)
-},{"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/keyOf.js":143}],305:[function(require,module,exports){
+},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/keyOf.js":143}],313:[function(require,module,exports){
 module.exports=require(144)
-},{"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/mapObject.js":144}],306:[function(require,module,exports){
+},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/mapObject.js":144}],314:[function(require,module,exports){
 module.exports=require(145)
-},{"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/memoizeStringOnly.js":145}],307:[function(require,module,exports){
+},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/memoizeStringOnly.js":145}],315:[function(require,module,exports){
 module.exports=require(146)
-},{"./mergeInto":309,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/merge.js":146}],308:[function(require,module,exports){
+},{"./mergeInto":317,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/merge.js":146}],316:[function(require,module,exports){
 module.exports=require(147)
-},{"./invariant":297,"./keyMirror":303,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/mergeHelpers.js":147,"_process":1}],309:[function(require,module,exports){
+},{"./invariant":305,"./keyMirror":311,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/mergeHelpers.js":147,"_process":1}],317:[function(require,module,exports){
 module.exports=require(148)
-},{"./mergeHelpers":308,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/mergeInto.js":148}],310:[function(require,module,exports){
+},{"./mergeHelpers":316,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/mergeInto.js":148}],318:[function(require,module,exports){
 module.exports=require(149)
-},{"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/mixInto.js":149}],311:[function(require,module,exports){
+},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/mixInto.js":149}],319:[function(require,module,exports){
 module.exports=require(150)
-},{"./invariant":297,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/monitorCodeUse.js":150,"_process":1}],312:[function(require,module,exports){
+},{"./invariant":305,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/monitorCodeUse.js":150,"_process":1}],320:[function(require,module,exports){
 module.exports=require(151)
-},{"./ReactDescriptor":219,"./invariant":297,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/onlyChild.js":151,"_process":1}],313:[function(require,module,exports){
+},{"./ReactDescriptor":227,"./invariant":305,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/onlyChild.js":151,"_process":1}],321:[function(require,module,exports){
 module.exports=require(152)
-},{"./ExecutionEnvironment":185,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/performance.js":152}],314:[function(require,module,exports){
+},{"./ExecutionEnvironment":193,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/performance.js":152}],322:[function(require,module,exports){
 module.exports=require(153)
-},{"./performance":313,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/performanceNow.js":153}],315:[function(require,module,exports){
+},{"./performance":321,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/performanceNow.js":153}],323:[function(require,module,exports){
 module.exports=require(154)
-},{"./ExecutionEnvironment":185,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/setInnerHTML.js":154}],316:[function(require,module,exports){
+},{"./ExecutionEnvironment":193,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/setInnerHTML.js":154}],324:[function(require,module,exports){
 module.exports=require(155)
-},{"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/shallowEqual.js":155}],317:[function(require,module,exports){
+},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/shallowEqual.js":155}],325:[function(require,module,exports){
 module.exports=require(156)
-},{"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/shouldUpdateReactComponent.js":156}],318:[function(require,module,exports){
+},{"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/shouldUpdateReactComponent.js":156}],326:[function(require,module,exports){
 module.exports=require(157)
-},{"./invariant":297,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/toArray.js":157,"_process":1}],319:[function(require,module,exports){
+},{"./invariant":305,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/toArray.js":157,"_process":1}],327:[function(require,module,exports){
 module.exports=require(158)
-},{"./ReactInstanceHandles":227,"./ReactTextComponent":246,"./invariant":297,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/traverseAllChildren.js":158,"_process":1}],320:[function(require,module,exports){
+},{"./ReactInstanceHandles":235,"./ReactTextComponent":254,"./invariant":305,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/traverseAllChildren.js":158,"_process":1}],328:[function(require,module,exports){
 module.exports=require(159)
-},{"./copyProperties":273,"./invariant":297,"./keyOf":304,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/update.js":159,"_process":1}],321:[function(require,module,exports){
+},{"./copyProperties":281,"./invariant":305,"./keyOf":312,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/update.js":159,"_process":1}],329:[function(require,module,exports){
 module.exports=require(160)
-},{"./emptyFunction":279,"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/react/lib/warning.js":160,"_process":1}],322:[function(require,module,exports){
-module.exports=require(161)
-},{"/Users/damassi/Sites/CN/react-cursor/examples/helloworld/node_modules/underscore/underscore.js":161}],323:[function(require,module,exports){
+},{"./emptyFunction":287,"/home/nik/Development/Temp/react-cursor/examples/helloworld/node_modules/react/lib/warning.js":160,"_process":1}],330:[function(require,module,exports){
 var React = require('react/addons');
-var _     = require('underscore');
 var util  = require('./util');
 
 'use strict';
@@ -22309,25 +22598,33 @@ function Cursor(cmp, path, value) {
     return util.getRefAtPath(cmp._pendingState || cmp.state, path);
   };
 
-  this.onChange = _.partial(onChange, cmp, path);
+  this.onChange = function (nextValue) {
+    if (Cursor.debug === true) {
+      console.warn("'onChange' is deprecated use 'set' instead!");
+    }
+    this.set(nextValue);
+  };
+
+  this.set = update.bind(this, cmp, path, '$set');
+
 
   this.refine = function (/* one or more paths through the tree */) {
     // When refining inside a lifecycle method, same cmp and same path isn't enough.
     // this.props and nextProps have different subtree values, and refining memoizer must account for that
 
     var nextPath = [].concat(path, util.flatten(arguments));
-    var nextValue = util.getRefAtPath(this.value, _.toArray(arguments));
+    var nextValue = util.getRefAtPath(this.value, Array.prototype.slice.call(arguments, 0));
     return build(cmp, nextPath, nextValue); // memoized
   };
 }
 
-function onChange(cmp, path, nextValue) {
+function update(cmp, path, operation, nextValue) {
   var nextState;
 
   if (path.length > 0) {
     nextState = React.addons.update(
       cmp._pendingState || cmp.state,
-      path.concat('$set').reduceRight(util.unDeref, nextValue)
+      path.concat(operation).reduceRight(util.unDeref, nextValue)
     );
   }
   else if (path.length === 0) {
@@ -22356,11 +22653,13 @@ var build = cursorBuildMemoizer(function (cmp, path, value) {
 
 Cursor.build = build;
 
+Cursor.debug = false;
+
 module.exports = Cursor;
 
 
-},{"./util":326,"react/addons":163,"underscore":322}],324:[function(require,module,exports){
-var _ = require('underscore');
+},{"./util":334,"react/addons":171}],331:[function(require,module,exports){
+var utils = require('./util');
 
 'use strict';
 
@@ -22368,11 +22667,11 @@ function ImmutableOptimizations (refFields, ignoredFields/*optional*/) {
   ignoredFields = ignoredFields === undefined ? [] : ignoredFields;
   return {
     shouldComponentUpdate: function (nextProps) {
-      var valuesChanged = !_.isEqual(
-        _.omit(nextProps, _.union(refFields, ignoredFields)),
-        _.omit(this.props, _.union(refFields, ignoredFields)));
+      var valuesChanged = !utils.isEqual(
+        utils.omit(nextProps, utils.union(refFields, ignoredFields)),
+        utils.omit(this.props, utils.union(refFields, ignoredFields)));
 
-      var refsChanged = !_.every(refFields, function (field) {
+      var refsChanged = !refFields.every(function (field) {
         return this.props[field] === nextProps[field];
       }.bind(this));
 
@@ -22383,7 +22682,167 @@ function ImmutableOptimizations (refFields, ignoredFields/*optional*/) {
 
 module.exports = ImmutableOptimizations;
 
-},{"underscore":322}],325:[function(require,module,exports){
+},{"./util":334}],332:[function(require,module,exports){
+'use strict';
+
+// From https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind
+if (!Function.prototype.bind) {
+  Function.prototype.bind = function (context) {
+    if (typeof this !== "function") {
+      // closest thing possible to the ECMAScript 5
+      // internal IsCallable function
+      throw new TypeError("Function.prototype.bind - what is trying to be bound is not callable");
+    }
+
+    var args = Array.prototype.slice.call(arguments, 1),
+        toBind = this,
+        NOP = function () {},
+        bound = function () {
+          return toBind.apply(this instanceof NOP && context
+                 ? this
+                 : context,
+                 args.concat(Array.prototype.slice.call(arguments)));
+        };
+
+    NOP.prototype = this.prototype;
+    bound.prototype = new NOP();
+
+    return bound;
+  };
+}
+
+// From https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/keys
+if (!Object.keys) {
+  Object.keys = (function() {
+    'use strict';
+    var hasOwnProperty = Object.prototype.hasOwnProperty,
+        hasDontEnumBug = !({ toString: null }).propertyIsEnumerable('toString'),
+        dontEnums = [
+          'toString',
+          'toLocaleString',
+          'valueOf',
+          'hasOwnProperty',
+          'isPrototypeOf',
+          'propertyIsEnumerable',
+          'constructor'
+        ],
+        dontEnumsLength = dontEnums.length;
+
+    return function(obj) {
+      if (typeof obj !== 'object' && (typeof obj !== 'function' || obj === null)) {
+        throw new TypeError('Object.keys called on non-object');
+      }
+
+      var result = [], prop, i;
+
+      for (prop in obj) {
+        if (hasOwnProperty.call(obj, prop)) {
+          result.push(prop);
+        }
+      }
+
+      if (hasDontEnumBug) {
+        for (i = 0; i < dontEnumsLength; i++) {
+          if (hasOwnProperty.call(obj, dontEnums[i])) {
+            result.push(dontEnums[i]);
+          }
+        }
+      }
+      return result;
+    };
+  }());
+}
+
+// From https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find
+if (!Array.prototype.find) {
+  Array.prototype.find = function(predicate) {
+    if (this == null) {
+      throw new TypeError('Array.prototype.find called on null or undefined');
+    }
+    if (typeof predicate !== 'function') {
+      throw new TypeError('predicate must be a function');
+    }
+    var list = Object(this);
+    var length = list.length >>> 0;
+    var thisArg = arguments[1];
+    var value;
+
+    for (var i = 0; i < length; i++) {
+      value = list[i];
+      if (predicate.call(thisArg, value, i, list)) {
+        return value;
+      }
+    }
+    return undefined;
+  };
+}
+
+// From https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/every
+if (!Array.prototype.every) {
+  Array.prototype.every = function(callbackfn, thisArg) {
+    'use strict';
+    var T, k;
+
+    if (this == null) {
+      throw new TypeError('this is null or not defined');
+    }
+
+    // 1. Let O be the result of calling ToObject passing the this
+    //    value as the argument.
+    var O = Object(this);
+
+    // 2. Let lenValue be the result of calling the Get internal method
+    //    of O with the argument "length".
+    // 3. Let len be ToUint32(lenValue).
+    var len = O.length >>> 0;
+
+    // 4. If IsCallable(callbackfn) is false, throw a TypeError exception.
+    if (typeof callbackfn !== 'function') {
+      throw new TypeError();
+    }
+
+    // 5. If thisArg was supplied, let T be thisArg; else let T be undefined.
+    if (arguments.length > 1) {
+      T = thisArg;
+    }
+
+    // 6. Let k be 0.
+    k = 0;
+
+    // 7. Repeat, while k < len
+    while (k < len) {
+
+      var kValue;
+
+      // a. Let Pk be ToString(k).
+      //   This is implicit for LHS operands of the in operator
+      // b. Let kPresent be the result of calling the HasProperty internal
+      //    method of O with argument Pk.
+      //   This step can be combined with c
+      // c. If kPresent is true, then
+      if (k in O) {
+
+        // i. Let kValue be the result of calling the Get internal method
+        //    of O with argument Pk.
+        kValue = O[k];
+
+        // ii. Let testResult be the result of calling the Call internal method
+        //     of callbackfn with T as the this value and argument list
+        //     containing kValue, k, and O.
+        var testResult = callbackfn.call(T, kValue, k, O);
+
+        // iii. If ToBoolean(testResult) is false, return false.
+        if (!testResult) {
+          return false;
+        }
+      }
+      k++;
+    }
+    return true;
+  };
+}
+
+},{}],333:[function(require,module,exports){
 var Cursor = require('./Cursor');
 var ImmutableOptimizations = require('./ImmutableOptimizations');
 
@@ -22394,120 +22853,140 @@ module.exports = {
   ImmutableOptimizations: ImmutableOptimizations
 }
 
-},{"./Cursor":323,"./ImmutableOptimizations":324}],326:[function(require,module,exports){
-  'use strict';
+},{"./Cursor":330,"./ImmutableOptimizations":331}],334:[function(require,module,exports){
+'use strict';
 
-  function getRefAtPath(tree, paths) {
-      return reduce(paths, deref, tree);
+require('./polyfills'); // Load polyfills for older browsers if necessary
+
+var isEqual = require('deep-equal');
+var union = require('array-union');
+var omit = require('omit-keys');
+
+function getRefAtPath(tree, paths) {
+  return reduce(paths, deref, tree);
+}
+
+function deref(obj, key) {
+  return obj[key];
+}
+
+function unDeref(obj, key) {
+  var nextObj = {};
+  nextObj[key] = obj;
+  return nextObj;
+}
+
+function initial(array) {
+  return array.slice(0, array.length - 1);
+}
+
+function last(array) {
+  return array[array.length - 1];
+}
+
+function reduce(array, f, mzero) {
+  return array.reduce(f, mzero);
+}
+
+function flatten(listOfLists) {
+  return [].concat.apply([], listOfLists);
+}
+
+function pairs(obj) {
+  var keys = Object.keys(obj);
+  var length = keys.length;
+  var pairs = Array(length);
+  for (var i = 0; i < length; i++) {
+    pairs[i] = [keys[i], obj[keys[i]]];
   }
+  return pairs;
+};
 
-  function deref(obj, key) {
-      return obj[key];
+/**
+ * Hash of null is null, hash of undefined is undefined
+ */
+function hashString(str) {
+  var hash = 0, i, ch, l;
+  if (str === undefined || str === null) {
+      return str;
   }
-
-  function unDeref(obj, key) {
-      var nextObj = {};
-      nextObj[key] = obj;
-      return nextObj;
-  }
-
-  function initial(array) {
-      return array.slice(0, array.length - 1);
-  }
-
-  function last(array) {
-      return array[array.length - 1];
-  }
-
-  function reduce(array, f, mzero) {
-      return array.reduce(f, mzero);
-  }
-
-  function flatten(listOfLists) {
-      return [].concat.apply([], listOfLists);
-  }
-
-  /**
-   * Hash of null is null, hash of undefined is undefined
-   */
-  function hashString(str) {
-      var hash = 0, i, ch, l;
-      if (str === undefined || str === null) {
-          return str;
-      }
-      if (str.length === 0) {
-          return hash;
-      }
-      for (i = 0, l = str.length; i < l; i++) {
-          ch  = str.charCodeAt(i);
-          hash  = ((hash << 5) - hash) + ch;
-          hash |= 0; // Convert to 32bit integer
-      }
+  if (str.length === 0) {
       return hash;
   }
-
-  function generateUUID () {
-    var d = new Date().getTime();
-    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-      var r = (d + Math.random()*16)%16 | 0;
-      d = Math.floor(d/16);
-      return (c=='x' ? r : (r&0x7|0x8)).toString(16);
-    });
-    return uuid;
+  for (i = 0, l = str.length; i < l; i++) {
+      ch  = str.charCodeAt(i);
+      hash  = ((hash << 5) - hash) + ch;
+      hash |= 0; // Convert to 32bit integer
   }
+  return hash;
+}
+
+function generateUUID () {
+  var d = new Date().getTime();
+  var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    var r = (d + Math.random()*16)%16 | 0;
+    d = Math.floor(d/16);
+    return (c=='x' ? r : (r&0x7|0x8)).toString(16);
+  });
+  return uuid;
+}
 
 
-  function hashRecord(record) {
-      return hashString(JSON.stringify(record));
+function hashRecord(record) {
+    return hashString(JSON.stringify(record));
+}
+
+/**
+ * Generate a unique thing to use as a memoize resolver hash for reference types.
+ */
+var refsCache = {}; // { id: cmp }
+function refToHash (cmp) {
+  // search the cmpUniqueMap by reference - have we seen it before?
+  // if so, use the assigned id as the hash
+  // if not, add to cache and generate a new ID to hash on
+
+  var cmpsWithUid = pairs(refsCache);
+  var cmpFound = cmpsWithUid.find(function (cmpAndId) { return cmpAndId[1] === cmp; });
+  if (cmpFound) {
+    return cmpFound[0]; // return the uid
   }
-
-  /**
-   * Generate a unique thing to use as a memoize resolver hash for reference types.
-   */
-  var refsCache = {}; // { id: cmp }
-  function refToHash (cmp) {
-    // search the cmpUniqueMap by reference - have we seen it before?
-    // if so, use the assigned id as the hash
-    // if not, add to cache and generate a new ID to hash on
-
-    var cmpsWithUid = _.pairs(refsCache);
-    var cmpFound = _.find(cmpsWithUid, function (cmpAndId) { return cmpAndId[1] === cmp; });
-    if (cmpFound) {
-      return cmpFound[0]; // return the uid
-    }
-    else {
-      var uid = generateUUID();
-      refsCache[uid] = cmp;
-      return uid;
-    }
+  else {
+    var uid = generateUUID();
+    refsCache[uid] = cmp;
+    return uid;
   }
+}
 
-  function memoizeFactory (resolver) {
-    var cache = {};
-    function memoize(func) {
-      return function () {
-        var key = resolver ? resolver.apply(this, arguments) : arguments[0];
-        return hasOwnProperty.call(cache, key)
-          ? cache[key]
-          : (cache[key] = func.apply(this, arguments));
-      };
-    }
-    return memoize;
+function memoizeFactory (resolver) {
+  var cache = {};
+  function memoize(func) {
+    return function () {
+      var key = resolver ? resolver.apply(this, arguments) : arguments[0];
+      return hasOwnProperty.call(cache, key)
+        ? cache[key]
+        : (cache[key] = func.apply(this, arguments));
+    };
   }
+  return memoize;
+}
 
-  module.exports = {
-      getRefAtPath: getRefAtPath,
-      deref: deref,
-      unDeref: unDeref,
-      initial: initial,
-      last: last,
-      reduce: reduce,
-      flatten: flatten,
-      hashString: hashString,
-      generateUUID: generateUUID,
-      hashRecord: hashRecord,
-      refToHash: refToHash,
-      memoizeFactory: memoizeFactory
-  };
+module.exports = {
+  getRefAtPath: getRefAtPath,
+  deref: deref,
+  unDeref: unDeref,
+  initial: initial,
+  last: last,
+  reduce: reduce,
+  flatten: flatten,
+  pairs: pairs,
+  hashString: hashString,
+  generateUUID: generateUUID,
+  hashRecord: hashRecord,
+  refToHash: refToHash,
+  memoizeFactory: memoizeFactory,
+  isEqual: isEqual,
+  union: union,
+  omit: omit,
+};
 
-},{}]},{},[162]);
+},{"./polyfills":332,"array-union":163,"deep-equal":165,"omit-keys":168}]},{},[162]);

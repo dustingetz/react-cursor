@@ -1,6 +1,6 @@
 {
   "name": "react-cursor",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "description": "react-cursor is a javascript implementation of the Cursor concept first seen in Om, and inspired by functional zippers.",
   "keywords": [
     "react",
