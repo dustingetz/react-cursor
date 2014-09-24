@@ -1,10 +1,26 @@
 'use strict';
 
-require('./polyfills'); // Load polyfills for older browsers if necessary
-
 var isEqual = require('deep-equal');
 var union = require('array-union');
 var omit = require('omit-keys');
+
+function find(array, predicate) {
+  if (typeof predicate !== 'function') {
+    throw new TypeError('predicate must be a function');
+  }
+  var list = Object(array);
+  var length = list.length >>> 0;
+  var thisArg = arguments[1];
+  var value;
+
+  for (var i = 0; i < length; i++) {
+    value = list[i];
+    if (predicate.call(thisArg, value, i, list)) {
+      return value;
+    }
+  }
+  return undefined;
+}
 
 function getRefAtPath(tree, paths) {
   return reduce(paths, deref, tree);
@@ -90,7 +106,7 @@ function refToHash (cmp) {
   // if not, add to cache and generate a new ID to hash on
 
   var cmpsWithUid = pairs(refsCache);
-  var cmpFound = cmpsWithUid.find(function (cmpAndId) { return cmpAndId[1] === cmp; });
+  var cmpFound = find(cmpsWithUid, function (cmpAndId) { return cmpAndId[1] === cmp; });
   if (cmpFound) {
     return cmpFound[0]; // return the uid
   }
@@ -131,4 +147,5 @@ module.exports = {
   isEqual: isEqual,
   union: union,
   omit: omit,
+  find: find,
 };
