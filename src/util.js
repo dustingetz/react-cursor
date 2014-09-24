@@ -1,31 +1,10 @@
 'use strict';
 
-// As documented here:
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind
-if (!Function.prototype.bind) {
-  Function.prototype.bind = function (context) {
-    if (typeof this !== "function") {
-      // closest thing possible to the ECMAScript 5
-      // internal IsCallable function
-      throw new TypeError("Function.prototype.bind - what is trying to be bound is not callable");
-    }
+require('./polyfills'); // Load polyfills for older browsers if necessary
 
-    var args = Array.prototype.slice.call(arguments, 1),
-        toBind = this,
-        NOP = function () {},
-        bound = function () {
-          return toBind.apply(this instanceof NOP && context
-                 ? this
-                 : context,
-                 args.concat(Array.prototype.slice.call(arguments)));
-        };
-
-    NOP.prototype = this.prototype;
-    bound.prototype = new NOP();
-
-    return bound;
-  };
-}
+var isEqual = require('deep-equal');
+var union = require('array-union');
+var omit = require('omit-keys');
 
 function getRefAtPath(tree, paths) {
   return reduce(paths, deref, tree);
@@ -56,6 +35,16 @@ function reduce(array, f, mzero) {
 function flatten(listOfLists) {
   return [].concat.apply([], listOfLists);
 }
+
+function pairs(obj) {
+  var keys = Object.keys(obj);
+  var length = keys.length;
+  var pairs = Array(length);
+  for (var i = 0; i < length; i++) {
+    pairs[i] = [keys[i], obj[keys[i]]];
+  }
+  return pairs;
+};
 
 /**
  * Hash of null is null, hash of undefined is undefined
@@ -100,8 +89,8 @@ function refToHash (cmp) {
   // if so, use the assigned id as the hash
   // if not, add to cache and generate a new ID to hash on
 
-  var cmpsWithUid = _.pairs(refsCache);
-  var cmpFound = _.find(cmpsWithUid, function (cmpAndId) { return cmpAndId[1] === cmp; });
+  var cmpsWithUid = pairs(refsCache);
+  var cmpFound = cmpsWithUid.find(function (cmpAndId) { return cmpAndId[1] === cmp; });
   if (cmpFound) {
     return cmpFound[0]; // return the uid
   }
@@ -133,9 +122,13 @@ module.exports = {
   last: last,
   reduce: reduce,
   flatten: flatten,
+  pairs: pairs,
   hashString: hashString,
   generateUUID: generateUUID,
   hashRecord: hashRecord,
   refToHash: refToHash,
-  memoizeFactory: memoizeFactory
+  memoizeFactory: memoizeFactory,
+  isEqual: isEqual,
+  union: union,
+  omit: omit,
 };
