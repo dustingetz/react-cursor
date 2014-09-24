@@ -1,5 +1,5 @@
 /** @jsx React.DOM */
-var _      = require('underscore');
+var union   = require('lodash-node/modern/arrays/range');
 var React  = require('react/addons');
 var Cursor = require('../../../../src/react-cursor').Cursor;
 var ImmutableOptimizations = require('../../../../src/react-cursor').ImmutableOptimizations;
