@@ -56,13 +56,13 @@ Construct a cursor:
     var cursor = Cursor.build(this) // `this` is the React component's this pointer
                                     // or the return value of React.renderComponent
 
-Cursors have `refine`, `value` and `onChange`:
+Cursors have `refine`, `value` and `transact`:
 
     cursor.refine('a').value            //=> 10
-    cursor.refine('a').onChange(11);
+    cursor.refine('a').transact(11);
     cursor.refine('b').refine('foo').value      //=> { 'bar': 42, 'baz': ['red', 'green'] }
-    cursor.refine('b').refine('foo').onChange({ 'bar': 43, 'baz': ['red', 'green'] })
-    cursor.refine('b', 'foo', 'baz', 1).onChange('blue')
+    cursor.refine('b').refine('foo').transact({ 'bar': 43, 'baz': ['red', 'green'] })
+    cursor.refine('b', 'foo', 'baz', 1).transact('blue')
 
 Cursors are heavily memoized to preserve reference equality between equivalent cursors, such that we can implement
 `React.shouldComponentUpdate` trivially and O(1):
@@ -87,20 +87,20 @@ Cursors make it trivial to implement a React JSON editor:
 
 ## Comparisons to similar libraries
 
-There exist several similar libraries 
-([Cortex](https://github.com/mquan/cortex), 
-[immutable-js](https://github.com/facebook/immutable-js#cursors), 
-[caseywebdev/cursors](https://github.com/caseywebdev/cursors)) 
-that tackle exactly the same problem, some of which pre-date this project. `react-cursor` has one distinguishing 
+There exist several similar libraries
+([Cortex](https://github.com/mquan/cortex),
+[immutable-js](https://github.com/facebook/immutable-js#cursors),
+[caseywebdev/cursors](https://github.com/caseywebdev/cursors))
+that tackle exactly the same problem, some of which pre-date this project. `react-cursor` has one distinguishing
 feature: the ability to trivially implement a correct shouldComponentUpdate. Note that to do this correctly, not only do
-equivalent values at equal paths need to be `===`, but `onChange` handlers at equal paths also need to be `===`. (If the 
-path changes, the DOM event handlers may need to be updated as well, requiring a render.) 
+equivalent values at equal paths need to be `===`, but `transact` handlers at equal paths also need to be `===`. (If the
+path changes, the DOM event handlers may need to be updated as well, requiring a render.)
 
 I also believe `react-cursor` is the only library that attempts to address [React's double setState issue](https://github.com/facebook/react/issues/122).
 
 ## notes
 
-`value` and `onChange` are the chosen nomenclature to directly line up with React's value/onChange convention.
+`value` and `transact` are the chosen nomenclature to directly line up with React's value/onChange convention.
 
 Cursors are implemented in terms of [React.addons.update](http://facebook.github.io/react/docs/update.html).
 
@@ -110,7 +110,7 @@ Please email the maintainer (dustin.getz@gmail.com) with questions, discussion o
 
 ## Contributors
 
-The initial prototypes of `react-cursor` were pair programmed by [Dustin Getz](https://github.com/dustingetz) and [Daniel Miladinov](https://github.com/danielmiladinov). 
+The initial prototypes of `react-cursor` were pair programmed by [Dustin Getz](https://github.com/dustingetz) and [Daniel Miladinov](https://github.com/danielmiladinov).
 
 ## License
 
