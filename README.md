@@ -73,9 +73,17 @@ Cursors are heavily memoized to preserve reference equality between equivalent c
 
 Due to the nature of React, this is a critical optimization when your application grows large. `react-cursor` provides this optimization as a mixin which can be used like so:
 
-`var ImmutableOptimizations = require('path/to/react-cursor').ImmutableOptimizations`
+```
+var ImmutableOptimizations = require('path/to/react-cursor').ImmutableOptimizations
 
-see [ImmutableOptimizations.js](https://github.com/dustingetz/react-cursor/blob/master/src/ImmutableOptimizations.js).
+var myClass = React.createClass({
+    mixins: [ImmutableOptimizations(refFields,ignoreFields)],
+    // ...
+});
+
+```
+
+When `shouldComponentUpdate` is run for `myClass`, props listed in `refFields` will compare old and new with a reference check, and other props will be compared with a value check (unless they are listed in `ignoreFields`). See the code at [ImmutableOptimizations.js](https://github.com/dustingetz/react-cursor/blob/master/src/ImmutableOptimizations.js).
 
 Cursors also have `pendingValue()` for use in event handlers. This solves the [double setState bug](https://github.com/facebook/react/issues/122).
 
