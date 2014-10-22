@@ -8,6 +8,6 @@ describe('Cursor', function() {
   });
 
   it('debug should be set to true', function() {
-    expect(Cursor.debug).to.equal(true);
+    expect(Cursor.debug).to.equal(false);
   });
 });

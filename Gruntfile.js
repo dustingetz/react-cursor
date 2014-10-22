@@ -54,6 +54,8 @@ module.exports = function (grunt) {
       mocha: {
         test: {
           options: {
+            log: true,
+            logErrors: true,
             reporter: 'Spec',
             run: true
           },
@@ -71,8 +73,6 @@ module.exports = function (grunt) {
           files: ['./test/**/*.*'],
           tasks: ['browserify:test', 'mocha:test'],
           options: {
-            log: true,
-            logErrors: true,
             spawn: false
           }
         }
