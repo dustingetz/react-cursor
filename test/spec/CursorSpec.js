@@ -3,8 +3,8 @@ var Cursor = require('../../src/Cursor');
 
 'use strict';
 
-function buildComponentDescriptorWithState(initialState) {
-  return React.createClass({
+function renderComponentWithState(initialState) {
+  var descriptor = React.createClass({
     getInitialState: function () {
       return initialState;
     },
@@ -12,10 +12,7 @@ function buildComponentDescriptorWithState(initialState) {
       return React.DOM.pre({}, JSON.stringify(this.state));
     }
   });
-}
 
-function renderComponentWithState(initialState) {
-  var descriptor = buildComponentDescriptorWithState(initialState);
   var TestComponent = React.createFactory(descriptor);
   return React.addons.TestUtils.renderIntoDocument(TestComponent({}));
 }
