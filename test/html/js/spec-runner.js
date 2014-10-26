@@ -47,20 +47,8 @@ function uniqSetWithForEach(arr) {
 	return ret;
 }
 
-// V8 currently has a broken implementation
-// https://github.com/joyent/node/issues/8449
-function doesForEachActuallyWork() {
-	var ret = false;
-
-	(new Set([true])).forEach(function (el) {
-		ret = el;
-	});
-
-	return ret;
-}
-
 if ('Set' in global) {
-	if (typeof Set.prototype.forEach === 'function' && doesForEachActuallyWork()) {
+	if (typeof Set.prototype.forEach === 'function') {
 		module.exports = uniqSetWithForEach;
 	} else {
 		module.exports = uniqSet;
