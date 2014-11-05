@@ -1,0 +1,78 @@
+body {
+    font-family: Helvetica, Arial, sans-serif;
+}
+
+.pre {
+    font-family: Courier New, serif;
+    display: inline;
+    color: #9a1919;
+}
+
+input {
+    font-size: 1em;
+}
+
+button {
+    font-size: 0.8em;
+    background-color: #444;
+    color: #fff;
+    border: none;
+    margin: 1px;
+}
+
+body {
+    font-family: Helvetica, Arial, sans-serif;
+}
+
+.item-list {
+    padding-left: 20px;
+}
+
+.item-container {
+    background-color: #eee;
+    margin: 10px 0 10px 0;
+
+}
+
+.item-controls, .item-list-controls {
+    background-color: #ccc;
+    margin: 10px 0 10px 0;
+    padding: 5px;
+}
+
+.item h3 {
+    margin: 0;
+    padding: 5px 0 5px 5px;
+    background-color: #ddd;
+}
+
+.item form {
+    padding-left: 15px;
+}
+
+.item form input {
+    font-family: Courier New, serif;
+}
+
+.item form input:first-child {
+    width: 88px;
+    margin-right: 5px;
+}
+
+.item-properties {
+    font-family: Courier New, serif;
+    padding: 15px;
+}
+
+.item-property {
+    margin: 3px;
+}
+
+.property-key {
+    display: inline-block;
+    width: 100px;
+}
+
+.property-value {
+    font-weight: bold;
+}
