@@ -1,5 +1,5 @@
 var React = require('react/addons');
-var util  = require('./util');
+var util = require('./util');
 
 'use strict';
 
@@ -19,8 +19,13 @@ function Cursor(cmp, path, value) {
     this.set(nextValue);
   };
 
-  this.set = update.bind(this, cmp, path, '$set');
 
+  this.push = update.bind(this, cmp, path, '$push');
+  this.unshift = update.bind(this, cmp, path, '$unshift');
+  this.splice = update.bind(this, cmp, path, '$splice');
+  this.set = update.bind(this, cmp, path, '$set');
+  this.merge = update.bind(this, cmp, path, '$merge');
+  this.apply = update.bind(this, cmp, path, '$apply');
 
   this.refine = function (/* one or more paths through the tree */) {
     // When refining inside a lifecycle method, same cmp and same path isn't enough.
