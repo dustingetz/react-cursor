@@ -16,12 +16,12 @@ function buildStatefulComponent(initialState) {
 
 describe('Cursor', function() {
   it('Can load the library in the unit tests', function() {
-    //expect(Cursor).toBeDefined(); -- why doesn't this work?
+    expect(Cursor).not.not.equal(undefined);
     expect(Cursor.debug).to.equal(false);
   });
 
   it("can we make an instance of a react cmp and get at the state", function () {
-    var MyCmp = buildStatefulComponent({ a: 42 });
+    var MyCmp = React.createFactory(buildStatefulComponent({ a: 42 }));
     var cmp = React.addons.TestUtils.renderIntoDocument(MyCmp({}));
     expect(cmp.state.a).to.equal(42);
     // expect(label.refs.p).toBeDefined();
@@ -29,7 +29,7 @@ describe('Cursor', function() {
   });
 
   it('Cursors to the same component are ===', function () {
-    var MyCmp = buildStatefulComponent({ a: 42 });
+    var MyCmp = React.createFactory(buildStatefulComponent({ a: 42 }));
     var cmp = React.addons.TestUtils.renderIntoDocument(MyCmp({}));
 
     var c1 = Cursor.build(cmp);
@@ -51,7 +51,7 @@ describe('Cursor', function() {
   });
 
   it('cursors can refine by path', function () {
-    var MyCmp = buildStatefulComponent({ a: 42 });
+    var MyCmp = React.createFactory(buildStatefulComponent({ a: 42 }));
     var cmp = React.addons.TestUtils.renderIntoDocument(MyCmp({}));
     var c = Cursor.build(cmp);
     expect(c.value.a).to.equal(42);
