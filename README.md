@@ -56,13 +56,23 @@ Construct a cursor:
     var cursor = Cursor.build(this) // `this` is the React component's this pointer
                                     // or the return value of React.renderComponent
 
-Cursors have `refine`, `value` and `onChange`:
+Cursors have `refine`, `value` and expose methods for all commands in [React.addons.update](http://facebook.github.io/react/docs/update.html#available-commands):
+
+* `push(array)`  all the items in array on the target.
+* `unshift(array)` all the items in array on the target.
+* `splice(array of arrays)` for each item in array() call splice() on the target with the parameters provided by the item.
+* `set(any)` replace the target entirely.
+* `merge(object)` merge the keys of object with the target.
+* `apply(function)` passes in the current value to the function and updates it with the new returned value.
+
+
+Example:
 
     cursor.refine('a').value            //=> 10
-    cursor.refine('a').onChange(11);
+    cursor.refine('a').set(11);
     cursor.refine('b').refine('foo').value      //=> { 'bar': 42, 'baz': ['red', 'green'] }
-    cursor.refine('b').refine('foo').onChange({ 'bar': 43, 'baz': ['red', 'green'] })
-    cursor.refine('b', 'foo', 'baz', 1).onChange('blue')
+    cursor.refine('b').refine('foo').set({ 'bar': 43, 'baz': ['red', 'green'] })
+    cursor.refine('b', 'foo', 'baz', 1).set('blue')
 
 Cursors are heavily memoized to preserve reference equality between equivalent cursors, such that we can implement
 `React.shouldComponentUpdate` trivially and O(1):
@@ -98,14 +108,14 @@ Cursors make it trivial to implement a React JSON editor:
 There exist several similar libraries (most notably [Cortex](https://github.com/mquan/cortex)) 
 that tackle exactly the same problem. `react-cursor` has one distinguishing 
 feature: the ability to trivially implement a correct shouldComponentUpdate. Note that to do this correctly, not only do
-equivalent values at equal paths need to be `===`, but `onChange` handlers at equal paths also need to be `===`. (If the 
+equivalent values at equal paths need to be `===`, but `set` handlers at equal paths also need to be `===`. (If the 
 path changes, the DOM event handlers may need to be updated as well, requiring a render.) 
 
 I also believe `react-cursor` is the only library that attempts to address [React's double setState issue](https://github.com/facebook/react/issues/122).
 
 ## notes
 
-`value` and `onChange` are the chosen nomenclature to directly line up with React's value/onChange convention.
+`value` and `set` are the chosen nomenclature to directly line up with React's value/set convention.
 
 Cursors are implemented in terms of [React.addons.update](http://facebook.github.io/react/docs/update.html).
 
