@@ -3,8 +3,8 @@ var Cursor = require('../../src/Cursor');
 
 'use strict';
 
-function buildStatefulComponent(initialState) {
-  return React.createClass({
+function renderComponentWithState(initialState) {
+  var descriptor = React.createClass({
     getInitialState: function () {
       return initialState;
     },
@@ -12,6 +12,9 @@ function buildStatefulComponent(initialState) {
       return React.DOM.pre({}, JSON.stringify(this.state));
     }
   });
+
+  var TestComponent = React.createFactory(descriptor);
+  return React.addons.TestUtils.renderIntoDocument(TestComponent({}));
 }
 
 describe('Cursor', function () {
@@ -21,16 +24,14 @@ describe('Cursor', function () {
   });
 
   it("can we make an instance of a react cmp and get at the state", function () {
-    var MyCmp = React.createFactory(buildStatefulComponent({a: 42}));
-    var cmp = React.addons.TestUtils.renderIntoDocument(MyCmp({}));
+    var cmp = renderComponentWithState({ a: 42 });
     expect(cmp.state.a).to.equal(42);
     // expect(label.refs.p).toBeDefined();
     // expect(label.refs.p.props.children).toBe("Some Text We Need for Test")
   });
 
   it('Cursors to the same component are ===', function () {
-    var MyCmp = React.createFactory(buildStatefulComponent({a: 42}));
-    var cmp = React.addons.TestUtils.renderIntoDocument(MyCmp({}));
+    var cmp = renderComponentWithState({ a: 42 });
 
     var c1 = Cursor.build(cmp);
     var c2 = Cursor.build(cmp);
@@ -51,16 +52,14 @@ describe('Cursor', function () {
   });
 
   it('cursors can refine by path', function () {
-    var MyCmp = React.createFactory(buildStatefulComponent({a: 42}));
-    var cmp = React.addons.TestUtils.renderIntoDocument(MyCmp({}));
+    var cmp = renderComponentWithState({ a: 42 });
     var c = Cursor.build(cmp);
     expect(c.value.a).to.equal(42);
     expect(c.refine('a').value).to.equal(42);
   });
 
   it('method set delegates to $set operation', function () {
-    var MyCmp = React.createFactory(buildStatefulComponent({a: 42}));
-    var cmp = React.addons.TestUtils.renderIntoDocument(MyCmp({}));
+    var cmp = renderComponentWithState({a: 42});
     var c = Cursor.build(cmp);
     var a = c.refine('a');
     a.set(53);
@@ -68,8 +67,7 @@ describe('Cursor', function () {
   });
 
   it('method push delegates to $push operation', function () {
-    var MyCmp = React.createFactory(buildStatefulComponent({a: [1, 2, 3]}));
-    var cmp = React.addons.TestUtils.renderIntoDocument(MyCmp({}));
+    var cmp = renderComponentWithState({a: [1, 2, 3]});
     var c = Cursor.build(cmp);
     var a = c.refine('a');
     a.push([4]);
@@ -79,8 +77,7 @@ describe('Cursor', function () {
   });
 
   it('method push delegates to $push operation', function () {
-    var MyCmp = React.createFactory(buildStatefulComponent({a: [4, 5, 6]}));
-    var cmp = React.addons.TestUtils.renderIntoDocument(MyCmp({}));
+    var cmp = renderComponentWithState({a: [4, 5, 6]});
     var c = Cursor.build(cmp);
     var a = c.refine('a');
     a.unshift([3]);
@@ -90,8 +87,7 @@ describe('Cursor', function () {
   });
 
   it('method splice delegates to $splice operation', function () {
-    var MyCmp = React.createFactory(buildStatefulComponent({a: [1, 2, 3]}));
-    var cmp = React.addons.TestUtils.renderIntoDocument(MyCmp({}));
+    var cmp = renderComponentWithState({a: [1, 2, 3]});
     var c = Cursor.build(cmp);
     var a = c.refine('a');
     a.splice([[1, 1, 4]]);
@@ -101,8 +97,7 @@ describe('Cursor', function () {
   });
 
   it('method merge delegates to $merge operation', function () {
-    var MyCmp = React.createFactory(buildStatefulComponent({a: {b: 64}}));
-    var cmp = React.addons.TestUtils.renderIntoDocument(MyCmp({}));
+    var cmp = renderComponentWithState({a: {b: 64}});
     var c = Cursor.build(cmp);
     var a = c.refine('a');
     a.merge({ c: 72 });
@@ -110,8 +105,7 @@ describe('Cursor', function () {
   });
 
   it('method apply delegates to $apply operation', function () {
-    var MyCmp = React.createFactory(buildStatefulComponent({a: 64 }));
-    var cmp = React.addons.TestUtils.renderIntoDocument(MyCmp({}));
+    var cmp = renderComponentWithState({a: 64 });
     var c = Cursor.build(cmp);
     var a = c.refine('a');
     a.apply(function(x) { return x / 8 });
