@@ -5,14 +5,12 @@ react-cursor
 
 `react-cursor` is an opinionated javascript implementation of the Cursor concept first seen in [Om](https://github.com/swannodette/om/wiki/Cursors), and inspired by functional zippers.
 
-Cursors makes it easy for us work with deeply nested immutable values that are backed by React state. This
-means we can store our entire application state in a single nested immutable value, allowing completely stateless React
+Cursors makes it easy for us work with deeply nested immutable values that are backed by React state. This means we can store our entire application state in a single nested immutable value, allowing completely stateless React
 views.
 
 One of the React [maintainers wrote](https://news.ycombinator.com/item?id=6937921):
 
-> [React is] there when you want to treat state as an implementation detail of a subcomponent. This is only because
-> we don't have a good way of externalizing state changes, while simultaneously keeping the nature of them private.
+> [React is] there when you want to treat state as an implementation detail of a subcomponent. This is only because we don't have a good way of externalizing state changes, while simultaneously keeping the nature of them private.
 
 Cursors solve this problem.
 
@@ -81,21 +79,18 @@ Cursors are heavily memoized to preserve reference equality between equivalent c
         return this.props.cursor !== nextProps.cursor;
     }
 
-Due to the nature of React, this is a critical optimization when your application grows large. `react-cursor` provides this optimization as a mixin which can be used like so:
+Since the whole point of using cursors is to allow us to store all the app state in a single value, React needs to re-render the entire app from the top with every state change. This means that providing proper implementation of `shouldComponentUpdate` is critical to maintain smooth performance. `react-cursor` provides this optimization as a mixin which can be used like so:
 
 ```
-var ImmutableOptimizations = require('path/to/react-cursor').ImmutableOptimizations
-
 var myClass = React.createClass({
-    mixins: [ImmutableOptimizations(refFields,ignoreFields)],
-    // ...
+    mixins: [ImmutableOptimizations(['cursor'])],
 });
 
 ```
 
-When `shouldComponentUpdate` is run for `myClass`, props listed in `refFields` will compare old and new with a reference check, and other props will be compared with a value check (unless they are listed in `ignoreFields`). See the code at [ImmutableOptimizations.js](https://github.com/dustingetz/react-cursor/blob/master/src/ImmutableOptimizations.js).
+Props listed in `refFields` will compare old and new with a reference check, and other props will be compared with a value check, unless they are listed in `ignoreFields` which is useful under rare circumstances.
 
-Cursors also have `pendingValue()` for use in event handlers. This solves the [double setState bug](https://github.com/facebook/react/issues/122).
+Cursors also have `pendingValue()` for use in event handlers. This mechanically solves the [double setState bug](https://github.com/facebook/react/issues/122).
 
 ## example app
 
@@ -105,27 +100,17 @@ Cursors make it trivial to implement a React JSON editor:
 
 ## Comparisons to similar libraries
 
-There exist several similar libraries (most notably [Cortex](https://github.com/mquan/cortex)) 
-that tackle exactly the same problem. `react-cursor` has one distinguishing 
+There exist several similar libraries (most notably [Cortex](https://github.com/mquan/cortex))
+that tackle exactly the same problem. `react-cursor` has one distinguishing
 feature: the ability to trivially implement a correct shouldComponentUpdate. Note that to do this correctly, not only do
-equivalent values at equal paths need to be `===`, but `set` handlers at equal paths also need to be `===`. (If the 
-path changes, the DOM event handlers may need to be updated as well, requiring a render.) 
+equivalent values at equal paths need to be `===`, but `set` handlers at equal paths also need to be `===`. (If the
+path changes, the DOM event handlers may need to be updated as well, requiring a render.)
 
 I also believe `react-cursor` is the only library that attempts to address [React's double setState issue](https://github.com/facebook/react/issues/122).
 
-## notes
-
-`value` and `set` are the chosen nomenclature to directly line up with React's value/set convention.
-
-Cursors are implemented in terms of [React.addons.update](http://facebook.github.io/react/docs/update.html).
-
-`react-cursor` currently depends on underscore, but this will be factored out (sooner if someone asks me for it).
-
-Please email the maintainer (dustin.getz@gmail.com) with questions, discussion or feature requests.
-
 ## Contributors
 
-The initial prototypes of `react-cursor` were pair programmed by [Dustin Getz](https://github.com/dustingetz) and [Daniel Miladinov](https://github.com/danielmiladinov). 
+The initial prototypes and thought work for `react-cursor` was pair programmed by [Dustin Getz](https://github.com/dustingetz) and [Daniel Miladinov](https://github.com/danielmiladinov).
 
 ## License
 
