@@ -81,23 +81,6 @@ function hashString(str) {
   return hash;
 }
 
-function generateUUID () {
-  var d = new Date().getTime();
-  var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-    var r = (d + Math.random()*16)%16 | 0;
-    d = Math.floor(d/16);
-    return (c=='x' ? r : (r&0x7|0x8)).toString(16);
-  });
-  return uuid;
-}
-
-var generateID = (function() {
-  var i = 0;
-  return function() {
-    return (i++).toString()
-  }
-})()
-
 function hashRecord(record) {
     return hashString(JSON.stringify(record));
 }
@@ -106,10 +89,11 @@ function hashRecord(record) {
  * Generate a unique thing to use as a memoize resolver hash for reference types.
  */
 var refsCache = {}; // { id: cmp }
+var cacheIdIndex = 0;
 function refToHash (cmp) {
   // search the cmpUniqueMap by reference - have we seen it before?
   // if so, use the assigned id as the hash
-  // if not, add to cache and generate a new ID to hash on
+  // if not, add to cache and increment cacheIdIndex as a new ID to hash on
 
   var cmpsWithUid = pairs(refsCache);
   var cmpFound = find(cmpsWithUid, function (cmpAndId) { return cmpAndId[1] === cmp; });
@@ -117,7 +101,7 @@ function refToHash (cmp) {
     return cmpFound[0]; // return the uid
   }
   else {
-    var uid = generateID();
+    var uid = (cacheIdIndex++).toString();
     refsCache[uid] = cmp;
     return uid;
   }
@@ -146,7 +130,6 @@ module.exports = {
   flatten: flatten,
   pairs: pairs,
   hashString: hashString,
-  generateUUID: generateUUID,
   hashRecord: hashRecord,
   refToHash: refToHash,
   memoizeFactory: memoizeFactory,
