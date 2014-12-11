@@ -81,7 +81,17 @@ function hashString(str) {
   return hash;
 }
 
-var generateUUID = (function() {
+function generateUUID () {
+  var d = new Date().getTime();
+  var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    var r = (d + Math.random()*16)%16 | 0;
+    d = Math.floor(d/16);
+    return (c=='x' ? r : (r&0x7|0x8)).toString(16);
+  });
+  return uuid;
+}
+
+var generateID = (function() {
   var i = 0;
   return function() {
     return (i++).toString()
@@ -107,7 +117,7 @@ function refToHash (cmp) {
     return cmpFound[0]; // return the uid
   }
   else {
-    var uid = generateUUID();
+    var uid = generateID();
     refsCache[uid] = cmp;
     return uid;
   }
