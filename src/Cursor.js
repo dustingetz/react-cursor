@@ -37,8 +37,10 @@ function update(cmp, path, operation, nextValue) {
   var nextState;
 
   if (path.length > 0) {
+    var q = cmp._reactInternalInstance._pendingStateQueue;
+
     nextState = React.addons.update(
-      cmp._pendingState || cmp.state,
+      (q && util.last(q)) || cmp.state,
       path.concat(operation).reduceRight(util.unDeref, nextValue)
     );
   }
