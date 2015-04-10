@@ -1,6 +1,7 @@
 /webapp/js-built/
 /webapp/styles/App.css
-/webapp/Page.js
+/webapp/js/Page.js
+/webapp/js/build.js
 /webapp/lib
 /node_modules
 /bower_components
