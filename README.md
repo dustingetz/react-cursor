@@ -1,7 +1,7 @@
 react-cursor
 ===============
 
-> Functional state management abstraction for use with Facebook React
+> Functional state management abstraction for use with Facebook React 0.13
 
 `react-cursor` helps you write stateless React components, and achieve optimzied React rendering. react-cursor allows us to store the entire application state in a single immutable value, and allows for generic `shouldComponentUpdate` as a mixin. The cursor concept was first seen in [Om](https://github.com/swannodette/om/wiki/Cursors).
 
