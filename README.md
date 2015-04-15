@@ -3,13 +3,20 @@ react-cursor
 
 > Functional state management abstraction for use with Facebook React 0.13
 
-`react-cursor` helps you write stateless React components, and achieve optimzied React rendering. react-cursor allows us to store the entire application state in a single immutable value, and allows for generic `shouldComponentUpdate` as a mixin. The cursor concept was first seen in [Om](https://github.com/swannodette/om/wiki/Cursors).
+`react-cursor` helps you write stateless React components, and achieve optimizied React rendering. react-cursor allows us to store the entire application state in a single immutable value, and allows for generic `shouldComponentUpdate` as a mixin. The cursor concept was first seen in [Om](https://github.com/swannodette/om/wiki/Cursors).
 
 ## Why react-cursor?
 
 react-cursor exists because back in 2013 I was working on a very large app in react, it got really really slow, so we profiled it and wrote react-cursor to speed it up.
 
-react-cursor is designed to be easy to integrate with an existing react codebase that already uses react state, where the developers are starting to realize "well, using react state seems to be causing a lot of bugs and bad code, what are my options now?", or "well my app is really big now and I am implementing shouldComponentUpdate in 50 different places, and each implementation is different and thus bug prone, surely this can be abstracted?" React-cursor provides this abstraction without forcing you to rewrite your app using proper immutable datstructures.
+
+### Functional state management philosophy
+
+react-cursor makes it easy to store the entire application state in a single immutable value. We found ourselves asking questions like, "stateful components seem to be where all the bugs and bad code is in our app, what are my options now?" react-cursor is designed to be straightforward to integrate with an existing react codebase that already uses react state.
+
+### get shouldComponentUpdate for free
+
+react-cursor yields optimized react rendering for free out of the box. We found ourselves with a large and slow React application, and to speed it up we needed to implement shouldComponentUpdate in 50 different places, and each implementation was different and bug prone. React-cursor provides a way to abstract this without forcing you to rewrite your app using proper immutable datstructures.
 
 If you are already using immutable datastructures (like ImmutableJS), react-cursor is not for you. react-cursor uses regular javascript datastructures (just like React does), and leans heavily on [React's Immutability Helpers](https://facebook.github.io/react/docs/update.html) to provide efficient immutable operations.
 
@@ -52,17 +59,7 @@ Construct a cursor:
     var cursor = Cursor.build(this) // `this` is the React component's this pointer
                                     // or the return value of React.renderComponent
 
-Cursors have `refine`, `value` and expose methods for all commands in [React.addons.update](http://facebook.github.io/react/docs/update.html#available-commands):
-
-* `push(array)`  all the items in array on the target.
-* `unshift(array)` all the items in array on the target.
-* `splice(array of arrays)` for each item in array() call splice() on the target with the parameters provided by the item.
-* `set(any)` replace the target entirely.
-* `merge(object)` merge the keys of object with the target.
-* `apply(function)` passes in the current value to the function and updates it with the new returned value.
-
-
-Example:
+Cursors have `refine`, `value` and expose methods for all commands in [React.addons.update](http://facebook.github.io/react/docs/update.html#available-commands). `set` is the method used most often.
 
     cursor.refine('a').value            //=> 10
     cursor.refine('a').set(11);
@@ -70,16 +67,13 @@ Example:
     cursor.refine('b').refine('foo').set({ 'bar': 43, 'baz': ['red', 'green'] })
     cursor.refine('b', 'foo', 'baz', 1).set('blue')
 
-Cursors are heavily memoized to preserve reference equality between equivalent cursors, such that we can implement
-`React.shouldComponentUpdate` trivially and O(1):
+If two cursors are equivalent as far as React rendering is concerned, they are ===. This lets us implemenet `React.shouldComponentUpdate` trivially and fast:
 
     shouldComponentUpdate: function (nextProps, nextState) {
         return this.props.cursor !== nextProps.cursor;
     }
 
-Since the whole point of using cursors is to allow us to store all the app state in a single value, React needs to re-render the entire app from the top with every state change. This means that providing proper implementation of `shouldComponentUpdate` is critical to maintain smooth performance. `react-cursor` provides this optimization as a mixin.
-
-Props listed in `refFields` will compare old and new with a reference check, and other props will be compared with a value check, unless they are listed in `ignoreFields` which is useful under rare circumstances.
+Since the whole point of using cursors is to allow us to store all the app state in a single value, React needs to re-render the entire app from the top with every state change. This means that providing proper implementation of `shouldComponentUpdate` is critical to maintain smooth performance. `react-cursor` provides this optimization as a mixin. Props listed in `refFields` will compare old and new with a reference check, and other props will be compared with a value check, unless they are listed in `ignoreFields` which is necessary under rare circumstances.
 
 Cursors also have `pendingValue()` for use in event handlers. This mechanically solves the [double setState bug](https://github.com/facebook/react/issues/122).
 
