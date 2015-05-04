@@ -57,7 +57,7 @@ Construct a cursor:
     var Cursor = require('path/to/react-cursor').Cursor;
 
     var cursor = Cursor.build(this) // `this` is the React component's this pointer
-                                    // or the return value of React.renderComponent
+                                    // or the return value of React.render
 
 Cursors have `refine`, `value` and expose methods for all commands in [React.addons.update](http://facebook.github.io/react/docs/update.html#available-commands). `set` is the method used most often.
 
