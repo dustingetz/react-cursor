@@ -35,43 +35,51 @@ Flux and react-cursor are orthogonal. Idiomatic React allows stateful components
 
 Given a React component with state like this:
 
-    var App = React.createClass({
-        getInitialState: function () {
-            return {
-                "a": 10,
-                "b": {
-                    "foo": {
-                        "bar": 42,
-                        "baz": ['red', 'green']
-                    }
+```js
+var App = React.createClass({
+    getInitialState: function () {
+        return {
+            "a": 10,
+            "b": {
+                "foo": {
+                    "bar": 42,
+                    "baz": ['red', 'green']
                 }
-            };
-        },
-        render: function () {
-            return <pre>{JSON.stringify(this.state, undefined, 2)}</pre>;
-        }
-    });
+            }
+        };
+    },
+    render: function () {
+        return <pre>{JSON.stringify(this.state, undefined, 2)}</pre>;
+    }
+});
+```
 
 Construct a cursor:
 
-    var Cursor = require('path/to/react-cursor').Cursor;
+```js
+var Cursor = require('path/to/react-cursor').Cursor;
 
-    var cursor = Cursor.build(this) // `this` is the React component's this pointer
-                                    // or the return value of React.render
+var cursor = Cursor.build(this) // `this` is the React component's this pointer
+                                // or the return value of React.render
+```
 
 Cursors have `refine`, `value` and expose methods for all commands in [React.addons.update](http://facebook.github.io/react/docs/update.html#available-commands). `set` is the method used most often.
 
-    cursor.refine('a').value            //=> 10
-    cursor.refine('a').set(11);
-    cursor.refine('b').refine('foo').value      //=> { 'bar': 42, 'baz': ['red', 'green'] }
-    cursor.refine('b').refine('foo').set({ 'bar': 43, 'baz': ['red', 'green'] })
-    cursor.refine('b', 'foo', 'baz', 1).set('blue')
+```js
+cursor.refine('a').value            //=> 10
+cursor.refine('a').set(11);
+cursor.refine('b').refine('foo').value      //=> { 'bar': 42, 'baz': ['red', 'green'] }
+cursor.refine('b').refine('foo').set({ 'bar': 43, 'baz': ['red', 'green'] })
+cursor.refine('b', 'foo', 'baz', 1).set('blue')
+```
 
 If two cursors are equivalent as far as React rendering is concerned, they are ===. This lets us implemenet `React.shouldComponentUpdate` trivially and fast:
 
-    shouldComponentUpdate: function (nextProps, nextState) {
-        return this.props.cursor !== nextProps.cursor;
-    }
+```js
+shouldComponentUpdate: function (nextProps, nextState) {
+    return this.props.cursor !== nextProps.cursor;
+}
+```
 
 Since the whole point of using cursors is to allow us to store all the app state in a single value, React needs to re-render the entire app from the top with every state change. This means that providing proper implementation of `shouldComponentUpdate` is critical to maintain smooth performance. `react-cursor` provides this optimization as a mixin. Props listed in `refFields` will compare old and new with a reference check, and other props will be compared with a value check, unless they are listed in `ignoreFields` which is necessary under rare circumstances.
 
