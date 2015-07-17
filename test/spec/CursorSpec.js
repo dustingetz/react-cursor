@@ -76,7 +76,7 @@ describe('Cursor', function () {
     expect(cmp.state.a).to.deep.equal([1, 2, 3, 4, 5, 6]);
   });
 
-  it('method push delegates to $push operation', function () {
+  it('method push delegates to $unshift operation', function () {
     var cmp = renderComponentWithState({a: [4, 5, 6]});
     var c = Cursor.build(cmp);
     var a = c.refine('a');
