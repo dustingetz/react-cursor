@@ -34,20 +34,16 @@ function Cursor(cmp, path, value) {
 }
 
 function update(cmp, path, operation, nextValue) {
-  var nextState;
-
-  if (path.length > 0) {
-    var q = cmp._reactInternalInstance._pendingStateQueue;
-
-    nextState = React.addons.update(
-      (q && util.last(q)) || cmp.state,
-      path.concat(operation).reduceRight(util.unDeref, nextValue)
-    );
-  }
-  else if (path.length === 0) {
-    nextState = nextValue;
-  }
-  cmp.setState(nextState);
+  cmp.setState(function (state) {
+    if (path.length > 0) {
+      return React.addons.update(
+        state,
+        path.concat(operation).reduceRight(util.unDeref, nextValue)
+      );
+    } else if (path.length === 0) {
+      return nextValue;
+    }
+  });
 }
 
 
