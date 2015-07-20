@@ -1,3 +1,5 @@
+/* global describe, it, expect */
+
 var React = require('react');
 var Cursor = require('../../src/Cursor');
 

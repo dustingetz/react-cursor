@@ -1,3 +1,5 @@
+/* global describe, it, expect, beforeEach */
+
 var util = require('../../src/util');
 
 'use strict';
