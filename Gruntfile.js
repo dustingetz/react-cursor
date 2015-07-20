@@ -70,7 +70,7 @@ module.exports = function (grunt) {
 
       watch: {
         tests: {
-          files: ['./test/**/*.*'],
+          files: ['./src/**/*.*', './test/**/*.*'],
           tasks: ['browserify:test', 'mocha_phantomjs:test'],
           options: {
             spawn: false
