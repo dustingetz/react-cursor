@@ -38,7 +38,7 @@ module.exports = function (grunt) {
       }
     },
 
-    clean: ['bower_components', 'webapp/libs', 'webapp/styles/App.css', 'webapp/Page.js']
+    clean: ['bower_components', 'webapp/libs', 'webapp/styles/App.css', 'webapp/js/build.js']
 
   });
 
