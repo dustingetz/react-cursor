@@ -33,16 +33,29 @@ function Cursor(cmp, path, value) {
   };
 }
 
-function update(cmp, path, operation, nextValue) {
+function update(cmp, path, operation, nextUpdate) {
+  // Backwards compatibility with non-function values of nextUpdate
+  if (typeof nextUpdate !== "function") {
+    var prevValue = nextUpdate;
+    nextUpdate = function ( ) { return prevValue; };
+  }
+
   cmp.setState(function (state) {
+    var nextState;
+
     if (path.length > 0) {
-      return React.addons.update(
+      nextState = React.addons.update(
         state,
-        path.concat(operation).reduceRight(util.unDeref, nextValue)
+        path.concat(operation).reduceRight(
+          util.unDeref,
+          nextUpdate(util.getRefAtPath(state, path))
+        )
       );
     } else if (path.length === 0) {
-      return nextValue;
+      nextState = nextUpdate(state);
     }
+
+    return nextState;
   });
 }
 

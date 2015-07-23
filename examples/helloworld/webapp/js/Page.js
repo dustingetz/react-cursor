@@ -61,8 +61,8 @@ var ClickerDescriptor = React.createClass({
   },
 
   inc2: function () {
-    this.props.cursor.set(this.props.cursor.pendingValue() + 1);
-    this.props.cursor.set(this.props.cursor.pendingValue() + 1);
+    this.props.cursor.set(function (s) { return s + 1; });
+    this.props.cursor.set(function (s) { return s + 1; });
   },
 
   inc10: function () {
