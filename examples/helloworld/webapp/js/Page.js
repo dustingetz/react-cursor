@@ -6,7 +6,7 @@ var ImmutableOptimizations = require('../../../../src/react-cursor').ImmutableOp
 
 'use strict';
 
-var App = React.createClass({
+var AppDescriptor = React.createClass({
   getInitialState: function () {
     return {
       very: {
@@ -39,14 +39,14 @@ var App = React.createClass({
   }
 });
 
-var Clicker = React.createClass({
+var ClickerDescriptor = React.createClass({
   mixins: [ImmutableOptimizations(['cursor'])],
 
   render: function () {
     console.log('rendering clicker ', this.props.key);
     return (
       <div>
-        <input type="text" value={this.props.cursor.value} set={this.onInputChange} />
+        <input type="text" value={this.props.cursor.value} onChange={this.onInputChange} />
         <span>{this.props.cursor.value}</span>
         <button onClick={this.inc2}>+2</button>
         <button onClick={this.inc10}>+10</button>
@@ -70,10 +70,12 @@ var Clicker = React.createClass({
   }
 });
 
+var App = React.createFactory(AppDescriptor);
+var Clicker= React.createFactory(ClickerDescriptor);
 
 
 function entrypoint(rootEl) {
-  React.renderComponent(<App />, rootEl);
+  React.render(<App />, rootEl);
 
   // In lieu of unit tests:
   var c1 = window.c1 = Cursor.build(window.App);
