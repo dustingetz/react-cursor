@@ -14,6 +14,8 @@ react-cursor exists because back in 2013 I was working on a very large app in re
 
 react-cursor makes it easy to store the entire application state in a single immutable value. We found ourselves asking questions like, "stateful components seem to be where all the bugs and bad code is in our app, what are my options now?" react-cursor is designed to be straightforward to integrate with an existing react codebase that already uses react state.
 
+Cursors do not make an app stateless, but they let an app keep all its state in a single place - thus the root view is stateful, and all downtree views are stateless. So cursors are a tool for reducing the surface area of code that is stateful.
+
 ### get shouldComponentUpdate for free
 
 react-cursor yields optimized react rendering for free out of the box. We found ourselves with a large and slow React application, and to speed it up we needed to implement shouldComponentUpdate in 50 different places, and each implementation was different and bug prone. React-cursor provides a way to abstract this without forcing you to rewrite your app using proper immutable datstructures.
@@ -22,7 +24,8 @@ If you are already using immutable datastructures (like ImmutableJS), react-curs
 
 ## What about flux?
 
-Flux and react-cursor are orthogonal. Idiomatic React allows stateful components. react-cursor makes it easy to remove all application state out of your React components and into one place. The decision of stateful vs stateless components is orthogonal to Flux architecture.
+Flux is about uni-directional data flow, and cursors are about state-at-top. You can structure your app using one or both or neither, they are separate concerns. 
+
 
 ## features
 
