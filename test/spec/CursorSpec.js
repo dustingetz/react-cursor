@@ -110,7 +110,9 @@ describe('Cursor', function () {
     var cmp = renderComponentWithState({a: 64 });
     var c = Cursor.build(cmp);
     var a = c.refine('a');
-    a.apply(function(x) { return x / 8 });
+    a.apply(function (prevState) {
+      return function (x) { return x / 8 }
+    });
     expect(cmp.state.a).to.equal(8);
   });
 });
