@@ -7,11 +7,6 @@ function Cursor(cmp, path, value) {
   // value to put in the DOM, use from render() and the component lifecycle methods
   this.value = value;
 
-  this.pendingValue = function () {
-    // the current value right now, use in event handlers
-    return util.getRefAtPath(cmp._pendingState || cmp.state, path);
-  };
-
   this.onChange = function (nextValue) {
     if (Cursor.debug === true) {
       console.warn("'onChange' is deprecated use 'set' instead!");
@@ -82,4 +77,3 @@ Cursor.build = build;
 Cursor.debug = false;
 
 module.exports = Cursor;
-
