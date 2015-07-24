@@ -51,12 +51,12 @@ module.exports = function (grunt) {
         }
       },
 
-      mocha: {
+      mocha_phantomjs: {
         test: {
           options: {
             log: true,
             logErrors: true,
-            reporter: 'Spec',
+            reporter: 'spec',
             run: true
           },
 
@@ -70,8 +70,8 @@ module.exports = function (grunt) {
 
       watch: {
         tests: {
-          files: ['./test/**/*.*'],
-          tasks: ['browserify:test', 'mocha:test'],
+          files: ['./src/**/*.*', './test/**/*.*'],
+          tasks: ['browserify:test', 'mocha_phantomjs:test'],
           options: {
             spawn: false
           }
@@ -85,9 +85,9 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-browserify');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-karma');
-    grunt.loadNpmTasks('grunt-mocha');
+    grunt.loadNpmTasks('grunt-mocha-phantomjs');
 
-    grunt.registerTask('test', ['browserify:test', 'mocha:test', 'watch']);
+    grunt.registerTask('test', ['browserify:test', 'mocha_phantomjs:test', 'watch']);
 
     grunt.registerTask('default', ['clean', 'browserify:dev']);
     grunt.registerTask('release', ['clean', 'browserify:dev', 'browserify:build', 'browserify:dist']);
