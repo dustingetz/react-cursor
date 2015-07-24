@@ -35,7 +35,7 @@
     "grunt-mocha": "^0.4.11",
     "karma": "^0.12.24",
     "mocha": "^2.0.1",
-    "react": "~0.12.0",
+    "react": "~0.13.0",
     "uglifyify": "~2.6.0",
     "underscore": "~1.7.0"
   },

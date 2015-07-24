@@ -7,11 +7,6 @@ function Cursor(cmp, path, value) {
   // value to put in the DOM, use from render() and the component lifecycle methods
   this.value = value;
 
-  this.pendingValue = function () {
-    // the current value right now, use in event handlers
-    return util.getRefAtPath(cmp._pendingState || cmp.state, path);
-  };
-
   this.onChange = function (nextValue) {
     if (Cursor.debug === true) {
       console.warn("'onChange' is deprecated use 'set' instead!");
@@ -33,21 +28,30 @@ function Cursor(cmp, path, value) {
   };
 }
 
-function update(cmp, path, operation, nextValue) {
-  var nextState;
-
-  if (path.length > 0) {
-    var q = cmp._reactInternalInstance._pendingStateQueue;
-
-    nextState = React.addons.update(
-      (q && util.last(q)) || cmp.state,
-      path.concat(operation).reduceRight(util.unDeref, nextValue)
-    );
+function update(cmp, path, operation, nextUpdate) {
+  // Backwards compatibility with non-function values of nextUpdate
+  if (typeof nextUpdate !== "function") {
+    var prevValue = nextUpdate;
+    nextUpdate = function ( ) { return prevValue; };
   }
-  else if (path.length === 0) {
-    nextState = nextValue;
-  }
-  cmp.setState(nextState);
+
+  cmp.setState(function (state) {
+    var nextState;
+
+    if (path.length > 0) {
+      nextState = React.addons.update(
+        state,
+        path.concat(operation).reduceRight(
+          util.unDeref,
+          nextUpdate(util.getRefAtPath(state, path))
+        )
+      );
+    } else if (path.length === 0) {
+      nextState = nextUpdate(state);
+    }
+
+    return nextState;
+  });
 }
 
 
@@ -73,4 +77,3 @@ Cursor.build = build;
 Cursor.debug = false;
 
 module.exports = Cursor;
-

@@ -19,7 +19,7 @@
     "grunt-contrib-jshint": "~0.7.1",
     "grunt-contrib-less": "~0.7.0",
     "grunt-react": "~0.8.2",
-    "react": "~0.11.2",
+    "react": "~0.13.3",
     "reactify": "~0.14.0",
     "underscore": "~1.7.0"
   }
