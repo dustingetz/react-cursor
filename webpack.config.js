@@ -2,10 +2,7 @@ var path = require('path');
 
 module.exports = {
   devtool: 'inline-source-map',
-
-  entry: {
-    'react-cursor.dev': './src/react-cursor'
-  },
+  entry: './src/react-cursor',
 
   output: {
     path: path.resolve(__dirname, 'lib'),

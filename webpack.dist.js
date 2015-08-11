@@ -3,7 +3,7 @@ var webpack = require('webpack');
 var config = require('./webpack.config');
 
 config.devtool = false;
-config.entry = './src/react-cursor.js';
+
 config.output = {
   path: path.resolve(__dirname, 'lib'),
   filename: 'react-cursor.min.js',
