@@ -5,6 +5,9 @@ react-cursor
 
 `react-cursor` helps you write stateless React components, and achieve optimizied React rendering. react-cursor allows us to store the entire application state in a single immutable value, and allows for generic `shouldComponentUpdate` as a mixin. The cursor concept was first seen in [Om](https://github.com/swannodette/om/wiki/Cursors).
 
+### Installation
+`npm install --save react-cursor`
+
 ## Why react-cursor?
 
 react-cursor exists because back in 2013 I was working on a very large app in react, it got really really slow, so we profiled it and wrote react-cursor to speed it up.
@@ -24,7 +27,7 @@ If you are already using immutable datastructures (like ImmutableJS), react-curs
 
 ## What about flux?
 
-Flux is about uni-directional data flow, and cursors are about state-at-top. You can structure your app using one or both or neither, they are separate concerns. 
+Flux is about uni-directional data flow, and cursors are about state-at-top. You can structure your app using one or both or neither, they are separate concerns.
 
 
 ## features
