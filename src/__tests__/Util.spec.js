@@ -1,6 +1,6 @@
 /* global describe, it, expect, beforeEach */
 
-var util = require('../../src/util');
+var util = require('../util');
 
 'use strict';
 
@@ -15,4 +15,3 @@ describe('Util', function() {
     expect(util.last(items)).to.equal('c');
   });
 });
-

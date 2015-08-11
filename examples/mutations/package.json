@@ -1,30 +1,48 @@
 {
-  "name": "react-cursor-mutation-example",
-  "version": "0.0.1",
-  "description": "",
+  "name": "react-hot-boilerplate",
+  "version": "1.0.0",
+  "description": "Boilerplate for ReactJS project with hot code reloading",
   "scripts": {
-    "build": "browserify webapp/js/Page.js -d > webapp/js/build.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js",
+    "lint": "eslint src"
   },
-  "contributors": [
-    "Lukas Buenger"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gaearon/react-hot-boilerplate.git"
+  },
+  "keywords": [
+    "react",
+    "reactjs",
+    "boilerplate",
+    "hot",
+    "reload",
+    "hmr",
+    "live",
+    "edit",
+    "webpack"
   ],
-  "browserify": {
-    "transform": [
-      "reactify"
-    ]
-  },
+  "author": "Dan Abramov <dan.abramov@me.com> (http://github.com/gaearon)",
   "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gaearon/react-hot-boilerplate/issues"
+  },
+  "homepage": "https://github.com/gaearon/react-hot-boilerplate",
   "devDependencies": {
-    "grunt": "~0.4.1",
-    "grunt-browserify": "~3.0.1",
-    "grunt-cli": "~0.1.9",
-    "grunt-contrib-clean": "~0.5.0",
-    "grunt-contrib-jshint": "~0.7.1",
-    "grunt-contrib-less": "~0.7.0",
-    "grunt-react": "~0.8.2",
-    "browserify": "~5.12.0",
-    "react": "^0.13.3",
-    "reactify": "~0.15.2"
+    "babel-core": "^5.4.7",
+    "babel-eslint": "^3.1.9",
+    "babel-loader": "^5.1.2",
+    "css-loader": "^0.15.6",
+    "eslint-plugin-react": "^2.3.0",
+    "less": "^2.5.1",
+    "less-loader": "^2.2.0",
+    "react-cursor": "^1.1.0",
+    "react-hot-loader": "^1.2.7",
+    "style-loader": "^0.12.3",
+    "underscore": "^1.8.3",
+    "webpack": "^1.9.6",
+    "webpack-dev-server": "^1.8.2"
+  },
+  "dependencies": {
+    "react": "^0.13.0"
   }
 }

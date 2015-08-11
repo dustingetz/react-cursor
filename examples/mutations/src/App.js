@@ -1,16 +1,17 @@
-"use strict";
+var React = require('react/addons');
+var Cursor = require('react-cursor').Cursor;
+var ImmutableOptimizations = require('react-cursor').ImmutableOptimizations;
+require('./App.less');
 
-var React = require('react/addons'),
-    Cursor = require('../../../../src/react-cursor').Cursor,
-    ImmutableOptimizations = require('../../../../src/react-cursor').ImmutableOptimizations,
-    getShortUID = function () {
-        return ("0000" + (Math.random()*Math.pow(36,4) << 0).toString(36)).slice(-4)
-    },
-    getNewItem = function () {
-        return {
-            key: getShortUID()
-        }
-    };
+var getShortUID = function () {
+    return ('0000' + (Math.random()*Math.pow(36,4) << 0).toString(36)).slice(-4)
+};
+
+var getNewItem = function () {
+    return {
+        key: getShortUID()
+    }
+};
 
 
 var Item = React.createClass({
@@ -198,4 +199,4 @@ var Application = React.createClass({
     }
 });
 
-React.render(<Application />, document.getElementById('root'));
+module.exports = Application;

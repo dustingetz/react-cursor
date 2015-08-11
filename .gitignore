@@ -4,4 +4,4 @@ Thumbs.db
 /bower_components
 *.iml
 .idea
-/dist/*
+/lib/*

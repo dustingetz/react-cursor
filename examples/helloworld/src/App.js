@@ -1,12 +1,12 @@
-/** @jsx React.DOM */
 var _      = require('underscore');
 var React  = require('react/addons');
-var Cursor = require('../../../../src/react-cursor').Cursor;
-var ImmutableOptimizations = require('../../../../src/react-cursor').ImmutableOptimizations;
+var Cursor = require('react-cursor').Cursor;
+var ImmutableOptimizations = require('react-cursor').ImmutableOptimizations;
+require('./App.less');
 
 'use strict';
 
-var AppDescriptor = React.createClass({
+var App = React.createClass({
   getInitialState: function () {
     return {
       very: {
@@ -19,15 +19,16 @@ var AppDescriptor = React.createClass({
     };
   },
 
-  componentWillMount: function () {
-    window.App = this;
-  },
-
   render: function () {
     var cursor = Cursor.build(this);
     var counts = cursor.refine('very', 'deeply', 'nested', 'counts');
     var contents = counts.value.map(function (count, index) {
-      return (<Clicker key={index} cursor={counts.refine(index)} />);
+      return (
+        <Clicker
+          key={index}
+          cursor={counts.refine(index)}
+        />
+      )
     }.bind(this));
 
     return (
@@ -39,7 +40,7 @@ var AppDescriptor = React.createClass({
   }
 });
 
-var ClickerDescriptor = React.createClass({
+var Clicker = React.createClass({
   mixins: [ImmutableOptimizations(['cursor'])],
 
   render: function () {
@@ -70,31 +71,4 @@ var ClickerDescriptor = React.createClass({
   }
 });
 
-var App = React.createFactory(AppDescriptor);
-var Clicker= React.createFactory(ClickerDescriptor);
-
-
-function entrypoint(rootEl) {
-  React.render(<App />, rootEl);
-
-  // In lieu of unit tests:
-  var c1 = window.c1 = Cursor.build(window.App);
-  var c2 = window.c2 = Cursor.build(window.App);
-  console.assert(c1.value === c2.value);
-  console.assert(c1.set === c2.set);
-  console.assert(c1 === c2);
-
-  var c10 = c1.refine('very', 'deeply', 'nested', 'counts', '0');
-  var c20 = c2.refine('very', 'deeply', 'nested', 'counts', '0');
-  console.assert(c10.value === c20.value);
-  console.assert(c10.set === c20.set);
-  console.assert(c10 === c20);
-
-  var c20b = c2.refine('very', 'deeply', 'nested', 'counts', '0');
-  console.assert(c20b.value === c20.value);
-  console.assert(c20b.set === c20.set);
-  console.assert(c20b === c20);
-}
-
-window.entrypoint = entrypoint;
-
+module.exports = App;

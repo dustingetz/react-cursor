@@ -1,5 +1,4 @@
 ## build steps
 
     npm install
-    grunt
-
+    npm start

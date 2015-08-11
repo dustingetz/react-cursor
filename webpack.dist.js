@@ -1,0 +1,30 @@
+var path = require('path');
+var webpack = require('webpack');
+var config = require('./webpack.config');
+
+config.devtool = false;
+config.entry = './src/react-cursor.js';
+config.output = {
+  path: path.resolve(__dirname, 'lib'),
+  filename: 'react-cursor.min.js',
+  libraryTarget: 'umd',
+  library: 'reactCursor',
+  publicPath: '/static/'
+};
+
+config.externals = {
+  react: 'React',
+  'react/addons': 'React',
+  underscore: 'underscore'
+};
+
+config.plugins = [
+  new webpack.DefinePlugin({
+    'process.env': {
+      NODE_ENV: JSON.stringify('production')
+    }
+  }),
+  new webpack.optimize.UglifyJsPlugin({ minimize: true })
+];
+
+module.exports = config;

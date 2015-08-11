@@ -1,7 +1,3 @@
-/webapp/js-built/
-/webapp/styles/App.css
-/webapp/js/build.js
-/webapp/lib
-/node_modules
-/bower_components
-
+node_modules
+npm-debug.log
+.DS_Store
