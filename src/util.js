@@ -120,6 +120,10 @@ function memoizeFactory (resolver) {
   return memoize;
 }
 
+function isObject (thing) {
+  return (typeof thing === "object") && (thing !== null);
+}
+
 module.exports = {
   getRefAtPath: getRefAtPath,
   deref: deref,
@@ -133,6 +137,7 @@ module.exports = {
   hashRecord: hashRecord,
   refToHash: refToHash,
   memoizeFactory: memoizeFactory,
+  isObject: isObject,
   isEqual: isEqual,
   union: union,
   omit: omit,
