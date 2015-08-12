@@ -8,7 +8,7 @@ config.output = {
   path: path.resolve(__dirname, 'lib'),
   filename: 'react-cursor.min.js',
   libraryTarget: 'umd',
-  library: 'reactCursor',
+  library: 'ReactCursor',
   publicPath: '/static/'
 };
 
