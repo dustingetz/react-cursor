@@ -69,6 +69,15 @@ var cursorBuildMemoizer = util.memoizeFactory(function (cmp, path, value) {
 var build = cursorBuildMemoizer(function (cmp, path, value) {
   path = path === undefined ? [] : path;
   value = value || util.getRefAtPath(cmp.state, path);
+
+  if (util.isObject(value)) {
+    Object.observe(value, function (changes) {
+      if (changes.length > 0) {
+        throw new Error('Modifications to Cursor.value are disallowed');
+      }
+    });
+  }
+
   return new Cursor(cmp, path, value);
 });
 
