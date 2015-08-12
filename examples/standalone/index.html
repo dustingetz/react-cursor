@@ -6,11 +6,33 @@
 </head>
 <body>
 <div id="root"></div>
-<script src='../../lib/react-cursor.min.js'></script>
+<script src="http://fb.me/react-with-addons-0.13.3.js"></script>
+<script src="../../lib/react-cursor.min.js"></script>
 <script>
     console.assert(window.ReactCursor !== undefined, 'couldnt load react-cursor');
     console.assert(window.ReactCursor.Cursor !== undefined, 'couldnt load react-cursor');
     console.log('We found react-cursor, all is well');
+
+    var ChildDescriptor = React.createClass({
+        mixins: [ReactCursor.ImmutableOptimizations(['cursor'])],
+        render: function () {
+            return React.DOM.pre({}, JSON.stringify(cur.value, undefined, 2));
+        }
+    });
+    var Child = React.createFactory(ChildDescriptor);
+
+    var AppDescriptor = React.createClass({
+        getInitialState: function () {
+            return { a: {b: 42} };
+        },
+        render: function () {
+            window.cur = ReactCursor.Cursor.build(this);
+            return Child({cur: cur});
+        }
+    });
+    var App = React.createFactory(AppDescriptor);
+
+    React.render(App({}), document.getElementById('root'));
 </script>
 </body>
 </html>
