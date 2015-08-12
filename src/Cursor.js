@@ -1,5 +1,6 @@
 var React = require('react/addons');
 var util = require('./util');
+var _ = require('underscore');
 
 'use strict';
 
@@ -70,7 +71,7 @@ var build = cursorBuildMemoizer(function (cmp, path, value) {
   path = path === undefined ? [] : path;
   value = value || util.getRefAtPath(cmp.state, path);
 
-  if (util.isObject(value)) {
+  if (_.isObject(value)) {
     Object.observe(value, function (changes) {
       if (changes.length > 0) {
         throw new Error('Modifications to Cursor.value are disallowed');
