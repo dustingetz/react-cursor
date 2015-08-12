@@ -97,6 +97,27 @@ Cursors make it trivial to implement a React JSON editor:
 
 [![live demo](https://raw.githubusercontent.com/dustingetz/react-json-editor/master/docs/_assets/json-editor.png)](http://react-json-editor.bitballoon.com/examples/react-state-editor/webapp/)
 
+## Manual build steps
+
+```
+npm install
+npm test
+npm run build
+npm run dist # production build in libs/react-cursor.min.js
+```
+
+## Run the examples
+
+```
+cd examples/helloworld
+npm start
+```
+
+```
+cd examples/mutations
+npm start
+```
+
 ## Contributors
 
 The initial prototypes and thought work for `react-cursor` was pair programmed by [Dustin Getz](https://github.com/dustingetz) and [Daniel Miladinov](https://github.com/danielmiladinov).
