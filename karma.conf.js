@@ -1,9 +1,16 @@
 
 module.exports = function (config) {
-  config.set({
+  var configuration = {
     browsers: [ 'Chrome' ],
     frameworks: [ 'mocha', 'chai' ],
     reporters: [ 'mocha' ],
+
+    customLaunchers: {
+      Chrome_travis_ci: {
+        base: 'Chrome',
+        flags: ['--no-sandbox']
+      }
+    },
 
     files: [
       'tests.webpack.js'
@@ -25,5 +32,11 @@ module.exports = function (config) {
     webpackServer: {
       noInfo: true
     }
-  });
+  };
+
+  if(process.env.TRAVIS) {
+    configuration.browsers = [ 'Chrome_travis_ci' ];
+  }
+
+  config.set(configuration);
 };
