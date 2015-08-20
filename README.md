@@ -110,12 +110,12 @@ npm run dist # production build in libs/react-cursor.min.js
 
 ```
 cd examples/helloworld
-npm start
+npm install && npm start
 ```
 
 ```
 cd examples/mutations
-npm start
+npm install && npm start
 ```
 
 ## Contributors
