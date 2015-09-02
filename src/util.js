@@ -107,8 +107,8 @@ function refToHash (cmp) {
   }
 }
 
+var cache = {};
 function memoizeFactory (resolver) {
-  var cache = {};
   function memoize(func) {
     return function () {
       var key = resolver ? resolver.apply(this, arguments) : arguments[0];
@@ -118,6 +118,12 @@ function memoizeFactory (resolver) {
     };
   }
   return memoize;
+}
+
+function clearCache() {
+  cache = {};
+  refsCache = {};
+  cacheIdIndex = 0;
 }
 
 module.exports = {
@@ -136,5 +142,6 @@ module.exports = {
   isEqual: isEqual,
   union: union,
   omit: omit,
-  find: find
+  find: find,
+  clearCache: clearCache
 };

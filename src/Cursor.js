@@ -76,4 +76,6 @@ Cursor.build = build;
 
 Cursor.debug = false;
 
+Cursor.dispose = util.clearCache;
+
 module.exports = Cursor;
