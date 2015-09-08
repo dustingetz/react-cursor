@@ -5,6 +5,11 @@ react-cursor
 
 `react-cursor` helps you write stateless React components, and achieve optimizied React rendering. react-cursor allows us to store the entire application state in a single immutable value, and allows for generic `shouldComponentUpdate` as a mixin. The cursor concept was first seen in [Om](https://github.com/swannodette/om/wiki/Cursors).
 
+## Changelog
+
+### 1.2.1
+ * Support server side rendering with workaround for memory leak
+
 ### Installation
 `npm install --save react-cursor`
 

@@ -120,7 +120,8 @@ function memoizeFactory (resolver) {
   return memoize;
 }
 
-function clearCache() {
+// Temporary workaround, see: https://github.com/dustingetz/react-cursor/pull/62
+function _internal_clearCache() {
   cache = {};
   refsCache = {};
   cacheIdIndex = 0;
@@ -143,5 +144,5 @@ module.exports = {
   union: union,
   omit: omit,
   find: find,
-  clearCache: clearCache
+  clearCache: _internal_clearCache
 };
