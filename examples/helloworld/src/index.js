@@ -1,7 +1,7 @@
 import React from 'react';
 import _ from 'underscore';
 import App from './App';
-
+import { Cursor } from '../../..';
 
 var state = {
     very: {
@@ -13,14 +13,6 @@ var state = {
     }
 };
 
-function swapper(f) {
-    state = f(state);
-    queueRender();
-}
-
-function queueRender() {
-    var cur = ReactCursor.Cursor.build(state, swapper);
-    React.render(<App cursor={cur} />, document.getElementById('root'));
-}
-
-queueRender();
+Cursor.render(
+  state,
+  cur => React.render(<App cursor={cur} />, document.getElementById('root')));

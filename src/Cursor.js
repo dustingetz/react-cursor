@@ -63,7 +63,19 @@ var build = cursorBuildMemoizer(function (state, swapper, path, value) {
   return new Cursor(state, swapper, path, value);
 });
 
+Cursor.render = (state, renderCallback) => {
+  function swapper(updateState) {
+    state = updateState(state);
+    queueRender();
+  }
 
+  function queueRender() {
+    var cursor = build(state, swapper);
+    return renderCallback(cursor);
+  }
+
+  return queueRender();
+};
 
 Cursor.build = build;
 
