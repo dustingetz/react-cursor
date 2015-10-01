@@ -1,6 +1,3 @@
-var _      = require('underscore');
-var React  = require('react/addons');
-var Cursor = require('react-cursor').Cursor;
 var ImmutableOptimizations = require('react-cursor').ImmutableOptimizations;
 require('./App.less');
 
