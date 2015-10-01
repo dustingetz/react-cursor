@@ -13,9 +13,7 @@ config.output = {
 };
 
 config.externals = {
-  react: 'React',
-  'react/addons': 'React',
-  underscore: 'underscore'
+  'react/addons': 'React'
 };
 
 config.plugins = [
