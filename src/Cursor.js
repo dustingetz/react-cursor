@@ -29,8 +29,20 @@ function Cursor(cmp, path, value) {
 }
 
 function update(cmp, path, operation, nextUpdate) {
-  // Backwards compatibility with non-function values of nextUpdate
-  if (typeof nextUpdate !== "function") {
+  if (typeof nextUpdate === 'function') {
+    // Don't setState if nextUpdate produces an equivalent value at the current path
+    var valAtPath = util.getRefAtPath(cmp.state, path);
+    var nextValAtPath = nextUpdate(valAtPath);
+    if (util.isEqual(nextValAtPath, valAtPath)) {
+      return;
+    }
+  } else {
+    // Don't setState if nextUpdate is equivalent to this.value
+    if (nextUpdate === this.value || util.isEqual(nextUpdate, this.value)) {
+      return;
+    }
+
+    // Backwards compatibility with non-function values of nextUpdate
     var prevValue = nextUpdate;
     nextUpdate = function ( ) { return prevValue; };
   }
