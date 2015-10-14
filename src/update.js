@@ -1,5 +1,5 @@
-import React from 'react/addons';
-import util from './util';
+var React = require('react/addons');
+var util = require('./util');
 
 
 function update(rootSwap, path, operation, leafUpdate) {

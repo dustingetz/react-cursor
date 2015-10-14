@@ -1,5 +1,5 @@
-import util from './util';
-import update from './update';
+var util = require('./util');
+var update = require('./update');
 
 
 function Cursor(rootValue, rootSwap, path, value) {
