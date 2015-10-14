@@ -1,5 +1,4 @@
 'use strict';
-
 var isEqual = require('deep-equal');
 var union = require('array-union');
 var omit = require('omit-keys');

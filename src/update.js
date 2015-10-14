@@ -1,3 +1,4 @@
+'use strict';
 var React = require('react/addons');
 var util = require('./util');
 

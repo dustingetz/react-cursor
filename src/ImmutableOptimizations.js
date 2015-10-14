@@ -1,6 +1,6 @@
+'use strict';
 var utils = require('./util');
 
-'use strict';
 
 function ImmutableOptimizations (refFields, ignoredFields/*optional*/) {
   var noValueCheckFields = refFields.concat(ignoredFields || []);
