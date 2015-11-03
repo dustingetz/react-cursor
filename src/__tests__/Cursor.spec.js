@@ -20,9 +20,9 @@ function renderComponentWithState(initialState) {
 }
 
 describe('Cursor', function () {
-  it('Can load the library in the unit tests', function () {
-    expect(Cursor).not.equal(undefined);
-    expect(Cursor.debug).to.equal(false);
+  it('should load the library in the unit tests', function () {
+    expect(Cursor).to.be.a('function');
+    expect(Cursor.debug).to.equal(true); // NODE_ENV !== production
   });
 
   it("can we make an instance of a react cmp and get at the state", function () {
