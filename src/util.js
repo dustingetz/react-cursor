@@ -1,5 +1,6 @@
 'use strict';
 
+var _ = require('lodash');
 var isEqual = require('deep-equal');
 var union = require('array-union');
 var omit = require('omit-keys');
@@ -122,6 +123,10 @@ function memoizeFactory (resolver) {
 
 // copy from MDN example: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/freeze#Examples
 function deepFreeze(obj) {
+  if (!_.isObject(obj)) {
+    return obj;
+  }
+
   // Retrieve the property names defined on obj
   var propNames = Object.getOwnPropertyNames(obj);
 
