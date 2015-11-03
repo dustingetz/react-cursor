@@ -115,4 +115,67 @@ describe('Cursor', function () {
     });
     expect(cmp.state.a).to.equal(8);
   });
+
+  it('should eventually throw an exception when detecting mutations to a root cursor.value', function (asyncDone) {
+    var cmp = renderComponentWithState({ a: 42 });
+    var c = Cursor.build(cmp);
+
+    var mutateCursorValue = function () {
+      c.value = { b: 43 };
+      asyncDone();
+    };
+
+    expect(mutateCursorValue).to.throw(Error);
+  });
+
+  it('should eventually throw an exception when detecting mutations to a refined cursor.value', function (asyncDone) {
+    var cmp = renderComponentWithState({ a: 42 });
+    var c = Cursor.build(cmp);
+    var r = c.refine('a');
+
+    var mutateRefinedCursorValue = function () {
+      r.value = 43;
+      asyncDone();
+    };
+
+    expect(mutateRefinedCursorValue).to.throw(Error);
+  });
+
+  it('should eventually throw an exception when detecting mutations to a refined grandchild cursor value', function (asyncDone) {
+    var cmp = renderComponentWithState({ a: { b: 42 } });
+    var root = Cursor.build(cmp);
+    var child = root.refine('a');
+    var grandChild = child.refine('b');
+
+    var mutateGrandchildValue = function () {
+      grandChild.value = 43;
+      asyncDone();
+    };
+
+    expect(mutateGrandchildValue).to.throw(Error);
+  });
+
+  it('should eventually throw an exception when adding new keys to a cursor value', function (asyncDone) {
+    var cmp = renderComponentWithState({ a: 42 });
+    var root = Cursor.build(cmp);
+
+    var addKeyToCursorValue = function () {
+      root.value.b = 43;
+      asyncDone();
+    };
+
+    expect(addKeyToCursorValue).to.throw(Error);
+  });
+
+  it('should eventually throw an exception when removing keys from a cursor value', function (asyncDone) {
+    var cmp = renderComponentWithState({ a: 42, b: 43 });
+    var root = Cursor.build(cmp);
+
+    var addKeyToCursorValue = function () {
+      delete root.value.b;
+      asyncDone();
+    };
+
+    expect(addKeyToCursorValue).to.throw(Error);
+  });
 });
