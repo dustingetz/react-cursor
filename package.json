@@ -1,6 +1,6 @@
 {
   "name": "react-cursor",
-  "version": "1.2.0",
+  "version": "2.0.0-alpha.3",
   "description": "Functional state management abstraction for use with Facebook React",
   "keywords": [
     "react",
@@ -41,7 +41,6 @@
     "mocha": "^2.0.1",
     "react": "~0.13.3",
     "uglifyify": "~2.6.0",
-    "underscore": "~1.7.0",
     "webpack": "^1.11.0",
     "webpack-dev-server": "^1.10.1"
   },

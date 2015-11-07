@@ -1,27 +1,11 @@
-var _      = require('underscore');
-var React  = require('react/addons');
-var Cursor = require('react-cursor').Cursor;
 var ImmutableOptimizations = require('react-cursor').ImmutableOptimizations;
 require('./App.less');
 
 'use strict';
 
 var App = React.createClass({
-  getInitialState: function () {
-    return {
-      very: {
-        deeply: {
-          nested: {
-            counts: _.range(400).map(function () { return 0; })
-          }
-        }
-      }
-    };
-  },
-
   render: function () {
-    var cursor = Cursor.build(this);
-    var counts = cursor.refine('very', 'deeply', 'nested', 'counts');
+    var counts = this.props.cursor.refine('very', 'deeply', 'nested', 'counts');
     var contents = counts.value.map(function (count, index) {
       return (
         <Clicker
@@ -34,7 +18,7 @@ var App = React.createClass({
     return (
       <div className="App">
         <div>{contents}</div>
-        <pre>{JSON.stringify(cursor.value, undefined, 2)}</pre>
+        <pre>{JSON.stringify(this.props.cursor.value, undefined, 2)}</pre>
       </div>
     );
   }
