@@ -20,9 +20,9 @@ function renderComponentWithState(initialState) {
 }
 
 describe('Cursor', function () {
-  it('Can load the library in the unit tests', function () {
-    expect(Cursor).not.equal(undefined);
-    expect(Cursor.debug).to.equal(false);
+  it('should load the library in the unit tests', function () {
+    expect(Cursor).to.be.a('function');
+    expect(Cursor.debug).to.equal(true); // NODE_ENV !== production
   });
 
   it("can we make an instance of a react cmp and get at the state", function () {
@@ -114,5 +114,43 @@ describe('Cursor', function () {
       return function (x) { return x / 8 }
     });
     expect(cmp.state.a).to.equal(8);
+  });
+
+  it('should eventually throw an exception when detecting mutations to a root cursor.value', function () {
+    var cmp = renderComponentWithState({ a: 42 });
+    var c = Cursor.build(cmp);
+
+    expect(() => c.value = { b: 43 }).to.throw(Error);
+  });
+
+  it('should eventually throw an exception when detecting mutations to a refined cursor.value', function () {
+    var cmp = renderComponentWithState({ a: 42 });
+    var c = Cursor.build(cmp);
+    var r = c.refine('a');
+
+    expect(() => r.value = 43).to.throw(Error);
+  });
+
+  it('should eventually throw an exception when detecting mutations to a refined grandchild cursor value', function () {
+    var cmp = renderComponentWithState({ a: { b: 42 } });
+    var root = Cursor.build(cmp);
+    var child = root.refine('a');
+    var grandChild = child.refine('b');
+
+    expect(() => grandChild.value = 43).to.throw(Error);
+  });
+
+  it('should eventually throw an exception when adding new keys to a cursor value', function () {
+    var cmp = renderComponentWithState({ a: 42 });
+    var root = Cursor.build(cmp);
+
+    expect(() => root.value.b = 43).to.throw(Error);
+  });
+
+  it('should eventually throw an exception when removing keys from a cursor value', function () {
+    var cmp = renderComponentWithState({ a: 42, b: 43 });
+    var root = Cursor.build(cmp);
+
+    expect(() => delete root.value.b).to.throw(Error);
   });
 });

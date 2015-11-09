@@ -26,6 +26,11 @@ function Cursor(cmp, path, value) {
     var nextValue = util.getRefAtPath(this.value, Array.prototype.slice.call(arguments, 0));
     return build(cmp, nextPath, nextValue); // memoized
   };
+
+  if (Cursor.debug && typeof Object.freeze === 'function') {
+    util.deepFreeze(this);
+    util.deepFreeze(value);
+  }
 }
 
 function update(cmp, path, operation, nextUpdate) {
@@ -74,6 +79,6 @@ var build = cursorBuildMemoizer(function (cmp, path, value) {
 
 Cursor.build = build;
 
-Cursor.debug = false;
+Cursor.debug = process.env.NODE_ENV !== 'production';
 
 module.exports = Cursor;

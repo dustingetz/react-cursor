@@ -48,6 +48,7 @@
   "dependencies": {
     "array-union": "^1.0.0",
     "deep-equal": "^0.2.1",
+    "lodash": "^3.10.1",
     "omit-keys": "^0.1.0"
   }
 }
