@@ -1,7 +1,7 @@
-var React = require('react/addons');
-var Cursor = require('react-cursor').Cursor;
-var ImmutableOptimizations = require('react-cursor').ImmutableOptimizations;
-require('./App.less');
+import React from 'react';
+import { Cursor, ImmutableOptimizations } from 'react-cursor';
+import '!style!css!less!./App.less';
+
 
 var getShortUID = function () {
     return ('0000' + (Math.random()*Math.pow(36,4) << 0).toString(36)).slice(-4)
@@ -38,7 +38,7 @@ var Item = React.createClass({
 
     render: function () {
         var model = this.props.model,
-            fields = Object.keys(model.value)
+            fields = Object.keys(model.value())
                 .filter(function(key) {
                     return key !== 'key';
                 })
@@ -46,14 +46,14 @@ var Item = React.createClass({
                     return (
                         <div className="item-property" key={index}>
                             <span className="property-key">{key}</span>
-                            <span className="property-value">{model.value[key]}</span>
+                            <span className="property-value">{model.value()[key]}</span>
                         </div>
                     );
                 }, this);
 
         return (
             <div className="item">
-                <h3>Item <span className="pre">{model.value.key}</span></h3>
+                <h3>Item <span className="pre">{model.value().key}</span></h3>
                 <div className="item-properties">{fields}</div>
                 <form onSubmit={this.addNew}>
                     <input name="key" placeholder="Key" ref="keyInput" />
@@ -76,7 +76,7 @@ var List = React.createClass({
 
     moveUp: function(index) {
         if (index > 0) {
-            var currentAtPosition = this.props.list.value[index-1];
+            var currentAtPosition = this.props.list.value()[index-1];
             this.props.list.splice([
                 [index-1, 1],
                 [index, 0, currentAtPosition]
@@ -85,8 +85,8 @@ var List = React.createClass({
     },
 
     moveDown: function(index) {
-        if (index < this.props.list.value.length - 1) {
-            var currentAtPosition = this.props.list.value[index+1];
+        if (index < this.props.list.value().length - 1) {
+            var currentAtPosition = this.props.list.value()[index+1];
             this.props.list.splice([
                 [index+1, 1],
                 [index, 0, currentAtPosition]
@@ -110,7 +110,7 @@ var List = React.createClass({
     insertAfter: function(index) {
         var newItem = getNewItem();
 
-        if (index < this.props.list.value.length - 1) {
+        if (index < this.props.list.value().length - 1) {
             this.props.list.splice([
                 [index+1, 0, newItem]
             ]);
@@ -199,4 +199,4 @@ var Application = React.createClass({
     }
 });
 
-module.exports = Application;
+export default Application;

@@ -1,22 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Master/Detail form demo | Wingspan Forms</title>
+    <title>react-cursor standalone demo</title>
     <meta http-equiv="content-type" content="text/html;charset=UTF-8">
 </head>
 <body>
 <div id="root"></div>
-<script src="http://fb.me/react-with-addons-0.13.3.js"></script>
-<script src="../../lib/react-cursor.min.js"></script>
+<script src="http://fb.me/react-with-addons-0.14.2.js"></script>
+<script src="http://fb.me/react-dom-0.14.2.js"></script>
+<script src="../../static/react-cursor.min.js"></script>
 <script>
-    console.assert(window.ReactCursor !== undefined, 'couldnt load react-cursor');
-    console.assert(window.ReactCursor.Cursor !== undefined, 'couldnt load react-cursor');
-    console.log('We found react-cursor, all is well');
-
     var ChildDescriptor = React.createClass({
         mixins: [ReactCursor.ImmutableOptimizations(['cursor'])],
         render: function () {
-            return React.DOM.pre({}, JSON.stringify(cur.value, undefined, 2));
+            return React.DOM.pre({}, 'All is well. (we found ReactCursor global)');
         }
     });
     var Child = React.createFactory(ChildDescriptor);
@@ -26,13 +23,13 @@
             return { a: {b: 42} };
         },
         render: function () {
-            window.cur = ReactCursor.Cursor.build(this);
+            window.cur = ReactCursor.Cursor.build(this.state, this.setState);
             return Child({cur: cur});
         }
     });
     var App = React.createFactory(AppDescriptor);
 
-    React.render(App({}), document.getElementById('root'));
+    ReactDOM.render(App({}), document.getElementById('root'));
 </script>
 </body>
 </html>

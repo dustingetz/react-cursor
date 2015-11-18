@@ -1,5 +1,8 @@
+import ReactDOM from 'react-dom';
 import _ from 'underscore';
-import App from './App';
+import atom from 'js-atom';
+import { Cursor } from 'react-cursor';
+import { default as App } from './App';
 
 
 window.stateAtom = atom.createAtom({
@@ -13,8 +16,8 @@ window.stateAtom = atom.createAtom({
 });
 
 function queueRender(key, ref, prevVal, curVal) {
-  var cur = ReactCursor.Cursor.build(stateAtom.deref(), stateAtom.swap);
-  window.app = React.render(<App cursor={cur} />, document.getElementById('root'));
+  var cur = Cursor.build(stateAtom.deref(), stateAtom.swap);
+  window.app = ReactDOM.render(<App cursor={cur} />, document.getElementById('root'));
 }
 
 stateAtom.addWatch('react-renderer', queueRender);
