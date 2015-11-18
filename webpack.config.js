@@ -5,27 +5,22 @@ module.exports = {
   entry: './src/react-cursor',
 
   output: {
-    path: path.resolve(__dirname, 'lib'),
-    filename: '[name].js',
+    path: path.resolve('./dist'),
+    filename: 'react-cursor.js',
     publicPath: '/static/'
   },
 
   resolve: {
-    extensions: ['', '.js', '.jsx'],
+    extensions: ['', '.js'],
     root: [
       path.resolve('./src')
     ],
-    modulesDirectories: [
-      'node_modules'
-    ]
+    modulesDirectories: ['node_modules']
   },
 
   module: {
-    loaders: [{
-      test: /\.jsx?$/,
-      loaders: ['babel'],
-      exclude: /node_modules/,
-      include: path.join(__dirname, 'src')
-    }]
+    loaders: [
+      {test: /\.js$/, loaders: ['babel'], include: path.resolve('./src')}
+    ]
   }
 };

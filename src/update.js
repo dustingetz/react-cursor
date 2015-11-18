@@ -1,6 +1,5 @@
-'use strict';
-var React = require('react/addons');
-var util = require('./util');
+import {default as persistentUpdate} from 'react-addons-update';
+import util from './util';
 
 
 function update(rootSwap, path, operation, leafUpdate) {
@@ -14,7 +13,7 @@ function update(rootSwap, path, operation, leafUpdate) {
     var nextState;
 
     if (path.length > 0) {
-      nextState = React.addons.update(
+      nextState = persistentUpdate(
           rootVal,
           path.concat(operation).reduceRight(
               util.unDeref,
@@ -29,4 +28,4 @@ function update(rootSwap, path, operation, leafUpdate) {
   });
 }
 
-module.exports = update;
+export default update;

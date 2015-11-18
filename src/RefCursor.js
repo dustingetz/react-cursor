@@ -1,7 +1,5 @@
-'use strict';
-var React = require('react/addons');
-var util = require('./util');
-var update = require('./update');
+import util from './util';
+import update from './update';
 
 
 class RefCursor {
@@ -26,7 +24,7 @@ class RefCursor {
    * For RefCursors, value is a function since the latest value must be
    * read from the atom reference. It's called deref to emphasize the difference.
    */
-  deref () {
+  value () {
     return util.getRefAtPath(this.rootDeref(), this.paths);
   }
 
@@ -47,4 +45,4 @@ function build (rootDeref, rootSwap, path) {
 
 RefCursor.build = build;
 
-module.exports = RefCursor;
+export default RefCursor;

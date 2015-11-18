@@ -1,7 +1,7 @@
-'use strict';
-var isEqual = require('deep-equal');
-var union = require('array-union');
-var omit = require('omit-keys');
+import isEqual from 'deep-equal';
+import union from 'array-union';
+import omit from 'omit-keys';
+
 
 function find(array, predicate) {
   if (typeof predicate !== 'function') {
@@ -119,7 +119,7 @@ function memoizeFactory (resolver) {
   return memoize;
 }
 
-module.exports = {
+export default {
   getRefAtPath: getRefAtPath,
   deref: deref,
   unDeref: unDeref,
