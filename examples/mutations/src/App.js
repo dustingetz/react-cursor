@@ -140,7 +140,7 @@ var List = React.createClass({
     render: function () {
         var model,
             list = this.props.list,
-            children = list.value.map(function (item, index) {
+            children = list.value().map(function (item, index) {
                 model = list.refine(index);
                 return (
                     <div className="item-container" key={item.key}>
@@ -190,7 +190,7 @@ var Application = React.createClass({
     },
 
     render: function () {
-        var cursor = Cursor.build(this);
+        var cursor = Cursor.build(this.state, this.setState.bind(this));
         return (
             <div className="app">
                 <List list={cursor.refine('list')} />
