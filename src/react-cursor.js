@@ -1,9 +1,10 @@
-var Cursor = require('./Cursor');
-var ImmutableOptimizations = require('./ImmutableOptimizations');
+import Cursor from './Cursor';
+import RefCursor from './RefCursor';
+import ImmutableOptimizations from './ImmutableOptimizations';
 
-'use strict';
 
-module.exports = {
+export default {
   Cursor: Cursor,
-  ImmutableOptimizations: ImmutableOptimizations
+  ImmutableOptimizations: ImmutableOptimizations,
+  RefCursor: RefCursor
 }

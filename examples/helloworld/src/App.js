@@ -1,28 +1,12 @@
-var _      = require('underscore');
-var React  = require('react/addons');
-var Cursor = require('react-cursor').Cursor;
-var ImmutableOptimizations = require('react-cursor').ImmutableOptimizations;
-require('./App.less');
+import React from 'react';
+import { ImmutableOptimizations } from 'react-cursor';
+import '!style!css!less!./App.less';
 
-'use strict';
 
 var App = React.createClass({
-  getInitialState: function () {
-    return {
-      very: {
-        deeply: {
-          nested: {
-            counts: _.range(400).map(function () { return 0; })
-          }
-        }
-      }
-    };
-  },
-
   render: function () {
-    var cursor = Cursor.build(this);
-    var counts = cursor.refine('very', 'deeply', 'nested', 'counts');
-    var contents = counts.value.map(function (count, index) {
+    var counts = this.props.cursor.refine('very', 'deeply', 'nested', 'counts');
+    var contents = counts.value().map(function (count, index) {
       return (
         <Clicker
           key={index}
@@ -34,7 +18,7 @@ var App = React.createClass({
     return (
       <div className="App">
         <div>{contents}</div>
-        <pre>{JSON.stringify(cursor.value, undefined, 2)}</pre>
+        <pre>{JSON.stringify(this.props.cursor.value(), undefined, 2)}</pre>
       </div>
     );
   }
@@ -47,8 +31,8 @@ var Clicker = React.createClass({
     console.log('rendering clicker ', this.props.key);
     return (
       <div>
-        <input type="text" value={this.props.cursor.value} onChange={this.onInputChange} />
-        <span>{this.props.cursor.value}</span>
+        <input type="text" value={this.props.cursor.value()} onChange={this.onInputChange} />
+        <span>{this.props.cursor.value()}</span>
         <button onClick={this.inc2}>+2</button>
         <button onClick={this.inc10}>+10</button>
       </div>
@@ -71,4 +55,4 @@ var Clicker = React.createClass({
   }
 });
 
-module.exports = App;
+export default App;

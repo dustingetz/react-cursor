@@ -1,6 +1,6 @@
 {
   "name": "react-cursor",
-  "version": "1.2.0",
+  "version": "2.0.0-alpha.4",
   "description": "Functional state management abstraction for use with Facebook React",
   "keywords": [
     "react",
@@ -39,16 +39,17 @@
     "karma-sourcemap-loader": "^0.3.5",
     "karma-webpack": "1.6.0",
     "mocha": "^2.0.1",
-    "react": "~0.13.3",
+    "react": "^0.14.2",
+    "react-addons-test-utils": "^0.14.2",
     "uglifyify": "~2.6.0",
-    "underscore": "~1.7.0",
     "webpack": "^1.11.0",
     "webpack-dev-server": "^1.10.1"
   },
   "dependencies": {
     "array-union": "^1.0.0",
     "deep-equal": "^0.2.1",
-    "lodash": "^3.10.1",
-    "omit-keys": "^0.1.0"
+    "lodash.isobject": "^3.0.2",
+    "omit-keys": "^0.1.0",
+    "react-addons-update": "^0.14.2"
   }
 }
