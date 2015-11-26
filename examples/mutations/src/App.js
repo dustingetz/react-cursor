@@ -190,7 +190,7 @@ var Application = React.createClass({
     },
 
     render: function () {
-        var cursor = Cursor.build(this.state, this.setState.bind(this));
+        var cursor = Cursor.build(this);
         return (
             <div className="app">
                 <List list={cursor.refine('list')} />

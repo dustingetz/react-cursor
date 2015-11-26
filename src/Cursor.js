@@ -15,12 +15,12 @@ function Cursor(rootValue, rootSwap, path, leafValue) {
 
     var nextPath = [].concat(path, util.flatten(arguments));
     var nextValue = util.getRefAtPath(this.value(), util.flatten(arguments));
-    return build(rootValue, rootSwap, nextPath, nextValue); // memoized
+    return internalBuild(rootValue, rootSwap, nextPath, nextValue); // memoized
   };
 
   if (Cursor.debug && typeof Object.freeze === 'function') {
     util.deepFreeze(this);
-    util.deepFreeze(value);
+    util.deepFreeze(leafValue);
   }
 }
 
@@ -34,12 +34,28 @@ var cursorBuildMemoizer = util.memoizeFactory((rootValue, rootSwap, path, leafVa
   return util.refToHash(rootSwap) + util.hashRecord(leafValue) + util.hashRecord(path);
 });
 
-var build = cursorBuildMemoizer((rootValue, rootSwap, path, leafValue) => {
+var internalBuild = cursorBuildMemoizer((rootValue, rootSwap, path, leafValue) => {
   path = path === undefined ? [] : path;
   leafValue = leafValue || util.getRefAtPath(rootValue, path);
   return new Cursor(rootValue, rootSwap, path, leafValue);
 });
 
+
+// To support binding cursors to react state, we need cmp.setState as a function, and the function
+// needs to be === if it comes from the same react component. Otherwise, this test fails:
+// "Cursors to the same component are ===". Since `cmp.setState.bind(cmp) !== cmp.setState.bind(cmp)`,
+// we need to memoize based on the cmp reference.
+var reactCmpMemoizer = util.memoizeFactory((cmp) => util.refToHash(cmp));
+var memoizedReactStateSwapper = reactCmpMemoizer((cmp) => cmp.setState.bind(cmp));
+
+function build (rootValue, rootSwap) {
+  var isReactCmp = typeof rootValue.__proto__.render === "function";
+  if (isReactCmp) {
+    var cmp = rootValue;
+    return internalBuild(cmp.state, memoizedReactStateSwapper(cmp));
+  }
+  return internalBuild(rootValue, rootSwap);
+}
 
 
 Cursor.build = build;
