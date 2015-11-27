@@ -42,14 +42,14 @@ The atom approach is the most flexible and powerful.
 var Store = React.createClass({
   getInitialState () { return {a: {b: 0}}; },
   render () {
-    var cur = Cursor.build(this.state, this.setState);
+    var cur = Cursor.build(this);
     return <App cursor={cur} />;
   }
 });
 
 React.render(<Store />, domEl);
 ```
-This is the most common use case and the easiest migration path if you're already using react component local state and just want to hoist all your state to the root.
+This is the most common use case and the easiest migration path if you're already using react component local state and just want to hoist all your state to the root and not change any other code.
 
 ### state is stored in an [atom](https://github.com/cjohansen/js-atom) - works in large hybrid legacy apps like Rails with Turbolinks
 ```javascript
