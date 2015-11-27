@@ -1,6 +1,7 @@
 /* global describe, it, expect */
 import { Cursor } from '../react-cursor';
 import {Store, renderComponentWithState} from './CursorTestUtil';
+import clone from 'clone';
 
 
 describe('Cursor', function () {
@@ -174,5 +175,106 @@ describe('Cursor', function () {
     var root = Cursor.build(cmp);
 
     expect(() => delete root.value().b).to.throw(Error);
+  });
+
+});
+
+
+describe('Interaction with ReactComponent.setState: non-function updates', function () {
+  var cmp, setState, cursor;
+
+  var testFixtures = [
+    // initialValue,                    identicalOtherValue,            differentValue
+    [true,                           true,                           false],
+    ['foo',                          'foo',                          'bar'],
+    [42,                             42,                             25],
+    [[1, 2, 3],                      [1, 2, 3],                      [4, 5, 6]],
+    [{ foo: { bar: { baz: 'qux'}}},  { foo: { bar: { baz: 'qux'}}},  { foo: { bar: { baz: 'zig'}}}]
+  ];
+
+  testFixtures.forEach(function (fixture) {
+    var initialValue = fixture[0];
+    var identicalOtherValue = fixture[1];
+    var differentValue = fixture[2];
+
+    var initialState = {a: {b: initialValue}};
+
+    describe('When built on a component whose state is ' + JSON.stringify(initialState), function () {
+      beforeEach(function () {
+        cmp = renderComponentWithState(initialState);
+        setState = sinon.spy(cmp, 'setState');
+        cursor = Cursor.build(cmp);
+      });
+
+      afterEach(function () {
+        cmp.setState.restore();
+        cursor = null;
+        setState = null;
+        cmp = null;
+      });
+
+      it('When calling cursor.refine("a", "b").set(' + JSON.stringify(initialValue) + '), the initial value, it will not call cmp.setState', function () {
+        cursor.refine('a', 'b').set(initialValue);
+        expect(setState).to.not.have.been.called;
+      });
+
+      it('When calling cursor.refine("a", "b").set(' + JSON.stringify(identicalOtherValue) + '), an identical other value, it will not call cmp.setState', function () {
+        cursor.refine('a', 'b').set(identicalOtherValue);
+        expect(setState).to.not.have.been.called;
+      });
+
+      it('When calling cursor.refine("a", "b").set(' + JSON.stringify(differentValue) +'), a different value, it will call cmp.setState', function () {
+        cursor.refine('a', 'b').set(differentValue);
+        expect(setState).to.have.been.calledOnce;
+      });
+    });
+  });
+});
+
+describe('Interaction with ReactComponent.setState: function updates', function () {
+  var cmp, setState, cursor;
+
+  var testFixtures = [
+    // initialValue,                   [swapToSameValueButDifferentRef, label],                [swapToDifferentValue, label]
+    [[1, 2, 3], [a => a.map(i => i), 'array map identity'], [a => a.map(i => i + 3), 'array map plus 3']],
+    [{foo: {bar: {baz: 'qux'}}}, [clone, 'clone object'], [o => o.swapped = true, 'object assoc :swapped true']]
+  ];
+
+
+  testFixtures.forEach(function (fixture) {
+    var initialValue = fixture[0];
+
+    var swapToSameValueButDifferentRef = fixture[1][0];
+    var firstLabel = fixture[1][1];
+
+    var swapToDifferentValue = fixture[2][0];
+    var secondLabel = fixture[2][1];
+
+    var initialState = {a: {b: initialValue}};
+
+    describe('When built on a component whose state is ' + JSON.stringify(initialState), function () {
+      beforeEach(function () {
+        cmp = renderComponentWithState(initialState);
+        setState = sinon.spy(cmp, 'setState');
+        cursor = Cursor.build(cmp);
+      });
+
+      afterEach(function () {
+        cmp.setState.restore();
+        cursor = null;
+        setState = null;
+        cmp = null;
+      });
+
+      it('When calling cursor.refine("a", "b").set(' + firstLabel + '), a function producing a value equivalent to the initialValue, it will not call cmp.setState', function () {
+        cursor.refine('a', 'b').set(swapToSameValueButDifferentRef);
+        expect(setState).to.not.have.been.called;
+      });
+
+      it('When calling cursor.refine("a", "b").set(' + secondLabel + '), a function producing a different value, it will call cmp.setState', function () {
+        cursor.refine('a', 'b').set(swapToDifferentValue);
+        expect(setState).to.have.been.calledOnce;
+      });
+    });
   });
 });

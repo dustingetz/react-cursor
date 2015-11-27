@@ -2,7 +2,7 @@
 module.exports = function (config) {
   var configuration = {
     browsers: [ 'Chrome' ],
-    frameworks: [ 'mocha', 'chai' ],
+    frameworks: [ 'mocha', 'sinon-chai' ],
     reporters: [ 'mocha' ],
 
     customLaunchers: {
