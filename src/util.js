@@ -144,6 +144,9 @@ function deepFreeze(obj) {
   return Object.freeze(obj);
 }
 
+let valEq = (a, b) => isEqual(a, b);
+let refEq = (a, b) => a === b;
+
 
 export default {
   deepFreeze: deepFreeze,
@@ -162,5 +165,7 @@ export default {
   isEqual: isEqual,
   union: union,
   omit: omit,
-  find: find
+  find: find,
+  valEq: valEq,
+  refEq: refEq
 };
