@@ -27,8 +27,8 @@ State-at-root pattern via `react-cursor` offers the following benefits:
  * build(reactCmpReference) - constructor
  * build(rootValue, rootSwap) - constructor
  * value() - return the value in the cursor (cursors have value semantics, for compatibility with React lifecycle methods)
- * refine()
- * set(), and additionally all updater methods in [React.addons.update](http://facebook.github.io/react/docs/update.html#available-commands)
+ * refine(key, ...) - return a new cursor nested inside the root cursor at key, this method optionally takes additional keys as varargs or arrays
+ * set(newVal), and additionally all updater methods in [React.addons.update](http://facebook.github.io/react/docs/update.html#available-commands)
 
 There are three ways to construct a cursor
  * state is stored in a stateful react component at the top level of react view-tree
