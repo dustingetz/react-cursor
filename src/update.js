@@ -1,6 +1,5 @@
 import {default as persistentUpdate} from 'react-addons-update';
-import util from './util';
-import {valEq} from './util';
+import {unDeref, getRefAtPath, valEq} from './util';
 
 
 function update(rootSwap, path, operation, leafUpdate) {
@@ -17,8 +16,8 @@ function update(rootSwap, path, operation, leafUpdate) {
       nextRootVal = persistentUpdate(
           rootVal,
           path.concat(operation).reduceRight(
-              util.unDeref,
-              leafUpdate(util.getRefAtPath(rootVal, path))
+              unDeref,
+              leafUpdate(getRefAtPath(rootVal, path))
           )
       );
     } else if (path.length === 0) {

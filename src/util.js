@@ -1,10 +1,8 @@
 import isObject from 'lodash.isobject';
 import isEqual from 'deep-equal';
-import union from 'array-union';
-import omit from 'omit-keys';
 
 
-function find(array, predicate) {
+export function find(array, predicate) {
   if (typeof predicate !== 'function') {
     throw new TypeError('predicate must be a function');
   }
@@ -22,37 +20,37 @@ function find(array, predicate) {
   return undefined;
 }
 
-function getRefAtPath(tree, paths) {
+export function getRefAtPath(tree, paths) {
   return reduce(paths, deref, tree);
 }
 
-function deref(obj, key) {
+export function deref(obj, key) { // aka get
   return obj[key];
 }
 
-function unDeref(obj, key) {
+export function unDeref(obj, key) { // kind of like assoc
   var nextObj = {};
   nextObj[key] = obj;
   return nextObj;
 }
 
-function initial(array) {
+export function initial(array) {
   return array.slice(0, array.length - 1);
 }
 
-function last(array) {
+export function last(array) {
   return array[array.length - 1];
 }
 
-function reduce(array, f, mzero) {
+export function reduce(array, f, mzero) {
   return array.reduce(f, mzero);
 }
 
-function flatten(listOfLists) {
+export function flatten(listOfLists) {
   return [].concat.apply([], listOfLists);
 }
 
-function pairs(obj) {
+export function pairs(obj) {
   var keys = Object.keys(obj);
   var length = keys.length;
   var pairs = Array(length);
@@ -65,7 +63,7 @@ function pairs(obj) {
 /**
  * Hash of null is null, hash of undefined is undefined
  */
-function hashString(str) {
+export function hashString(str) {
   var hash = 0, i, ch, l;
   if (str === undefined || str === null) {
       return str;
@@ -81,7 +79,7 @@ function hashString(str) {
   return hash;
 }
 
-function hashRecord(record) {
+export function hashRecord(record) {
     return hashString(JSON.stringify(record));
 }
 
@@ -90,7 +88,7 @@ function hashRecord(record) {
  */
 var refsCache = {}; // { id: cmp }
 var cacheIdIndex = 0;
-function refToHash (cmp) {
+export function refToHash (cmp) {
   // search the cmpUniqueMap by reference - have we seen it before?
   // if so, use the assigned id as the hash
   // if not, add to cache and increment cacheIdIndex as a new ID to hash on
@@ -107,7 +105,7 @@ function refToHash (cmp) {
   }
 }
 
-function memoizeFactory (resolver) {
+export function memoizeFactory (resolver) {
   var cache = {};
   function memoize(func) {
     return function () {
@@ -122,7 +120,7 @@ function memoizeFactory (resolver) {
 
 
 // copy from MDN example: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/freeze#Examples
-function deepFreeze(obj) {
+export function deepFreeze(obj) {
   if (!isObject(obj)) {
     return obj;
   }
@@ -144,28 +142,5 @@ function deepFreeze(obj) {
   return Object.freeze(obj);
 }
 
-let valEq = (a, b) => isEqual(a, b);
-let refEq = (a, b) => a === b;
-
-
-export default {
-  deepFreeze: deepFreeze,
-  getRefAtPath: getRefAtPath,
-  deref: deref,
-  unDeref: unDeref,
-  initial: initial,
-  last: last,
-  reduce: reduce,
-  flatten: flatten,
-  pairs: pairs,
-  hashString: hashString,
-  hashRecord: hashRecord,
-  refToHash: refToHash,
-  memoizeFactory: memoizeFactory,
-  isEqual: isEqual,
-  union: union,
-  omit: omit,
-  find: find,
-  valEq: valEq,
-  refEq: refEq
-};
+export const valEq = (a, b) => isEqual(a, b);
+export const refEq = (a, b) => a === b;

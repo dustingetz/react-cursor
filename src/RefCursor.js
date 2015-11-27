@@ -1,4 +1,4 @@
-import util from './util';
+import {getRefAtPath, flatten} from './util';
 import update from './update';
 
 
@@ -25,11 +25,11 @@ class RefCursor {
    * read from the atom reference. It's called deref to emphasize the difference.
    */
   value () {
-    return util.getRefAtPath(this.rootDeref(), this.paths);
+    return getRefAtPath(this.rootDeref(), this.paths);
   }
 
   refine (/* one or more paths through the tree */) {
-    var nextPaths = [].concat(this.paths, util.flatten(arguments));
+    var nextPaths = [].concat(this.paths, flatten(arguments));
     return build(this.rootDeref, this.rootSwap, nextPaths);
   }
 }

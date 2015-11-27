@@ -1,8 +1,8 @@
 /* global describe, it, expect */
-import { Cursor } from '../react-cursor';
+import {Cursor} from '../react-cursor';
 import {Store, renderComponentWithState} from './CursorTestUtil';
 import clone from 'clone';
-import {isEqual, valEq, refEq} from '../util';
+import {valEq, refEq} from '../util';
 
 
 describe('Cursors can be tested', () => {
