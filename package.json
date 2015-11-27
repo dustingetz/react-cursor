@@ -40,6 +40,7 @@
     "karma-sinon-chai": "^1.1.0",
     "karma-sourcemap-loader": "^0.3.5",
     "karma-webpack": "1.6.0",
+    "lodash": "^3.10.1",
     "mocha": "^2.0.1",
     "react": "^0.14.2",
     "react-addons-test-utils": "^0.14.2",
