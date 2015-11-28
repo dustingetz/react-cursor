@@ -2,6 +2,20 @@ import isObject from 'lodash.isobject';
 import isEqual from 'deep-equal';
 
 
+export let clone = (xs) => xs.slice(0);
+
+function butLast (xs) {
+  let xxs = clone(xs);
+  xxs.pop();
+  return xxs;
+}
+
+export let apply = (f, ...args) => {
+  // last arg can be a seq of more args
+  args = [].concat(butLast(args), last(args));
+  return f.apply(null, args);
+};
+
 export function find(array, predicate) {
   if (typeof predicate !== 'function') {
     throw new TypeError('predicate must be a function');
@@ -20,18 +34,12 @@ export function find(array, predicate) {
   return undefined;
 }
 
-export function getRefAtPath(tree, paths) {
+export function getRefAtPath(tree, paths) { // this is get-in in clojure
   return reduce(paths, deref, tree);
 }
 
-export function deref(obj, key) { // aka get
+export function deref(obj, key) { // aka get in clojure
   return obj[key];
-}
-
-export function unDeref(obj, key) { // kind of like assoc
-  var nextObj = {};
-  nextObj[key] = obj;
-  return nextObj;
 }
 
 export function initial(array) {

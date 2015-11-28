@@ -55,7 +55,7 @@ describe('Cursor operations', () => {
     },
 
     'apply': () => {
-      cur.refine('a', 'b').apply(root => leaf => leaf/2);
+      cur.refine('a', 'b').apply(leaf => leaf/2);
       expect(storeValue().a.b).to.equal(21);
     }
   };

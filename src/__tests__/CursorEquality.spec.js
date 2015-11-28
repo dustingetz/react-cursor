@@ -93,7 +93,7 @@ describe('Cursors ensure equal values are ===', () => {
     let prevLeafVal = a.value();
     var nextLeafVal = {b: 42};
 
-    a.apply(root => leaf => nextLeafVal);
+    a.apply(leaf => nextLeafVal);
 
     expect(valEq(cmp.state.a, nextLeafVal)).to.equal(true); // cur valEq nextVal
     expect(refEq(cmp.state.a, nextLeafVal)).to.equal(false); // cur not refEq nextVal

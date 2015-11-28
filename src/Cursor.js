@@ -1,22 +1,29 @@
-import {memoizeFactory, getRefAtPath, hashRecord, refToHash, flatten, deepFreeze} from './util';
-import update from './update';
+import {apply, memoizeFactory, getRefAtPath, hashRecord, refToHash, flatten, deepFreeze} from './util';
+import {updateIn, merge, push, unshift, splice} from './update';
 
 
-function Cursor(rootValue, rootSwap, path, leafValue) {
+function Cursor(rootValue, rootSwap, paths, leafValue) {
   this.value = () => leafValue;
 
-  ['push', 'unshift', 'splice', 'set', 'merge', 'apply'].forEach(function (command) {
-    this[command] = update.bind(this, rootSwap, path, '$' + command);
-  }.bind(this));
-
-  this.refine = function (/* one or more paths through the tree */) {
+  this.refine = function (...args) {
     // When refining inside a lifecycle method, same cmp(swapper) and same path isn't enough.
     // this.props and nextProps have different subtree values, and refining memoizer must account for that
 
-    var nextPath = [].concat(path, flatten(arguments));
-    var nextValue = getRefAtPath(this.value(), flatten(arguments));
-    return internalBuild(rootValue, rootSwap, nextPath, nextValue); // memoized
+    var nextPaths = paths.concat(flatten(args));
+    var nextValue = getRefAtPath(this.value(), flatten(args));
+    return internalBuild(rootValue, rootSwap, nextPaths, nextValue); // memoized
   };
+
+  this.swap = (f, ...args) => {
+    rootSwap(rootValue => apply(updateIn, rootValue, paths, f, args));
+  }
+
+  this.apply = (f) => this.swap(f);
+  this.set = (val) => this.swap(v => val)
+  this.merge = (val) => this.swap(merge, val);
+  this.push = (xs) => this.swap(push, xs);
+  this.unshift = (xs) => this.swap(unshift, xs);
+  this.splice = (xs) => this.swap(splice, xs);
 
   if (Cursor.debug && typeof Object.freeze === 'function') {
     deepFreeze(this);
