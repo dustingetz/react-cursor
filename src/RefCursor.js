@@ -1,5 +1,5 @@
 import {getRefAtPath, flatten} from './util';
-import update from './update';
+import {updateIn, merge, push, unshift, splice} from 'update-in';
 
 
 class RefCursor {

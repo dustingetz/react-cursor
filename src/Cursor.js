@@ -1,5 +1,5 @@
+import {updateIn, merge, push, unshift, splice} from 'update-in';
 import {apply, memoizeFactory, getRefAtPath, hashRecord, refToHash, flatten, deepFreeze} from './util';
-import {updateIn, merge, push, unshift, splice} from './update';
 
 
 function Cursor(rootValue, rootSwap, paths, leafValue) {
@@ -16,7 +16,7 @@ function Cursor(rootValue, rootSwap, paths, leafValue) {
 
   this.swap = (f, ...args) => {
     rootSwap(rootValue => apply(updateIn, rootValue, paths, f, args));
-  }
+  };
 
   this.apply = (f) => this.swap(f);
   this.set = (val) => this.swap(v => val)
