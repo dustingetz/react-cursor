@@ -39,6 +39,7 @@ export function getRefAtPath(tree, paths) { // this is get-in in clojure
 }
 
 export function deref(obj, key) { // aka get in clojure
+  console.assert(key in obj, '');
   return obj[key];
 }
 
