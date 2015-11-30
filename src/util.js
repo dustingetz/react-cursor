@@ -39,7 +39,7 @@ export function getIn(tree, paths) { // this is get-in in clojure
 }
 
 export function get(obj, key) {
-  console.assert(key in obj, `Bad cursor refine: path ${key} not found in ${obj}`);
+  console.assert(key in obj, `Bad cursor refine: path ${key} not found in `, obj);
   return obj[key];
 }
 
