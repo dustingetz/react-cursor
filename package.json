@@ -1,6 +1,6 @@
 {
   "name": "react-cursor",
-  "version": "2.0.0-alpha.5",
+  "version": "2.0.0-alpha.6",
   "description": "Functional state management abstraction for use with Facebook React",
   "keywords": [
     "react",
