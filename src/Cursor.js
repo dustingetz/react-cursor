@@ -1,33 +1,23 @@
 import {updateIn, merge, push, unshift, splice} from 'update-in';
-import {apply, memoizeFactory, getRefAtPath, hashRecord, refToHash, flatten, deepFreeze} from './util';
+import {memoizeFactory, getRefAtPath, hashRecord, refToHash, flatten, deepFreeze} from './util';
 
 
-function Cursor(rootValue, rootSwap, paths, leafValue) {
-  this.value = () => leafValue;
+class Cursor {
+  constructor (rootValue, rootSwap, paths, leafValue) {
+    this.value = () => leafValue;
+    this.refine = (...morePaths) => internalBuild(rootValue, rootSwap, paths.concat(morePaths), getRefAtPath(this.value(), morePaths));
+    this.swap = (f, ...args) => rootSwap(rootValue => updateIn(rootValue, paths, v => f.apply(null, [v].concat(args))));
 
-  this.refine = function (...args) {
-    // When refining inside a lifecycle method, same cmp(swapper) and same path isn't enough.
-    // this.props and nextProps have different subtree values, and refining memoizer must account for that
+    this.set = (val) => this.swap(v => val);
+    this.merge = (val) => this.swap(merge, val);
+    this.push = (xs) => this.swap(push, xs);
+    this.unshift = (xs) => this.swap(unshift, xs);
+    this.splice = (xs) => this.swap(splice, xs);
 
-    var nextPaths = paths.concat(flatten(args));
-    var nextValue = getRefAtPath(this.value(), flatten(args));
-    return internalBuild(rootValue, rootSwap, nextPaths, nextValue); // memoized
-  };
-
-  this.swap = (f, ...args) => {
-    rootSwap(rootValue => apply(updateIn, rootValue, paths, f, args));
-  };
-
-  this.apply = (f) => this.swap(f);
-  this.set = (val) => this.swap(v => val)
-  this.merge = (val) => this.swap(merge, val);
-  this.push = (xs) => this.swap(push, xs);
-  this.unshift = (xs) => this.swap(unshift, xs);
-  this.splice = (xs) => this.swap(splice, xs);
-
-  if (Cursor.debug && typeof Object.freeze === 'function') {
-    deepFreeze(this);
-    deepFreeze(leafValue);
+    if (Cursor.debug && typeof Object.freeze === 'function') {
+      deepFreeze(this);
+      deepFreeze(leafValue);
+    }
   }
 }
 
@@ -38,6 +28,8 @@ function Cursor(rootValue, rootSwap, paths, leafValue) {
 var cursorBuildMemoizer = memoizeFactory((rootValue, rootSwap, path, leafValue) => {
   path = path === undefined ? [] : path;
   leafValue = leafValue || getRefAtPath(rootValue, path);
+  // When refining inside a lifecycle method, same cmp(swapper) and same path isn't enough.
+  // this.props and nextProps have different subtree values, and refining memoizer must account for that
   return refToHash(rootSwap) + hashRecord(leafValue) + hashRecord(path);
 });
 

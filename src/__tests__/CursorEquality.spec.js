@@ -85,7 +85,7 @@ describe('Cursors ensure equal values are ===', () => {
     expect(refEq(cur2.value(), prevLeafVal)).to.equal(true); // cur refEq prevVal
   });
 
-  it('cursor apply resulting in equal value preserves ===', () => {
+  it('cursor swap resulting in equal value preserves ===', () => {
 
     var cmp = renderComponentWithState({a: {b: 42}});
     var a = Cursor.build(cmp).refine('a');
@@ -93,7 +93,7 @@ describe('Cursors ensure equal values are ===', () => {
     let prevLeafVal = a.value();
     var nextLeafVal = {b: 42};
 
-    a.apply(leaf => nextLeafVal);
+    a.swap(leaf => nextLeafVal);
 
     expect(valEq(cmp.state.a, nextLeafVal)).to.equal(true); // cur valEq nextVal
     expect(refEq(cmp.state.a, nextLeafVal)).to.equal(false); // cur not refEq nextVal

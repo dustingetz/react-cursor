@@ -3,34 +3,16 @@ import {updateIn, merge, push, unshift, splice} from 'update-in';
 
 
 class RefCursor {
-  /**
-   * rootDeref and rootSwap together comprise the notion of an atom
-   */
   constructor (rootDeref, rootSwap, paths) {
-    this.rootDeref = rootDeref;
-    this.rootSwap = rootSwap;
-    this.paths = paths;
+    this.value = () => getRefAtPath(rootDeref(), paths);
+    this.refine = (...morePaths) => build(rootDeref, rootSwap, paths.concat(morePaths));
+    this.swap = (f, ...args) => rootSwap(rootValue => updateIn(rootValue, paths, v => f.apply(null, [v].concat(args))));
 
-    // These effects (swap and reset) write through to the underlying atom.
-    // So these effects are seen in all cursors bound to this atom, at all
-    // levels of refinement. Value is always read out of the atom so it is never stale.
-    ['push', 'unshift', 'splice', 'set', 'merge', 'apply'].forEach(function (command) {
-      this[command] = update.bind(this, rootSwap, paths, '$' + command);
-    }.bind(this));
-  }
-
-
-  /**
-   * For RefCursors, value is a function since the latest value must be
-   * read from the atom reference. It's called deref to emphasize the difference.
-   */
-  value () {
-    return getRefAtPath(this.rootDeref(), this.paths);
-  }
-
-  refine (/* one or more paths through the tree */) {
-    var nextPaths = [].concat(this.paths, flatten(arguments));
-    return build(this.rootDeref, this.rootSwap, nextPaths);
+    this.set = (val) => this.swap(v => val);
+    this.merge = (val) => this.swap(merge, val);
+    this.push = (xs) => this.swap(push, xs);
+    this.unshift = (xs) => this.swap(unshift, xs);
+    this.splice = (xs) => this.swap(splice, xs);
   }
 }
 

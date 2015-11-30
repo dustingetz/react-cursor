@@ -54,8 +54,8 @@ describe('Cursor operations', () => {
       expect(storeValue().a).to.deep.equal({ b: 42, z: 1});
     },
 
-    'apply': () => {
-      cur.refine('a', 'b').apply(leaf => leaf/2);
+    'swap': () => {
+      cur.refine('a', 'b').swap(leaf => leaf/2);
       expect(storeValue().a.b).to.equal(21);
     }
   };
