@@ -34,12 +34,12 @@ export function find(array, predicate) {
   return undefined;
 }
 
-export function getRefAtPath(tree, paths) { // this is get-in in clojure
-  return reduce(paths, deref, tree);
+export function getIn(tree, paths) { // this is get-in in clojure
+  return reduce(paths, get, tree);
 }
 
-export function deref(obj, key) { // aka get in clojure
-  console.assert(key in obj, '');
+export function get(obj, key) {
+  console.assert(key in obj, `Bad cursor refine: path ${key} not found in ${obj}`);
   return obj[key];
 }
 

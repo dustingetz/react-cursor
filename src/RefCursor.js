@@ -1,10 +1,10 @@
-import {getRefAtPath, flatten} from './util';
+import {getIn, flatten} from './util';
 import {updateIn, merge, push, unshift, splice} from 'update-in';
 
 
 class RefCursor {
   constructor (rootDeref, rootSwap, paths) {
-    this.value = () => getRefAtPath(rootDeref(), paths);
+    this.value = () => getIn(rootDeref(), paths);
     this.refine = (...morePaths) => build(rootDeref, rootSwap, paths.concat(morePaths));
     this.swap = (f, ...args) => rootSwap(rootValue => updateIn(rootValue, paths, v => f.apply(null, [v].concat(args))));
 
