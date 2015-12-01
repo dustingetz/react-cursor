@@ -2,20 +2,6 @@ import isObject from 'lodash.isobject';
 import isEqual from 'deep-equal';
 
 
-export let clone = (xs) => xs.slice(0);
-
-function butLast (xs) {
-  let xxs = clone(xs);
-  xxs.pop();
-  return xxs;
-}
-
-export let apply = (f, ...args) => {
-  // last arg can be a seq of more args
-  args = [].concat(butLast(args), last(args));
-  return f.apply(null, args);
-};
-
 export function find(array, predicate) {
   if (typeof predicate !== 'function') {
     throw new TypeError('predicate must be a function');
@@ -45,10 +31,6 @@ export function get(obj, key) {
 
 export function initial(array) {
   return array.slice(0, array.length - 1);
-}
-
-export function last(array) {
-  return array[array.length - 1];
 }
 
 export function reduce(array, f, mzero) {
