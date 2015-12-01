@@ -21,12 +21,11 @@ describe ('Cursor equality', () => {
 
   let suite = {
     'cursors built from same constructor arguments are ===': () => {
-      expect(refEq(cur, cur2)).to.equal(true);
-
-      expect(refEq(cur.refine('a'), cur2.refine('a'))).to.equal(true);
+      expect(cur).to.equal(cur2);
+      expect(cur.refine('a')).to.equal(cur2.refine('a'));
     },
     'refining the same cursor twice ===': () => {
-      expect(refEq(cur.refine('a'), cur.refine('a'))).to.equal(true);
+      expect(cur.refine('a')).to.equal(cur.refine('a'));
     },
     'if an update results in equal value, preserve ===': () => {
       let a = cur.refine('a');
@@ -36,9 +35,10 @@ describe ('Cursor equality', () => {
       a.swap(v => nextLeafVal);
 
       // the store preserves ===
-      expect(valEq(storeValue().a, nextLeafVal)).to.equal(true); // cur valEq nextVal
-      expect(refEq(storeValue().a, nextLeafVal)).to.equal(false); // cur not refEq nextVal
-      expect(refEq(storeValue().a, prevLeafVal)).to.equal(true); // cur refEq prevVal
+      expect(storeValue().a).to.deep.equal(nextLeafVal);
+      expect(storeValue().a).to.not.equal(nextLeafVal);
+      console.log(cur.value(), cur.refine('a').value(), prevLeafVal)
+      expect(storeValue().a).to.equal(prevLeafVal);
 
       // cursor preserves ===
       //let aa = Cursor.build(storeValue(), store.swap).refine('a');

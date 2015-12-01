@@ -22,7 +22,7 @@ class Cursor {
 }
 
 
-let NewCursor_ = (rootValue, rootSwap, paths = []) => new Cursor(rootValue, rootSwap, paths, rootValue);
+let NewCursor_ = (rootValue, rootSwap, paths, leafValue) => new Cursor(rootValue, rootSwap, paths, leafValue);
 
 // reuse the same cursor instance for same {value swap paths},
 let hasher = (rootValue, rootSwap, paths, leafValue) => refToHash(rootSwap) + hashRecord(leafValue) + hashRecord(paths);
@@ -31,8 +31,8 @@ let NewCursor = memoized(hasher, NewCursor_);
 
 Cursor.build = (value, swap) => {
   return isReactCmp(value)
-      ? NewCursor(makeValueFromReact(value), makeSwapFromReact(value))
-      : NewCursor(value, swap);
+      ? NewCursor(makeValueFromReact(value), makeSwapFromReact(value), [], makeValueFromReact(value))
+      : NewCursor(value, swap, [], value);
 };
 
 export default Cursor;
