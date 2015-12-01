@@ -14,6 +14,8 @@ class RefCursor {
     this.push = (xs) => this.swap(push, xs);
     this.unshift = (xs) => this.swap(unshift, xs);
     this.splice = (xs) => this.swap(splice, xs);
+
+    // RefCursors don't own a value, so they aren't responsible for freezing it.
   }
 }
 

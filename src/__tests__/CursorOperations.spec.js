@@ -1,16 +1,16 @@
 /* global describe, it, expect */
 import _ from 'lodash';
-import {Cursor} from '../react-cursor';
+import {Cursor, RefCursor} from '../react-cursor';
 import {Store, renderComponentWithState} from './CursorTestUtil';
 import {valEq, refEq} from '../util';
 
 
-describe('Cursor operations', () => {
-  var cur, storeValue;
-  var initialState = {a: {b: 42}, c: [1, 2, 3]};
+describe('Cursor updates', () => {
+  let cur, storeValue;
+  const initialState = {a: {b: 42}, c: [1, 2, 3]};
 
 
-  var suite = {
+  let suite = {
 
     'set at leaf': () => {
       expect(storeValue()).to.deep.equal(initialState);
@@ -60,10 +60,42 @@ describe('Cursor operations', () => {
     }
   };
 
-  describe('backed by store', () => {
+
+
+  describe('Cursor with store', () => {
     beforeEach(() => {
       const store = new Store(initialState);
       cur = Cursor.build(store.value(), store.swap);
+      storeValue = () => store.value();
+    });
+
+    afterEach(() => {
+      cur = null;
+      storeValue = null;
+    });
+
+    _.map(suite, (v, k) => it(k, v));
+  });
+
+  describe('Cursor with react state', () => {
+    beforeEach(() => {
+      const cmp = renderComponentWithState(initialState);
+      cur = Cursor.build(cmp);
+      storeValue = () => cmp.state;
+    });
+
+    afterEach(() => {
+      cur = null;
+      storeValue = null;
+    });
+
+    _.map(suite, (v, k) => { it(k, v) });
+  });
+
+  describe('RefCursor with store', () => {
+    beforeEach(() => {
+      const store = new Store(initialState);
+      cur = RefCursor.build(store.value, store.swap);
       storeValue = () => store.value();
     });
 
@@ -76,10 +108,10 @@ describe('Cursor operations', () => {
   });
 
 
-  describe('backed by react state', () => {
+  describe('RefCursor with react state', () => {
     beforeEach(() => {
       const cmp = renderComponentWithState(initialState);
-      cur = Cursor.build(cmp);
+      cur = RefCursor.build(cmp);
       storeValue = () => cmp.state;
     });
 
