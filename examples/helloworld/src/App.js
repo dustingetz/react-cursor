@@ -42,16 +42,16 @@ var Clicker = React.createClass({
   onInputChange: function (e) {
     var nextValue = parseInt(e.target.value, 10);
     if (isNaN(nextValue)) nextValue = '';
-    this.props.cursor.set(nextValue);
+    this.props.cursor.swap(() => nextValue);
   },
 
   inc2: function () {
-    this.props.cursor.set(function (s) { return s + 1; });
-    this.props.cursor.set(function (s) { return s + 1; });
+    this.props.cursor.swap(s => s+1);
+    this.props.cursor.swap(s => s+1);
   },
 
   inc10: function () {
-    this.props.cursor.set(function (s) { return s + 10; });
+    this.props.cursor.swap(s => s+10);
   }
 });
 
