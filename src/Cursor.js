@@ -1,6 +1,6 @@
 import {updateIn, merge, push, unshift, splice} from 'update-in';
 import {memoized, getIn, hashRecord, refToHash, flatten, deepFreeze} from './util';
-import ReactAdapter from './ReactAdapter';
+import {makeDerefFromReact, makeSwapFromReact, makeValueFromReact, isReactCmp} from './ReactAdapter';
 
 
 let debug = process.env.NODE_ENV !== 'production';
@@ -22,15 +22,17 @@ class Cursor {
 }
 
 
-var NewCursor = (rootValue, rootSwap, path = [], leafValue = rootValue) => new Cursor(rootValue, rootSwap, path, leafValue);
+let NewCursor_ = (rootValue, rootSwap, paths = []) => new Cursor(rootValue, rootSwap, paths, rootValue);
 
-// If we build two cursors for the same path on the same React component,
-// and those React components have equal state, reuse the same cursor instance,
-// so we can use === to compare them.
-let hasher = (rootValue, rootSwap, path, leafValue) => refToHash(rootSwap) + hashRecord(leafValue) + hashRecord(path);
-NewCursor = memoized(hasher, NewCursor);
+// reuse the same cursor instance for same {value swap paths},
+let hasher = (rootValue, rootSwap, paths, leafValue) => refToHash(rootSwap) + hashRecord(leafValue) + hashRecord(paths);
+let NewCursor = memoized(hasher, NewCursor_);
 
 
-Cursor.build = ReactAdapter(NewCursor);
+Cursor.build = (value, swap) => {
+  return isReactCmp(value)
+      ? NewCursor(makeValueFromReact(value), makeSwapFromReact(value))
+      : NewCursor(value, swap);
+};
 
 export default Cursor;

@@ -1,6 +1,6 @@
-import {getIn, flatten} from './util';
+import {memoized, refToHash, hashRecord, getIn, flatten} from './util';
 import {updateIn, merge, push, unshift, splice} from 'update-in';
-import ReactAdapter from './ReactAdapter';
+import {makeDerefFromReact, makeSwapFromReact, isReactCmp} from './ReactAdapter';
 
 
 class RefCursor {
@@ -19,10 +19,18 @@ class RefCursor {
   }
 }
 
-// RefCursors have no memoization as they do not expose any notion of value equality.
-let NewRefCursor = (rootDeref, rootSwap, path = []) => new RefCursor(rootDeref, rootSwap, path);
+
+let NewRefCursor_ = (rootDeref, rootSwap, paths = []) => new RefCursor(rootDeref, rootSwap, paths);
+
+// reuse the same cursor instance for same {deref swap paths}
+let hasher = (rootDeref, rootSwap, paths) => refToHash(rootDeref) + refToHash(rootSwap) + hashRecord(paths);
+let NewRefCursor = memoized(hasher, NewRefCursor_);
 
 
-RefCursor.build = ReactAdapter(NewRefCursor);
+RefCursor.build = (deref, swap) => {
+  return isReactCmp(deref)
+      ? NewRefCursor(makeDerefFromReact(deref), makeSwapFromReact(deref))
+      : NewRefCursor(deref, swap);
+};
 
 export default RefCursor;
