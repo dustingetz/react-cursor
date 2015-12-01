@@ -112,6 +112,10 @@ export function memoized (hasher = identity, f) {
 
 // copy from MDN example: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/freeze#Examples
 export function deepFreeze(obj) {
+  if (typeof Object.freeze !== 'function') {
+    return obj;
+  }
+
   if (!isObject(obj)) {
     return obj;
   }

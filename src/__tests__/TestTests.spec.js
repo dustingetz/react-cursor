@@ -6,7 +6,7 @@ describe('Cursors can be tested', () => {
   });
 
   it('debug mode is turned on in tests', () => {
-    expect(Cursor.debug).to.equal(true); // NODE_ENV !== production
+    expect(process.env.NODE_ENV !== 'production').to.equal(true);
   })
 });
 
