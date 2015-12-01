@@ -96,17 +96,17 @@ export function refToHash (cmp) {
   }
 }
 
-export function memoizeFactory (resolver) {
+let identity = x => x;
+
+export function memoized (hasher = identity, f) {
   var cache = {};
-  function memoize(func) {
-    return function () {
-      var key = resolver ? resolver.apply(this, arguments) : arguments[0];
-      return hasOwnProperty.call(cache, key)
-        ? cache[key]
-        : (cache[key] = func.apply(this, arguments));
-    };
-  }
-  return memoize;
+  return (...args) => {
+    // hasher gets the same arguments as f, to create the hashKey
+    const hashKey = hasher.apply(this, args);
+    return hasOwnProperty.call(cache, hashKey)
+        ? cache[hashKey]
+        : (cache[hashKey] = f.apply(this, args));
+  };
 }
 
 
