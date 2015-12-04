@@ -1,6 +1,6 @@
 import {updateIn, merge, push, unshift, splice} from 'update-in';
 import {memoized, getIn, hashRecord, refToHash, flatten, deepFreeze} from './util';
-import {makeDerefFromReact, makeSwapFromReact, makeValueFromReact, isReactCmp} from './ReactAdapter';
+import {makeSwapFromReact, makeValueFromReact, isReactCmp} from './ReactAdapter';
 
 
 let debug = process.env.NODE_ENV !== 'production';
