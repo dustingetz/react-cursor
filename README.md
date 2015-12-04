@@ -47,7 +47,7 @@ Cursors are not themselves stateful, they are backed by state stored somewhere e
 
 The atom approach is the most flexible and powerful.
 
-*state is stored in a stateful react component at the top level of react view-tree*
+**state is stored in a stateful react component at the top level of react view-tree**
 ```javascript
 var Store = React.createClass({
   getInitialState () { return {a: {b: 0}}; },
@@ -61,7 +61,7 @@ React.render(<Store />, domEl);
 ```
 This is the most common use case and the easiest migration path if you're already using react component local state and just want to hoist all your state to the root and not change any other code.
 
-*state is stored in an [atom](https://github.com/cjohansen/js-atom) - works in large hybrid legacy apps like Rails with Turbolinks*
+**state is stored in an [atom](https://github.com/cjohansen/js-atom) - works in large hybrid legacy apps like Rails with Turbolinks**
 ```javascript
 var store = atom.createAtom({ a: { b: 0 } });
 
@@ -76,7 +76,8 @@ store.removeWatch('react-renderer');
 ```
 This works great in legacy page based apps that aren't pure React, since we can start and stop react rendering without losing state. This is important when our app uses more than one rendering technology. Our state is decoupled from React, so different parts of app can be coded differently but still share application state. For example, rails with TurboLinks where only one of the pages renders with React and the rest use Rails views.
 
-*state is stored in a javascript var (like an atom but dumber)*
+**state is stored in a javascript var**
+This is like using an atom but dumber - just a thought experiment to demonstrate the interface.
 ```javascript
 var store = { a: { b: 0 } }; // store is just a var
 
