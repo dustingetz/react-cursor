@@ -33,19 +33,14 @@ New tutorial coming soon. for now see examples/helloworld.
  * refine(key, ...keys) - return a new cursor nested inside the root cursor at some path
  * swap(f) - apply f with the refined value and puts returned value into the backing store
 
-We also have these non-core convienence methods which might be removed
+Cursor has non-core convienence methods:
  * set(v), merge(v), push(xs), unshift(xs), splice([[splices]]) - convenience wrappers for swap for common updates
+
+There is a mixin `ImmutableOptimizations()` to achieve optimized rendering (yes, we also work with PureRenderMixin if you prefer that). See examples/helloworld for usage.
 
 There are two constructors
  * build(reactCmpReference) - construct cursor backed by react state
  * build(rootValue, rootSwap) - construct cursor backed by state stored somewhere else
-
-Cursors are not themselves stateful, they are backed by state stored somewhere else, here are some examples:
- * in a stateful react component at the top level of react view-tree
- * in an [atom](https://github.com/cjohansen/js-atom) - works in large hybrid legacy apps like Rails with Turbolinks
- * in a javascript var - like an atom, but stupid-simple for demonstration purposes
-
-The atom approach is the most flexible and powerful.
 
 **state is stored in a stateful react component at the top level of react view-tree**
 ```javascript
@@ -77,7 +72,7 @@ store.removeWatch('react-renderer');
 This works great in legacy page based apps that aren't pure React, since we can start and stop react rendering without losing state. This is important when our app uses more than one rendering technology. Our state is decoupled from React, so different parts of app can be coded differently but still share application state. For example, rails with TurboLinks where only one of the pages renders with React and the rest use Rails views.
 
 **state is stored in a javascript var**
-This is like using an atom but dumber - just a thought experiment to demonstrate the interface.
+This is like using an atom but dumber - just a thought experiment to demonstrate the interface. Don't do this.
 ```javascript
 var store = { a: { b: 0 } }; // store is just a var
 
@@ -94,9 +89,6 @@ function render(prevVal, curVal) {
 
 render(undefined, store); // Render the first time
 ```
-Don't do this, it's just a demonstration for understanding.
-
-We provide a mixin `ImmutableOptimizations` to achieve optimized rendering (yes, we also work with PureRenderMixin if you prefer that). See the react-cursor examples directory for usage.
 
 ## demo app
 
