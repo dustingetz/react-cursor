@@ -1,15 +1,20 @@
-import {updateIn, merge, push, unshift, splice} from 'update-in';
-import {memoized, getIn, hashRecord, refToHash, flatten, deepFreeze} from './util';
+import {merge, push, unshift, splice} from 'update-in';
+import {memoized, getIn, hashRecord, refToHash, deepFreeze, rootAt} from './util';
 import {makeSwapFromReact, makeValueFromReact, isReactCmp} from './ReactAdapter';
 
 
 let debug = process.env.NODE_ENV !== 'production';
 
+let makeRefinedSwap = memoized(
+  (swapFn, paths) => refToHash(swapFn) + hashRecord(paths),
+  (swapFn, paths) => (f) => swapFn(rootAt(paths, f))
+);
+
 class Cursor {
-  constructor (rootValue, rootSwap, paths, leafValue) {
-    this.value = () => leafValue;
-    this.refine = (...morePaths) => NewCursor(rootValue, rootSwap, paths.concat(morePaths), getIn(this.value(), morePaths));
-    this.swap = (f, ...args) => rootSwap(rootValue => updateIn(rootValue, paths, v => f.apply(null, [v].concat(args))));
+  constructor (value, swapFn) {
+    this.value = () => value;
+    this.refine = (...morePaths) => NewCursor(getIn(value, morePaths), makeRefinedSwap(swapFn, morePaths));
+    this.swap = (f, ...args) => swapFn((v) => f.apply(null, [v].concat(args)));
 
     this.set = (val) => this.swap(v => val);
     this.merge = (val) => this.swap(merge, val);
@@ -17,22 +22,22 @@ class Cursor {
     this.unshift = (xs) => this.swap(unshift, xs);
     this.splice = (xs) => this.swap(splice, xs);
 
-    debug && deepFreeze(leafValue);
+    debug && deepFreeze(value);
   }
 }
 
 
-let NewCursor_ = (rootValue, rootSwap, paths, leafValue) => new Cursor(rootValue, rootSwap, paths, leafValue);
+let NewCursor_ = (value, swap) => new Cursor(value, swap);
 
-// reuse the same cursor instance for same {value swap paths},
-let hasher = (rootValue, rootSwap, paths, leafValue) => refToHash(rootSwap) + hashRecord(leafValue) + hashRecord(paths);
+// reuse the same cursor instance for same {value swap},
+let hasher = (value, swap) => refToHash(swap) + hashRecord(value);
 let NewCursor = memoized(hasher, NewCursor_);
 
 
 Cursor.build = (value, swap) => {
   return isReactCmp(value)
-      ? NewCursor(makeValueFromReact(value), makeSwapFromReact(value), [], makeValueFromReact(value))
-      : NewCursor(value, swap, [], value);
+      ? NewCursor(makeValueFromReact(value), makeSwapFromReact(value))
+      : NewCursor(value, swap);
 };
 
 export default Cursor;
