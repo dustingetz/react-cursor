@@ -6,9 +6,9 @@ react-cursor
 `react-cursor` helps you write stateless React components, and achieve optimizied React rendering. react-cursor allows us to store the entire application state in a single immutable value, and allows for generic `shouldComponentUpdate` as a mixin. The cursor concept was first seen in [Om](https://github.com/swannodette/om/wiki/Cursors).
 
 ## Project Maturity
-[1.2 branch](https://github.com/dustingetz/react-cursor/tree/1.2) is used in production in several large "enterprise" projects and lots of smaller projects. This branch supports React 0.13.
+master is stable, there is a full test suite, if you are new to react-cursor, use master, master is better. See package.json for latest published snapshot.
 
-master is currently under heavy development for pending 2.0 release which may have API changes. I am running master in production, there is a full test suite, the docs lag a bit so you may need to read a little bit of code.
+[1.2 branch](https://github.com/dustingetz/react-cursor/tree/1.2) is used in production in several large "enterprise" projects and lots of smaller projects. This branch supports React 0.13.
 
 ## Why react-cursor?
 Cursors give you direct access to state-at-root without going full-on Flux (Action/Store/Dispatcher). Since all state writes are funneled through the cursor, cursors can use structure-sharing so we achieve optimized rendering through shouldComponentUpdate "for free".
