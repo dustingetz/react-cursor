@@ -1,5 +1,6 @@
 import isObject from 'lodash.isobject';
 import isEqual from 'deep-equal';
+import {updateIn} from 'update-in';
 
 
 export function find(array, predicate) {
@@ -139,3 +140,5 @@ export function deepFreeze(obj) {
 
 export const valEq = (a, b) => isEqual(a, b);
 export const refEq = (a, b) => a === b;
+
+export let rootAt = (segments, fn) => (value) => updateIn(value, segments, fn);

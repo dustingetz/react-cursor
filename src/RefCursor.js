@@ -1,13 +1,22 @@
-import {memoized, refToHash, hashRecord, getIn, flatten} from './util';
-import {updateIn, merge, push, unshift, splice} from 'update-in';
+import {memoized, refToHash, hashRecord, getIn, rootAt} from './util';
+import {merge, push, unshift, splice} from 'update-in';
 import {makeDerefFromReact, makeSwapFromReact, isReactCmp} from './ReactAdapter';
 
+let makeRefinedSwap = memoized(
+  (swapFn, paths) => refToHash(swapFn) + hashRecord(paths),
+  (swapFn, paths) => (f) => swapFn(rootAt(paths, f))
+);
+
+let makeRefinedDeref = memoized(
+  (deref, paths) => refToHash(deref) + hashRecord(paths),
+  (deref, paths) => () => getIn(deref(), paths)
+);
 
 class RefCursor {
-  constructor (rootDeref, rootSwap, paths) {
-    this.value = () => getIn(rootDeref(), paths);
-    this.refine = (...morePaths) => NewRefCursor(rootDeref, rootSwap, paths.concat(morePaths));
-    this.swap = (f, ...args) => rootSwap(rootValue => updateIn(rootValue, paths, v => f.apply(null, [v].concat(args))));
+  constructor (deref, swapFn) {
+    this.value = deref;
+    this.refine = (...morePaths) => NewRefCursor(makeRefinedDeref(deref, morePaths), makeRefinedSwap(swapFn, morePaths));
+    this.swap = (f, ...args) => swapFn((v) => f.apply(null, [v].concat(args)));
 
     this.set = (val) => this.swap(v => val);
     this.merge = (val) => this.swap(merge, val);
@@ -20,10 +29,10 @@ class RefCursor {
 }
 
 
-let NewRefCursor_ = (rootDeref, rootSwap, paths = []) => new RefCursor(rootDeref, rootSwap, paths);
+let NewRefCursor_ = (deref, swap) => new RefCursor(deref, swap);
 
 // reuse the same cursor instance for same {deref swap paths}
-let hasher = (rootDeref, rootSwap, paths) => refToHash(rootDeref) + refToHash(rootSwap) + hashRecord(paths);
+let hasher = (deref, swap) => refToHash(deref) + refToHash(swap);
 let NewRefCursor = memoized(hasher, NewRefCursor_);
 
 
