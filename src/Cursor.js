@@ -5,10 +5,11 @@ import {makeSwapFromReact, makeValueFromReact, isReactCmp} from './ReactAdapter'
 
 let debug = process.env.NODE_ENV !== 'production';
 
+
 let makeRefinedSwap = memoized(
   (swapFn, paths) => refToHash(swapFn) + hashRecord(paths),
-  (swapFn, paths) => (f) => swapFn(rootAt(paths, f))
-);
+  (swapFn, paths) => (f) => swapFn(rootAt(paths, f)));
+
 
 class Cursor {
   constructor (value, swapFn) {
@@ -27,17 +28,14 @@ class Cursor {
 }
 
 
-let NewCursor_ = (value, swap) => new Cursor(value, swap);
-
-// reuse the same cursor instance for same {value swap},
-let hasher = (value, swap) => refToHash(swap) + hashRecord(value);
-let NewCursor = memoized(hasher, NewCursor_);
+let NewCursor = memoized(
+    (value, swap) => refToHash(swap) + hashRecord(value),
+    (value, swap) => new Cursor(value, swap));
 
 
-Cursor.build = (value, swap) => {
-  return isReactCmp(value)
-      ? NewCursor(makeValueFromReact(value), makeSwapFromReact(value))
-      : NewCursor(value, swap);
-};
+Cursor.build = (value, swap) => isReactCmp(value)
+    ? NewCursor(makeValueFromReact(value), makeSwapFromReact(value))
+    : NewCursor(value, swap);
+
 
 export default Cursor;
