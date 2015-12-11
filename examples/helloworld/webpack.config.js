@@ -20,13 +20,12 @@ module.exports = {
       path.resolve('./src')
     ],
     alias: {
-      'react-cursor': path.join(__dirname, '../../src/react-cursor')
+      'react-cursor': path.join(__dirname, '../../dist/react-cursor')
     }
   },
   module: {
     loaders: [
-      { test: /\.js$/, loaders: ['babel'], include: [path.join(__dirname, 'src')] },
-      { test: /react-cursor/, loader: 'babel' }
+      { test: /\.js$/, loaders: ['babel'], include: [path.join(__dirname, 'src')] }
    ]
   }
 };
