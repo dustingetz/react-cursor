@@ -1,10 +1,14 @@
 {
   "name": "react-cursor",
   "version": "2.0.0-alpha.10",
-  "description": "Functional state management abstraction for use with Facebook React",
+  "description": "Immutable recursive UI state management",
   "keywords": [
     "react",
-    "cursor"
+    "cursor",
+    "immutable",
+    "state",
+    "functional",
+    "flux"
   ],
   "repository": {
     "type": "git",
