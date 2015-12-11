@@ -78,23 +78,13 @@ export function hashRecord(record) {
 /**
  * Generate a unique thing to use as a memoize resolver hash for reference types.
  */
-var refsCache = {}; // { id: cmp }
+let refsCache = new WeakMap();
 var cacheIdIndex = 0;
-export function refToHash (cmp) {
-  // search the cmpUniqueMap by reference - have we seen it before?
-  // if so, use the assigned id as the hash
-  // if not, add to cache and increment cacheIdIndex as a new ID to hash on
-
-  var cmpsWithUid = pairs(refsCache);
-  var cmpFound = find(cmpsWithUid, function (cmpAndId) { return cmpAndId[1] === cmp; });
-  if (cmpFound) {
-    return cmpFound[0]; // return the uid
-  }
-  else {
-    var uid = (cacheIdIndex++).toString();
-    refsCache[uid] = cmp;
-    return uid;
-  }
+export function refToHash (o) {
+  let cachedUid = refsCache.get(o);
+  let uid =  cachedUid || (cacheIdIndex++).toString();
+  !cachedUid && refsCache.set(o, uid);
+  return uid;
 }
 
 let identity = x => x;
