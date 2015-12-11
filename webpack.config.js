@@ -8,6 +8,8 @@ module.exports = {
   output: {
     path: path.resolve('./dist'),
     filename: 'react-cursor.js',
+    libraryTarget: 'umd',
+    library: 'ReactCursor',
     publicPath: '/static/'
   },
 
