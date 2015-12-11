@@ -2,8 +2,8 @@ import omit from 'omit-keys';
 import {valEq, refEq} from './util';
 
 
-function ImmutableOptimizations (refFields, ignoredFields/*optional*/) {
-  var noValueCheckFields = refFields.concat(ignoredFields || []);
+function ImmutableOptimizations (refFields = [], ignoredFields = []) {
+  var noValueCheckFields = refFields.concat(ignoredFields);
   return {
     shouldComponentUpdate: function (nextProps) {
 
