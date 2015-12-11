@@ -106,10 +106,6 @@ Advantages of react-cursor over immutable-js, baobab, cortex:
  * easy to integrate with your existing large codebase already using react state
  * simpler implementation: tiny api, not much code
 
-## Contributors
-
-The initial prototypes and thought work for `react-cursor` was pair programmed by [Dustin Getz](https://github.com/dustingetz) and [Daniel Miladinov](https://github.com/danielmiladinov).
-
 ## License
 
 _`react-cursor` is governed under the MIT License._
