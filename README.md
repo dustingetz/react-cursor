@@ -3,29 +3,23 @@ react-cursor
 
 > Functional state management abstraction for use with Facebook React
 
-`react-cursor` helps you write stateless React components, and achieve optimizied React rendering. react-cursor allows us to store the entire application state in a single immutable value, and allows for generic `shouldComponentUpdate` as a mixin. The cursor concept was first seen in [Om](https://github.com/swannodette/om/wiki/Cursors).
-
 [react-cursor hello-world in a fiddle](https://jsfiddle.net/dustingetz/n9kfc17x/)
 
-## Project Maturity
-master is stable, there is a full test suite, if you are new to react-cursor, use master, master is better. See package.json for latest published snapshot and *npm install it with explicit version*. 2.0 is fully backwards compatible with 1.x.
+`react-cursor` helps you write stateless React components, and achieve optimizied React rendering.
 
-## Why react-cursor?
-Cursors give you direct access to state-at-root without going full-on Flux (Action/Store/Dispatcher). Since all state writes are funneled through the cursor, cursors can use structure-sharing so we achieve optimized rendering through shouldComponentUpdate "for free".
+ * Decouple your application state from the shape of the DOM, allowing application state to be normalized
+ * easy shouldComponentUpdate implemented using reference equality
+ * Designed for recursive or deeply nested data
 
-Cursors do not make an app stateless, but they let an app keep all its state in a single place - thus the root view is stateful, and all downtree views are stateless. So cursors are a tool for reducing the surface area of code that is stateful.
+Cursors do not make an app stateless, but they let an app keep all its state in a single place at the root -- thus the root is stateful, and all downtree views are stateless. So cursors are a tool for reducing the surface area of code that is stateful.
 
 If you are already using immutable datastructures (like ImmutableJS), react-cursor is not for you. react-cursor uses regular javascript datastructures, and leans on [React's Immutability Helpers](https://facebook.github.io/react/docs/update.html) (sugared by [update-in](https://github.com/dustingetz/update-in/) to provide efficient immutable operations and structure sharing.
 
-## features
-State-at-root pattern via `react-cursor` offers the following benefits:
-
- * O(1) deep equality checks (like Om), fastest possible react performance
- * Decouple your application state from the shape of the DOM, allowing application state to be normalized
- * Work with recursive or deeply nested data
+## Project Maturity
+master is stable, there is a full test suite. See package.json for latest published snapshot and *npm install it with explicit version*. 2.0 is fully backwards compatible with 1.x.
 
 ## tutorial
-New tutorial coming soon. for now see examples/helloworld.
+New tutorial coming soon. for now see [react-cursor hello-world in a fiddle](https://jsfiddle.net/dustingetz/n9kfc17x/).
 
 ## API
 `Cursor` has these methods:
