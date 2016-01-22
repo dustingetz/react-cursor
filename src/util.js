@@ -119,7 +119,7 @@ export function deepFreeze(obj) {
     var prop = obj[name];
 
     // Freeze prop if it is an object
-    if (typeof prop == 'object' && !Object.isFrozen(prop)) {
+    if (!!prop && typeof prop == 'object' && !Object.isFrozen(prop)) {
       deepFreeze(prop);
     }
   });
