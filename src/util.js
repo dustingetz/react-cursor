@@ -1,4 +1,3 @@
-import isObject from 'lodash.isobject';
 import isEqual from 'deep-equal';
 import {updateIn} from 'update-in';
 
@@ -100,6 +99,9 @@ export function memoized (hasher = identity, f) {
   };
 }
 
+function isObject(value) {
+  return !!value && typeof value == 'object';
+}
 
 // copy from MDN example: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/freeze#Examples
 export function deepFreeze(obj) {
@@ -119,7 +121,7 @@ export function deepFreeze(obj) {
     var prop = obj[name];
 
     // Freeze prop if it is an object
-    if (typeof prop == 'object' && !Object.isFrozen(prop)) {
+    if (isObject(prop) && !Object.isFrozen(prop)) {
       deepFreeze(prop);
     }
   });
