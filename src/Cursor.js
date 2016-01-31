@@ -1,5 +1,8 @@
 import {merge, push, unshift, splice} from 'update-in';
-import {memoized, getIn, hashRecord, refToHash, deepFreeze, rootAt} from './util';
+import memoized from './util/memoized';
+import {getIn, rootAt} from './util/associative';
+import hashRecord from './util/hashRecord';
+import refToHash from './util/refToHash';
 import {makeSwapFromReact, makeValueFromReact, isReactCmp} from './ReactAdapter';
 
 
