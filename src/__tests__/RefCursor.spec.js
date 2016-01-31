@@ -1,7 +1,6 @@
 import _ from 'lodash';
 import {Cursor, RefCursor} from '../react-cursor';
 import {Store, renderComponentWithState} from './CursorTestUtil';
-import {valEq, refEq} from '../util';
 
 
 describe('RefCursors are not immutable', () => {
@@ -14,8 +13,8 @@ describe('RefCursors are not immutable', () => {
     'updating cursor does change ref cursor\'s value': () => {
       let prevCurValue = cur.value();
       cur.refine('a', 'b').swap(v => 43);
-      expect(valEq(storeValue(), prevCurValue)).to.equal(false);
-      expect(refEq(cur.value(), prevCurValue)).to.equal(false);
+      expect(_.isEqual(storeValue(), prevCurValue)).to.equal(false);
+      expect(cur.value() === prevCurValue).to.equal(false);
     }
   };
 

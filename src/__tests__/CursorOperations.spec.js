@@ -2,7 +2,6 @@
 import _ from 'lodash';
 import {Cursor, RefCursor} from '../react-cursor';
 import {Store, renderComponentWithState} from './CursorTestUtil';
-import {valEq, refEq} from '../util';
 
 
 describe('Cursor updates', () => {

@@ -1,4 +1,5 @@
-import {memoized, refToHash} from './util';
+import memoized from './util/memoized';
+import refToHash from './util/refToHash';
 
 
 // To support binding cursors to react state, we need cmp.setState as a function, and the function
