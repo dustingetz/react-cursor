@@ -1,5 +1,5 @@
 import omit from 'omit-keys';
-import {valEq, refEq} from './util';
+import isEqual from 'deep-equal';
 
 
 function ImmutableOptimizations (refFields = [], ignoredFields = []) {
@@ -7,12 +7,12 @@ function ImmutableOptimizations (refFields = [], ignoredFields = []) {
   return {
     shouldComponentUpdate: function (nextProps) {
 
-      var valuesChanged = !valEq(
+      var valuesChanged = !isEqual(
         omit(nextProps, noValueCheckFields),
         omit(this.props, noValueCheckFields));
 
       var refsChanged = !refFields.every((field) => {
-        return refEq(this.props[field], nextProps[field]);
+        return this.props[field] === nextProps[field];
       });
 
       return valuesChanged || refsChanged;

@@ -1,8 +1,7 @@
 import _ from 'lodash';
 import {Cursor, RefCursor} from '../react-cursor';
 import {Store, renderComponentWithState} from './CursorTestUtil';
-import {valEq, refEq} from '../util';
-
+import isEqual from 'deep-equal';
 
 
 describe('Value cursors are immutable', () => {
@@ -15,18 +14,18 @@ describe('Value cursors are immutable', () => {
     'updating cursor does not change value cursor\'s value': () => {
       let prevCurValue = cur.value();
       cur.refine('a', 'b').swap(v => 43);
-      expect(valEq(storeValue(), prevCurValue)).to.equal(false);
-      expect(refEq(cur.value(), prevCurValue)).to.equal(true);
+      expect(isEqual(storeValue(), prevCurValue)).to.equal(false);
+      expect(cur.value() === prevCurValue).to.equal(true);
     },
     'cannot mutate cursor\'s value by assoc': () => {
       expect(() => cur.value().b = 43).to.throw(Error);
-      expect(refEq(cur.value(), initialState)).to.equal(true);
-      expect(refEq(storeValue(), initialState)).to.equal(true);
+      expect(cur.value() === initialState).to.equal(true);
+      expect(storeValue() === initialState).to.equal(true);
     },
     'cannot mutate cursor\'s value by delete': () => {
       expect(() => delete cur.value().a).to.throw(Error);
-      expect(refEq(cur.value(), initialState)).to.equal(true);
-      expect(refEq(storeValue(), initialState)).to.equal(true);
+      expect(cur.value() === initialState).to.equal(true);
+      expect(storeValue() === initialState).to.equal(true);
     }
   };
 

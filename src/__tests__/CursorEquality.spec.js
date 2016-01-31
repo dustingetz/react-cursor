@@ -1,15 +1,15 @@
 import _ from 'lodash';
 import {Cursor, RefCursor} from '../react-cursor';
 import {Store, renderComponentWithState} from './CursorTestUtil';
-import {valEq, refEq} from '../util';
+import isEqual from 'deep-equal';
 
 
 describe ('Cursor equality', () => {
   it('sanity check that two equal js objects are not ===', () => {
     let a = {b: 42};
     let b = {b: 42};
-    expect(refEq(a, b)).to.equal(false);
-    expect(valEq(a, b)).to.equal(true);
+    expect(a === b).to.equal(false);
+    expect(isEqual(a, b)).to.equal(true);
   });
 
 
