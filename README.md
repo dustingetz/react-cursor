@@ -88,7 +88,10 @@ render(undefined, store); // Render the first time
 
 Cursors are a recursive data structure, so we can implement recursive things like a JSON editor:
 
-[![live demo](https://raw.githubusercontent.com/dustingetz/react-json-editor/master/docs/_assets/json-editor.png)](http://react-json-editor.bitballoon.com/examples/react-state-editor/webapp/)
+[![live demo](screenshot.png?raw=true)](http://master-xmc9sn4ypn.elasticbeanstalk.com/app/)
+
+Here is the [live demo](http://master-xmc9sn4ypn.elasticbeanstalk.com/app/) (includes webpack sourcemaps), and [source code to the live demo](https://github.com/prognostic-llc/react-json-editor-example).
+
 
 ## Warnings, gotchas, more details, FAQ
  * don't mutate values that come out of a cursor, treat the values as immutable and use the cursor interface for updates
