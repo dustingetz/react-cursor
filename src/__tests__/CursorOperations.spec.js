@@ -23,6 +23,14 @@ describe('Cursor updates', () => {
       expect(storeValue().a).to.deep.equal({b: 43});
     },
 
+    'refine and set creates key if non-existent': () => {
+      expect(storeValue()).to.deep.equal(initialState);
+      expect(storeValue().e).to.equal(undefined);
+      let e = {a: {b: 43}, c: [2, 3, 4], d: 44};
+      cur.refine('e').set(e);
+      expect(storeValue().e).to.deep.equal(e);
+    },
+
     'push': () => {
       var c = cur.refine('c');
       c.push([4]);
