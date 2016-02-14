@@ -1,5 +1,5 @@
-import {merge, push, unshift, splice} from 'update-in';
 import memoized from './util/memoized';
+import CursorOperations from './CursorOperations';
 import {getIn, rootAt} from './util/associative';
 import hashRecord from './util/hashRecord';
 import refToHash from './util/refToHash';
@@ -15,17 +15,12 @@ let makeRefinedSwap = memoized(
   (swapFn, paths) => (f) => swapFn(rootAt(paths, f)));
 
 
-class Cursor {
+class Cursor extends CursorOperations {
   constructor (value, swapFn) {
+    super();
     this.value = () => value;
     this.refine = (...morePaths) => NewCursor(getIn(value, morePaths), makeRefinedSwap(swapFn, morePaths));
     this.swap = (f, ...args) => swapFn((v) => f.apply(null, [v].concat(args)));
-
-    this.set = (val) => this.swap(v => val);
-    this.merge = (val) => this.swap(merge, val);
-    this.push = (xs) => this.swap(push, xs);
-    this.unshift = (xs) => this.swap(unshift, xs);
-    this.splice = (xs) => this.swap(splice, xs);
 
     debug && deepFreeze(value);
   }

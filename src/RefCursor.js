@@ -1,4 +1,5 @@
 import {merge, push, unshift, splice} from 'update-in';
+import CursorOperations from './CursorOperations';
 import memoized from './util/memoized';
 import {getIn, rootAt} from './util/associative';
 import hashRecord from './util/hashRecord';
@@ -16,17 +17,12 @@ let makeRefinedDeref = memoized(
   (deref, paths) => () => getIn(deref(), paths));
 
 
-class RefCursor {
+class RefCursor extends CursorOperations {
   constructor (deref, swapFn) {
+    super();
     this.value = deref;
     this.refine = (...morePaths) => NewRefCursor(makeRefinedDeref(deref, morePaths), makeRefinedSwap(swapFn, morePaths));
     this.swap = (f, ...args) => swapFn((v) => f.apply(null, [v].concat(args)));
-
-    this.set = (val) => this.swap(v => val);
-    this.merge = (val) => this.swap(merge, val);
-    this.push = (xs) => this.swap(push, xs);
-    this.unshift = (xs) => this.swap(unshift, xs);
-    this.splice = (xs) => this.swap(splice, xs);
 
     // RefCursors don't own a value, so they aren't responsible for freezing it.
   }
