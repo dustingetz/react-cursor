@@ -1,4 +1,4 @@
-import {merge, push, unshift, splice} from 'update-in';
+import {merge, push, unshift, splice, dissoc} from 'update-in';
 
 export default class CursorOperations {
   set (val) { return this.swap(_ => val); }
@@ -6,4 +6,5 @@ export default class CursorOperations {
   push (xs) { return this.swap(push, xs); }
   unshift (xs) { return this.swap(unshift, xs); }
   splice (xs) { return this.swap(splice, xs); }
+  dissoc (...keys) { return this.swap.apply(this, [dissoc].concat(keys)); }
 };

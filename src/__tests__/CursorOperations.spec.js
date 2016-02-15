@@ -6,7 +6,7 @@ import {Store, renderComponentWithState} from './CursorTestUtil';
 
 describe('Cursor updates', () => {
   let cur, storeValue;
-  const initialState = {a: {b: 42}, c: [1, 2, 3]};
+  const initialState = {a: {b: 42}, c: [1, 2, 3], d: {foo: 1, bar: 2, baz: {qux: 3}}};
 
 
   let suite = {
@@ -45,6 +45,40 @@ describe('Cursor updates', () => {
       expect(storeValue().c).to.deep.equal([1, 4, 3]);
       c.splice([[0, 1, 6, 5], [4, 0, 2, 1]]);
       expect(storeValue().c).to.deep.equal([6, 5, 4, 3, 2, 1]);
+    },
+
+    'dissoc array': () => {
+      let c = cur.refine('c');
+      expect(storeValue().c).to.deep.equal([1, 2, 3]);
+
+      c.dissoc(0);
+      expect(storeValue().c).to.deep.equal([2, 3]);
+
+      c.push([4, 5, 6]);
+
+      c.dissoc(2);
+      expect(storeValue().c).to.deep.equal([2, 3, 5, 6]);
+
+      c.push([7, 8, 9]);
+      c.dissoc(2, 3, 4);
+
+      expect(storeValue().c).to.deep.equal([2, 3, 8, 9]);
+
+      c.push([10, 11, 12]);
+      c.dissoc(1, 3, 5);
+
+      expect(storeValue().c).to.deep.equal([2, 8, 10, 12]);
+    },
+
+    'dissoc object': () => {
+      let d = cur.refine('d');
+      expect(storeValue().d).to.deep.equal({foo: 1, bar: 2, baz: {qux: 3}});
+
+      d.dissoc('baz');
+      expect(storeValue().d).to.deep.equal({foo: 1, bar: 2});
+
+      d.dissoc('foo', 'bar');
+      expect(storeValue().d).to.deep.equal({});
     },
 
     'merge': () => {
