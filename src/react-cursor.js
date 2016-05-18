@@ -3,8 +3,8 @@ import RefCursor from './RefCursor';
 import ImmutableOptimizations from './ImmutableOptimizations';
 
 
-export default {
+module.exports = {
   Cursor: Cursor,
   ImmutableOptimizations: ImmutableOptimizations,
   RefCursor: RefCursor
-}
+};

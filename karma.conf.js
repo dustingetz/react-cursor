@@ -1,8 +1,10 @@
+var path = require('path');
 
 module.exports = function (config) {
   var configuration = {
     browsers: [ 'Chrome' ],
     frameworks: [ 'mocha', 'sinon-chai' ],
+    
     reporters: [ 'mocha' ],
 
     customLaunchers: {
@@ -22,9 +24,16 @@ module.exports = function (config) {
 
     webpack: {
       devtool: 'inline-source-map',
+      resolve: {
+        extensions: ['', '.js'],
+        root: [
+          path.resolve('./src')
+        ],
+        modulesDirectories: ['node_modules']
+      },
       module: {
         loaders: [
-          { test: /\.js$/, exclude: /node_modules/, loader: 'babel' },
+          { test: /\.js$/, loader: 'babel', include: path.resolve('./src') },
           { test: /node_modules\/update-in/, loader: 'babel'}
         ]
       }
