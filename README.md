@@ -28,7 +28,7 @@ New tutorial coming soon. for now see [react-cursor hello-world in a fiddle](htt
  * swap(f) - apply f with the refined value and puts returned value into the backing store
 
 Cursor has non-core convienence methods:
- * set(v), merge(v), push(xs), unshift(xs), splice([[splices]]) - convenience wrappers for swap for common updates
+ * set(v), merge(v), assoc(k, v), dissoc(k), push(xs), unshift(xs), splice([[splices]]) - convenience wrappers for swap for common updates
 
 There is a mixin `ImmutableOptimizations()` to achieve optimized rendering (yes, we also work with PureRenderMixin if you prefer that). See examples/helloworld for usage.
 
