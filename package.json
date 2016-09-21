@@ -1,6 +1,6 @@
 {
   "name": "react-cursor",
-  "version": "2.0.0-alpha.14",
+  "version": "2.0.0-alpha.15",
   "description": "Immutable recursive UI state management",
   "keywords": [
     "react",
@@ -22,7 +22,7 @@
     "dist": "webpack --config webpack.dist.js",
     "lib": "BABEL_ENV=commonjs babel src --out-dir lib"
   },
-  "main": "./dist/react-cursor.js",
+  "main": "lib/react-cursor.js",
   "jsnext:main": "src/react-cursor.js",
   "devDependencies": {
     "babel-cli": "^6.8.0",
@@ -61,6 +61,6 @@
     "lodash.omit": "^4.0.0",
     "lodash.reduce": "^4.0.0",
     "react-addons-update": "^0.14.2",
-    "update-in": "0.0.1-alpha.5"
+    "update-in": "0.0.1-alpha.6"
   }
 }
