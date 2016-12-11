@@ -1,7 +1,7 @@
 {
   "name": "react-cursor",
-  "version": "2.0.0-alpha.14",
-  "description": "Immutable recursive UI state management",
+  "version": "2.0.15",
+  "description": "Immutable state for React.js",
   "keywords": [
     "react",
     "cursor",
