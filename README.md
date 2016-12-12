@@ -27,7 +27,7 @@ For frequently used swap functions, see the bundled `update-in` dependency: see 
 ## FAQ
  * Cursors have value semantics, don't mutate values that come out of a cursor
  * Equal cursors are `===` for easy and efficient optimized rendering (see hello world jsfiddle for example)
- * You should read the source! The core cursor abstraction is 8 lines of code
+ * You should read the source! The [core cursor abstraction is 15 lines of code](https://github.com/dustingetz/react-cursor/blob/master/src/Cursor.js)
  * There is an undocumented alternate implementation, `RefCursor`, which has reference semantics, this is only useful for working with legacy mutable code
 
 ## License
