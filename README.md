@@ -9,7 +9,9 @@ react-cursor
 
 ## What is react-cursor
 
-Cursors are a tool for working with recursive or deeply nested data, immutably. react-cursor is a javascript port of an abstraction that I first saw in ClojureScript. Cursors let your app hold all its state at the root of the UI tree; thus the root is stateful, and all downtree views are stateless.
+Cursors are a tool for working with recursive or deeply nested data, immutably. react-cursor is a javascript port of an abstraction that I first saw in ClojureScript. This implementation is decoupled from any rendering library and is very small.
+
+Cursors are useful in UI programming, because UIs are tree shaped and naturally have tree-shaped state. Cursors let your app hold all its state in one place at the root of the UI tree; thus the root is stateful, and all downtree views are stateless.
 
 ## Project Maturity
 
